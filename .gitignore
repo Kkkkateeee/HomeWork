@@ -1,0 +1,12 @@
+src/Library/bin/
+src/Library/obj/
+
+Tests/bin/
+Tests/obj/
+Tests/TestResults/
+
+Benchmarks/bin/
+Benchmarks/obj/
+Benchmarks/BenchmarkDotNet.Artifacts/
+
+GraphsAndStatistics/venv/
