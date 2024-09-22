@@ -1,0 +1,156 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/banicsidy/Desktop/HomeWork/src/Tests/Tests.fsproj": {}
+  },
+  "projects": {
+    "/home/banicsidy/Desktop/HomeWork/src/Library/Library.fsproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/banicsidy/Desktop/HomeWork/src/Library/Library.fsproj",
+        "projectName": "Library",
+        "projectPath": "/home/banicsidy/Desktop/HomeWork/src/Library/Library.fsproj",
+        "packagesPath": "/home/banicsidy/.nuget/packages/",
+        "outputPath": "/home/banicsidy/Desktop/HomeWork/src/Library/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/banicsidy/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "/usr/share/dotnet/sdk/8.0.401/FSharp/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "FSharp.Core": {
+              "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[8.0.400, )",
+              "generatePathProperty": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.401/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/banicsidy/Desktop/HomeWork/src/Tests/Tests.fsproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/banicsidy/Desktop/HomeWork/src/Tests/Tests.fsproj",
+        "projectName": "Tests",
+        "projectPath": "/home/banicsidy/Desktop/HomeWork/src/Tests/Tests.fsproj",
+        "packagesPath": "/home/banicsidy/.nuget/packages/",
+        "outputPath": "/home/banicsidy/Desktop/HomeWork/src/Tests/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/banicsidy/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "/usr/share/dotnet/sdk/8.0.401/FSharp/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/home/banicsidy/Desktop/HomeWork/src/Library/Library.fsproj": {
+                "projectPath": "/home/banicsidy/Desktop/HomeWork/src/Library/Library.fsproj"
+              }
+            }
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "FSharp.Core": {
+              "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[8.0.400, )",
+              "generatePathProperty": true
+            },
+            "MSTest.TestAdapter": {
+              "target": "Package",
+              "version": "[3.1.1, )",
+              "generatePathProperty": true
+            },
+            "MSTest.TestFramework": {
+              "target": "Package",
+              "version": "[3.1.1, )",
+              "generatePathProperty": true
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.8.0, )",
+              "generatePathProperty": true
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[6.0.0, )",
+              "generatePathProperty": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.401/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
