@@ -1,5 +1,7 @@
 ﻿namespace Library
 
 module Say =
-    let hello name =
-        printfn "Hello %s" name
+    let rec factorial n =
+        if n < 0 then failwith "Факториал отрицательных чисел не вычисляется этой программой\n"
+        elif n = 0 || n = 1 then 1
+        else n*factorial (n - 1)
