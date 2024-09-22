@@ -125,3 +125,4 @@
 /home/banicsidy/Desktop/HomeWork/src/Tests/obj/Debug/net8.0/Tests.pdb
 /home/banicsidy/Desktop/HomeWork/src/Tests/obj/Debug/net8.0/Tests.genruntimeconfig.cache
 /home/banicsidy/Desktop/HomeWork/src/Tests/obj/Debug/net8.0/ref/Tests.dll
+/home/banicsidy/Desktop/HomeWork/src/Tests/obj/Debug/net8.0/Tests.sourcelink.json
