@@ -2,7 +2,7 @@ namespace Tests
 
 open System
 open Microsoft.VisualStudio.TestTools.UnitTesting
-open Library.Say  // подключаем пространство имен
+open Library.factorial  // подключаем пространство имен
 
 
 [<TestClass>]
@@ -23,4 +23,4 @@ type TestClass () =
     [<TestMethod>]  // (-1)!
     member this.Factorial_negative () =
         let ex = Assert.ThrowsException<System.Exception>(fun () -> factorial -1 :> obj)
-        Assert.AreEqual("Факториал отрицательных чисел не вычисляется этой программой\n", ex.Message)
+        Assert.AreEqual("The factorial of negative numbers is not calculated by this program\n", ex.Message)
