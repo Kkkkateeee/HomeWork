@@ -1,6 +1,6 @@
 ﻿namespace Library
 
-module Say =
+module fibinacci =
 
     // объявление типа матрицы
     type Matrix = int64 array array  
@@ -28,7 +28,7 @@ module Say =
 
     // Функция для получения n-го числа Фибоначчи
     let fibonacci (n: int) : int64 =
-        if n < 0 then failwith "Числа Фибоначчи для отрицательных n не определены\n"
+        if n < 0 then failwith "Fibonacci numbers for negative n are not defined\n"
         if n = 0 then 0L
         elif n = 1 then 1L
         else

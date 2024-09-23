@@ -2,7 +2,7 @@ namespace Tests
 
 open System
 open Microsoft.VisualStudio.TestTools.UnitTesting
-open Library.Say  // подключаем пространство имен
+open Library.fibinacci  // подключаем пространство имен
 
 
 [<TestClass>]
@@ -31,5 +31,5 @@ type TestClass () =
     [<TestMethod>]  // F(-1)
     member this.Fib_negative () =
         let ex = Assert.ThrowsException<System.Exception>(fun () -> fibonacci -1 :> obj)
-        Assert.AreEqual("Числа Фибоначчи для отрицательных n не определены\n", ex.Message)
+        Assert.AreEqual("Fibonacci numbers for negative n are not defined\n", ex.Message)
     
