@@ -1,6 +1,6 @@
 ﻿namespace Library
 
-module Say =
+module quick_sort =
     let rec Quick_sort (arr: int[]) =
 
         if Array.length arr <= 1  then arr
