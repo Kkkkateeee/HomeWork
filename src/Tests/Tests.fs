@@ -2,7 +2,7 @@ namespace Tests
 
 open System
 open Microsoft.VisualStudio.TestTools.UnitTesting
-open Library.Say  // подключаем пространство имен
+open Library.bubble_sort  // подключаем пространство имен
 
 
 [<TestClass>]

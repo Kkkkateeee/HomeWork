@@ -1,6 +1,6 @@
 ﻿namespace Library
 
-module Say =
+module bubble_sort =
     let bubble_sort (array : int[]) =
     
         let mutable array_len = array.Length
