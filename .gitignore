@@ -1,30 +1,6 @@
-# Файлы сборки
-bin/
-obj/
+src/Library/bin
+src/Library/obj
 
-# Файлы временных данных
-*.user
-*.suo
-*.userprefs
-
-# Папки с временными файлами IDE
-.vscode/
-.idea/
-
-# Файлы кэша
-*.cache
-
-# Файлы конфигурации
-*.dbmdl
-*.dbproj.schemaview
-
-# Логи и временные файлы
-*.log
-
-# Папки, специфичные для системы
-.DS_Store
-Thumbs.db
-
-# Другие временные файлы
-*.tmp
-*.temp
+src/Tests/bin
+src/Tests/obj
+src/Tests/TestResults
