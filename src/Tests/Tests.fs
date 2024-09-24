@@ -2,7 +2,7 @@ namespace Tests
 
 open System
 open Microsoft.VisualStudio.TestTools.UnitTesting
-open Library.factorial  // подключаем пространство имен
+open Library.factorial  // add namespace
 
 
 [<TestClass>]
