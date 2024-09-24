@@ -6,10 +6,10 @@ name: .NET
 on:
   push:
     branches: 
-      - '**'  # Реагировать на push в любую ветку
+      - '**'  
   pull_request:
     branches: 
-      - '**'  # Реагировать на pull request в любую ветку
+      - '**'  
 
 jobs:
   build:
