@@ -2,7 +2,7 @@ namespace Tests
 
 open System
 open Microsoft.VisualStudio.TestTools.UnitTesting
-open Library.fibinacci  // подключаем пространство имен
+open Library.fibinacci  // add namespace
 
 
 [<TestClass>]
