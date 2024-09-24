@@ -2,11 +2,9 @@
 
 module fibinacci =
 
-    // объявление типа матрицы
     type Matrix = int64 array array  
 
 
-    // Функция для умножения двух матриц
     let multiply (m1: Matrix) (m2: Matrix) : Matrix =
         [| 
             [| m1.[0].[0] * m2.[0].[0] + m1.[0].[1] * m2.[1].[0];
@@ -16,7 +14,6 @@ module fibinacci =
         |]
         
 
-    // Функция для возведения матрицы в степень n
     let rec power (matrix: Matrix) (n: int) : Matrix =
         if n = 1 then matrix
         else
@@ -26,7 +23,6 @@ module fibinacci =
             else multiply result matrix
 
 
-    // Функция для получения n-го числа Фибоначчи
     let fibonacci (n: int) : int64 =
         if n < 0 then failwith "Fibonacci numbers for negative n are not defined\n"
         if n = 0 then 0L
