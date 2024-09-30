@@ -28,5 +28,12 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: FSharplint
+      
+    - name: Install fsharplint
+      run: dotnet tool install --global fsharplint
+
+    - name: Add .dotnet/tools to PATH
+      run: echo "${{ github.env.PATH }}:$HOME/.dotnet/tools" >> $GITHUB_ENV
+
+    - name: Run fsharplint
       run: dotnet-fsharplint lint -f
