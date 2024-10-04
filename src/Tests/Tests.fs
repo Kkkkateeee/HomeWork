@@ -90,7 +90,7 @@ type sorts_test() =
         let res = merge_sort float_test_cases
         let expected = Array.sort float_test_cases
         Assert.AreEqual(expected, res)
-        
+
     [<TestMethod>]
     member this.TestMergeSort_char() =
         let res = merge_sort char_test_cases
