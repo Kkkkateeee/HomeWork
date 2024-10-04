@@ -22,144 +22,80 @@ type factorial_tests() =
     member this.TestFactorial_Five() = Assert.AreEqual(120, factorial (5))
 
     [<TestMethod>] // (-1)!
-    member this.Factorial_negative() =
+    member this.TestFactorial_negative() =
         let ex = Assert.ThrowsException<System.Exception>(fun () -> factorial -1 :> obj)
         Assert.AreEqual("The factorial of negative numbers is not calculated by this program\n", ex.Message)
 
 
-type bubble_sort_tests() =
+type sorts_test() =
+    let int_test_cases =
+        [| [||]
+           [| 1; 2; 3; 4; 5 |]
+           [| 5; 4; 3; 2; 1 |]
+           [| 3; 1; 4; 1; 5; 9; 2; 6; 5; 3; 5 |]
+           [| 4; 2; 2; 8; 3; 3; 1 |] |]
 
-    [<TestMethod>] // empty array
-    member this.TestEmpty() =
-        let arr = [||]
-        bubble_sort arr
-        Assert.IsTrue(Seq.forall2 (=) arr [||])
+    let float_test_cases = [| 3.14; 1.41; 2.71; 0.57; 4.67 |]
+    let char_test_cases = [| 'D'; 'A'; 'C'; 'B'; 'E' |]
 
-    [<TestMethod>] // sorted array
-    member this.TestSortedArray() =
-        let arr = [| 1; 2; 3; 4; 5 |]
-        bubble_sort arr
-        Assert.IsTrue(Seq.forall2 (=) arr [| 1; 2; 3; 4; 5 |])
+    [<TestMethod>]
+    member this.TestBubbleSort_int() =
+        for elem in int_test_cases do
+            let res = bubble_sort elem
+            let expected = Array.sort elem
+            Assert.AreEqual(expected, res)
 
-    [<TestMethod>] // reverse sorted array
-    member this.TestReverseSortedArray() =
-        let arr = [| 5; 4; 3; 2; 1 |]
-        bubble_sort arr
-        Assert.IsTrue(Seq.forall2 (=) arr [| 1; 2; 3; 4; 5 |])
+    [<TestMethod>]
+    member this.TestBubbleSort_float() =
+        let res = bubble_sort float_test_cases
+        let expected = Array.sort float_test_cases
+        Assert.AreEqual(expected, res)
 
-    [<TestMethod>] // unsorted array
-    member this.TestUnsortedArray() =
-        let arr = [| 3; 1; 4; 1; 5; 9; 2; 6; 5; 3; 5 |]
-        bubble_sort arr
-        Assert.IsTrue(Seq.forall2 (=) arr [| 1; 1; 2; 3; 3; 4; 5; 5; 5; 6; 9 |])
-
-    [<TestMethod>] // array with repeating elements
-    member this.TestArrayWithDuplicates() =
-        let arr = [| 4; 2; 2; 8; 3; 3; 1 |]
-        bubble_sort arr
-        Assert.IsTrue(Seq.forall2 (=) arr [| 1; 2; 2; 3; 3; 4; 8 |])
-
-    [<TestMethod>] // float array
-    member this.TestFloatArray() =
-        let arr = [| 3.14; 1.41; 2.71; 0.57; 4.67 |]
-        bubble_sort arr
-        Assert.IsTrue(Seq.forall2 (=) arr [| 0.57; 1.41; 2.71; 3.14; 4.67 |])
-
-    [<TestMethod>] // float array
-    member this.TestCharArray() =
-        let arr = [| 'D'; 'A'; 'C'; 'B'; 'E' |]
-        bubble_sort arr
-        Assert.IsTrue(Seq.forall2 (=) arr [| 'A'; 'B'; 'C'; 'D'; 'E' |])
+    [<TestMethod>]
+    member this.TestBubbleSort_char() =
+        let res = bubble_sort char_test_cases
+        let expected = Array.sort char_test_cases
+        Assert.AreEqual(expected, res)
 
 
-type quick_sort_tests() =
+    [<TestMethod>]
+    member this.TestQuickSort_int() =
+        for elem in int_test_cases do
+            let res = quick_sort elem
+            let expected = Array.sort elem
+            Assert.AreEqual(expected, res)
 
-    [<TestMethod>] // empty array
-    member this.Empty() =
-        let arr = [||]
-        quick_sort arr 0 0
-        Assert.IsTrue(Seq.forall2 (=) arr [||])
+    [<TestMethod>]
+    member this.TestQuickSort_float() =
+        let res = quick_sort float_test_cases
+        let expected = Array.sort float_test_cases
+        Assert.AreEqual(expected, res)
 
-    [<TestMethod>] // sorted array
-    member this.SortedArray() =
-        let arr = [| 1; 2; 3; 4; 5 |]
-        quick_sort arr 0 4
-        Assert.IsTrue(Seq.forall2 (=) arr [| 1; 2; 3; 4; 5 |])
-
-    [<TestMethod>] // reverse sorted array
-    member this.TestReverseSortedArray() =
-        let arr = [| 5; 4; 3; 2; 1 |]
-        quick_sort arr 0 4
-        Assert.IsTrue(Seq.forall2 (=) arr [| 1; 2; 3; 4; 5 |])
-
-    [<TestMethod>] // unsorted array
-    member this.TestUnsortedArray() =
-        let arr = [| 3; 1; 4; 1; 5; 9; 2; 6; 5; 3; 5 |]
-        quick_sort arr 0 10
-        Assert.IsTrue(Seq.forall2 (=) arr [| 1; 1; 2; 3; 3; 4; 5; 5; 5; 6; 9 |])
-
-    [<TestMethod>] // array with repeating
-    member this.TestArrayWithDuplicates() =
-        let arr = [| 4; 2; 2; 8; 3; 3; 1 |]
-        quick_sort arr 0 6
-        Assert.IsTrue(Seq.forall2 (=) arr [| 1; 2; 2; 3; 3; 4; 8 |])
-
-    [<TestMethod>] // float array
-    member this.TestFloatArray() =
-        let arr = [| 3.14; 1.41; 2.71; 0.57; 4.67 |]
-        quick_sort arr 0 4
-        Assert.IsTrue(Seq.forall2 (=) arr [| 0.57; 1.41; 2.71; 3.14; 4.67 |])
-
-    [<TestMethod>] // float array
-    member this.TestCharArray() =
-        let arr = [| 'D'; 'A'; 'C'; 'B'; 'E' |]
-        quick_sort arr 0 4
-        Assert.IsTrue(Seq.forall2 (=) arr [| 'A'; 'B'; 'C'; 'D'; 'E' |])
+    [<TestMethod>]
+    member this.TestQuickSort_char() =
+        let res = quick_sort char_test_cases
+        let expected = Array.sort char_test_cases
+        Assert.AreEqual(expected, res)
 
 
-type merge_sort_tests() =
+    [<TestMethod>]
+    member this.TestMergeSort_int() =
+        for elem in int_test_cases do
+            let res = merge_sort elem
+            let expected = Array.sort elem
+            Assert.AreEqual(expected, res)
 
-    [<TestMethod>] // empty array
-    member this.Empty() =
-        let arr = [||]
-        merge_sort arr 0 0
-        Assert.IsTrue(Seq.forall2 (=) arr [||])
-
-    [<TestMethod>] // sorted array
-    member this.SortedArray() =
-        let arr = [| 1; 2; 3; 4; 5 |]
-        merge_sort arr 0 4
-        Assert.IsTrue(Seq.forall2 (=) arr [| 1; 2; 3; 4; 5 |])
-
-    [<TestMethod>] // reverse sorted array
-    member this.TestReverseSortedArray() =
-        let arr = [| 5; 4; 3; 2; 1 |]
-        merge_sort arr 0 4
-        Assert.IsTrue(Seq.forall2 (=) arr [| 1; 2; 3; 4; 5 |])
-
-    [<TestMethod>] // unsorted array
-    member this.TestUnsortedArray() =
-        let arr = [| 3; 1; 4; 1; 5; 9; 2; 6; 5; 3; 5 |]
-        merge_sort arr 0 10
-        Assert.IsTrue(Seq.forall2 (=) arr [| 1; 1; 2; 3; 3; 4; 5; 5; 5; 6; 9 |])
-
-    [<TestMethod>] // array with repeating
-    member this.TestArrayWithDuplicates() =
-        let arr = [| 4; 2; 2; 8; 3; 3; 1 |]
-        merge_sort arr 0 6
-        Assert.IsTrue(Seq.forall2 (=) arr [| 1; 2; 2; 3; 3; 4; 8 |])
-
-    [<TestMethod>] // float array
-    member this.TestFloatArray() =
-        let arr = [| 3.14; 1.41; 2.71; 0.57; 4.67 |]
-        merge_sort arr 0 4
-        Assert.IsTrue(Seq.forall2 (=) arr [| 0.57; 1.41; 2.71; 3.14; 4.67 |])
-
-    [<TestMethod>] // float array
-    member this.TestCharArray() =
-        let arr = [| 'D'; 'A'; 'C'; 'B'; 'E' |]
-        merge_sort arr 0 4
-        Assert.IsTrue(Seq.forall2 (=) arr [| 'A'; 'B'; 'C'; 'D'; 'E' |])
+    [<TestMethod>]
+    member this.TestMergeSort_float() =
+        let res = merge_sort float_test_cases
+        let expected = Array.sort float_test_cases
+        Assert.AreEqual(expected, res)
+        
+    [<TestMethod>]
+    member this.TestMergeSort_char() =
+        let res = merge_sort char_test_cases
+        let expected = Array.sort char_test_cases
+        Assert.AreEqual(expected, res)
 
 
 type fibinacci_matrix_tests() =
