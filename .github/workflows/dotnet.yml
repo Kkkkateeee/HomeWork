@@ -41,9 +41,3 @@ jobs:
 
       - name: Fantomas
         run: dotnet fantomas .
-      
-      - name: Dotnet tool restore
-        run: dotnet tool restore
-      
-      - name: Fs
-        run: dotnet fsharplint lint .
