@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 6.x
-          
+
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
         with:
@@ -46,6 +46,9 @@ jobs:
 
       - name: Fantomas
         run: dotnet fantomas .
+
+      - name: test
+        run: set DOTNET_ROLL_FORWARD=latestMajor
 
       - name: Fsharplint
         run: dotnet fsharplint lint .
