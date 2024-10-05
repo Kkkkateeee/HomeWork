@@ -47,6 +47,9 @@ jobs:
       - name: Fantomas
         run: dotnet fantomas .
 
+      - name: Dotnet tool restore
+        run: dotnet tool restore
+
       - name: test
         run: set DOTNET_ROLL_FORWARD=latestMajor
 
