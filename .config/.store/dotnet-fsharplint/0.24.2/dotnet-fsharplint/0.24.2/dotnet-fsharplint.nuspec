@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>dotnet-fsharplint</id>
+    <version>0.24.2</version>
+    <title>FSharpLint.Console</title>
+    <authors>Matthew Mcveigh</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <projectUrl>https://github.com/fsprojects/FSharpLint</projectUrl>
+    <description>Console application to run FSharpLint.</description>
+    <releaseNotes>https://github.com/fsprojects/FSharpLint/blob/v0.24.2/CHANGELOG.md</releaseNotes>
+    <tags>F# fsharp lint FSharpLint fslint cli</tags>
+    <packageTypes>
+      <packageType name="DotnetTool" />
+    </packageTypes>
+    <repository type="git" url="https://github.com/fsprojects/FSharpLint" commit="143ae50e0e32d0842fa36c1bc22c735f2c72f114" />
+  </metadata>
+</package>

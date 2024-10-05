@@ -1,0 +1,762 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>FSharpLint.Core</name></assembly>
+<members>
+<member name="M:FSharpLint.Rules.TypedItemSpacing.runner(FSharpLint.Rules.TypedItemSpacing.Config,FSharpLint.Framework.Rules.AstNodeRuleParams)">
+<summary>
+ Checks for correct spacing around colon of a typed item.
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.TypedItemSpacing.checkRange(FSharpLint.Rules.TypedItemSpacing.Config,FSharpLint.Framework.Rules.AstNodeRuleParams,FSharp.Compiler.Text.Range)">
+<summary>
+ Checks the provided range, containing a typed item, has valid spacing.
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.NestedStatements.isMetaData``1(FSharpLint.Framework.Rules.AstNodeRuleParams,``0,System.Int32)">
+<summary>
+ Is node a duplicate of a node in the AST containing ExtraSyntaxInfo
+ e.g. lambda arg being a duplicate of the lambda.
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.NestedStatements.isCompilerGeneratedMatch(FSharp.Compiler.Syntax.SynExpr)">
+<summary>
+ Lambda wildcard arguments are named internally as _argN, a match is then generated for them in the AST.
+ e.g. fun _ -&gt; () is represented in the AST as fun _arg1 -&gt; match _arg1 with | _ -&gt; ().
+ This function returns true if the given match statement is compiler generated for a lambda wildcard argument.
+</summary>
+</member>
+<member name="P:FSharpLint.Rules.NoPartialFunctions.partialInstanceMemberIdentifiers">
+<summary>
+ List of tuples (fully qualified instance member name, namespace, argument compiled type name, replacement strategy)
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.CyclomaticComplexity.BindingStack.Clear">
+<summary>
+ Clears the stack.
+</summary>
+</member>
+<member name="T:FSharpLint.Rules.CyclomaticComplexity.BindingStack">
+<summary>
+  A two-tiered stack-like structure for containing BindingScopes.
+</summary>
+</member>
+<member name="P:FSharpLint.Rules.CyclomaticComplexity.BindingScope.Complexity">
+<summary>
+ the cyclomatic complexity of the binding scope.
+</summary>
+</member>
+<member name="P:FSharpLint.Rules.CyclomaticComplexity.BindingScope.Binding">
+<summary>
+ The binding of the node
+</summary>
+</member>
+<member name="P:FSharpLint.Rules.CyclomaticComplexity.BindingScope.Node">
+<summary>
+ The Node corresponding to the binding.
+</summary>
+</member>
+<member name="T:FSharpLint.Rules.CyclomaticComplexity.BindingScope">
+<summary>
+ The scope of a binding. 
+</summary>
+</member>
+<member name="P:FSharpLint.Rules.CyclomaticComplexity.Config.MaxComplexity">
+<summary>
+ The maximum cyclomatic complexity for a function or method before an issue is flagged.
+</summary>
+</member>
+<member name="T:FSharpLint.Rules.CyclomaticComplexity.Config">
+<summary>
+ Configuration of the cyclomatic complexity (FL0069) rule.
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.CyclomaticComplexity.rule(FSharpLint.Rules.CyclomaticComplexity.Config)">
+<summary>
+ Generator function for a rule instance.
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.CyclomaticComplexity.cleanup">
+<summary>
+ Resets call stack after a call to runner.
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.CyclomaticComplexity.runner(FSharpLint.Rules.CyclomaticComplexity.Config,FSharpLint.Framework.Rules.AstNodeRuleParams)">
+<summary>
+ Runner for the rule. 
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.CyclomaticComplexity.countBooleanOperators(FSharp.Compiler.Syntax.SynExpr)">
+<summary>
+ Returns the number of boolean operators in an expression.
+ If expression is Match, MatchLambda, or MatchBang, the &apos;when&apos; expressions of the match clauses are examined for boolean operators, if applicable.
+</summary>
+</member>
+<member name="P:FSharpLint.Rules.CyclomaticComplexity.boolFunctions">
+<summary>
+ Boolean operator functions.
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.CyclomaticComplexity.countCasesInMatchClause(FSharp.Compiler.Syntax.SynMatchClause)">
+<summary>
+ Determines the number of cases in a match clause.
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.CyclomaticComplexity.getBindingStack(System.Int32)">
+<summary>
+ gets the global binding stack 
+</summary>
+</member>
+<member name="P:FSharpLint.Rules.CyclomaticComplexity.bindingStackOpt">
+<summary>
+ A stack to track the current cyclomatic complexity of a binding scope.
+</summary>
+</member>
+<member name="T:FSharpLint.Rules.FavourConsistentThis.Config">
+<summary>
+ Configuration of the favour consistent &apos;this&apos; (FL0074) rule.
+</summary>
+</member>
+<member name="P:FSharpLint.Rules.FavourIgnoreOverLetWild.rule">
+<summary>
+ Checks if any code uses &apos;let _ = ...&apos; and suggests to use the ignore function.
+</summary>
+</member>
+<member name="P:FSharpLint.Rules.FavourTypedIgnore.rule">
+<summary>
+ Checks if any code uses untyped ignore
+</summary>
+</member>
+<member name="T:FSharpLint.Rules.Helper.Naming.AccessControlLevel">
+<summary>
+ Specifies access control level as described in 
+ https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/access-control .
+ Higher levels also include lower levels, so e.g. identifier marked with Public 
+ is also accessible in Internal and Private scopes.
+ Public scope is the widest, then goes Internal, then Private.
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.Helper.Naming.getPatternIdents``1(FSharpLint.Rules.Helper.Naming.AccessControlLevel,Microsoft.FSharp.Core.FSharpFunc{FSharpLint.Rules.Helper.Naming.AccessControlLevel,Microsoft.FSharp.Core.FSharpFunc{FSharp.Compiler.Syntax.SynPat,``0[]}},System.Boolean,FSharp.Compiler.Syntax.SynPat)">
+<summary>
+ Recursively get all identifiers from pattern using provided getIdents function and collect them into array.
+ accessibility parameter is passed to getIdents, and can be narrowed down along the way (see checkAccessibility).
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.Helper.Naming.isImplicitModule(FSharp.Compiler.Syntax.SynModuleOrNamespace)">
+<summary>
+ Is module name implicitly created from file name?
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.Helper.Naming.isAttribute(System.String,Microsoft.FSharp.Collections.FSharpList{FSharp.Compiler.Syntax.SynAttributeList})">
+<summary>
+ Is an attribute with a given name?
+ e.g. check for Literal attribute.
+</summary>
+</member>
+<member name="P:FSharpLint.Rules.Helper.Naming.isNotDoubleBackTickedIdent">
+<summary>
+ Is an identifier not surrounded by double backticks? e.g. not `let ``some identifier`` = 0`.
+ Unfortunately it&apos;s having to compare the length of the identifier in the source vs identifier length in AST,
+ the information as to whether the identifier was backticked doesn&apos;t appear to be in the AST.
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.Helper.Hints.checkTrie(System.Int32,FSharpLint.Framework.HintParser.MergeSyntaxTrees.Node,FSharpLint.Framework.AbstractSyntaxArray.Node[],System.Collections.Generic.Dictionary{System.Char,System.Int32},Microsoft.FSharp.Core.FSharpFunc{FSharpLint.Framework.HintParser.Hint,Microsoft.FSharp.Core.Unit})">
+<summary>
+ Compares the hint trie against a given location in the abstract syntax array.
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.Helper.Hints.isMatch(System.Int32,System.Int32,FSharpLint.Framework.AbstractSyntaxArray.Node[])">
+<summary>
+ Confirms if two parts of the ast look alike.
+ This is required as hints can bind variables: the bound location needs to be compared to
+ parts of the ast that the hint covers with the same variable.
+</summary>
+</member>
+<member name="T:FSharpLint.Rules.Helper.Hints">
+<summary>
+ Matching hints is done in two passes: fuzzy match, and an untyped ast match.
+ The untyped ast match attempts to match a single hint against a given node in the ast,
+ to avoid attempting every hint against every node, an initial pass (the fuzzy match) is done
+ to eliminate as many cases where there&apos;ll never be a match as quickly as possible, so that the
+ ast match is run against as few hints and ast nodes as possible.
+ 
+ The fuzzy match requires two structures to be computed before hand: an abstract syntax array
+ constructed from the ast, and a trie of hints. Both of these structures contain hash codes of the
+ nodes, the hash codes are expected to match when the nodes are equivalent. The matching is done using these
+ hash codes so we end up with a trie of integers searching against an array of integers -
+ which is pretty fast.
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.HintMatcher.runner(FSharpLint.Rules.HintMatcher.Config,FSharpLint.Framework.Rules.AstNodeRuleParams)">
+<summary>
+ Searches the abstract syntax array for possible hint matches using the hint trie.
+ Any possible matches that are found will be given to the callback function `notify`,
+ any matches found are not guaranteed and it&apos;s expected that the caller verify the match.
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.HintMatcher.|RequiresCheck|CanBeReplaced|CannotBeReplaced|(Microsoft.FSharp.Collections.FSharpList{FSharpLint.Framework.Ast.AstNode},FSharp.Compiler.Text.Range)">
+<summary>
+ Check if lambda can be replaced with an identifier (cannot in the case when is a parameter with the type of a delegate).
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.HintMatcher.canReplaceLambdaWithFunction(FSharp.Compiler.CodeAnalysis.FSharpCheckFileResults,FSharp.Compiler.Syntax.SynLongIdent,System.Int32)">
+<summary>
+ Check a lambda function can be replaced with a function,
+ it will not be if the lambda is automatically getting
+ converted to a delegate type e.g. Func&lt;T&gt;.
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.HintMatcher.matchConst(FSharp.Compiler.Syntax.SynConst)">
+<summary>
+ Converts a SynConst (FSharp AST) into a Constant (hint AST).
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.HintMatcher.MatchPattern.removeParens(FSharp.Compiler.Syntax.SynPat)">
+<summary>
+ Extracts a pattern from parentheses e.g. ((x)) -&gt; x
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.HintMatcher.MatchExpression.notPropertyInitialisationOrNamedParameter(FSharpLint.Rules.HintMatcher.MatchExpression.Arguments,FSharp.Compiler.Syntax.SynExpr,FSharp.Compiler.Syntax.SynExpr)">
+<summary>
+ Check that an infix equality operation is not actually the assignment of a value to a property in a constructor
+ or a named parameter in a method call.
+</summary>
+</member>
+<member name="M:FSharpLint.Rules.HintMatcher.MatchExpression.removeParens(FSharpLint.Framework.Ast.AstNode)">
+<summary>
+ Extracts an expression from parentheses e.g. ((x + 4)) -&gt; x + 4
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.Resources.GetString(System.String,System.Globalization.CultureInfo)">
+<summary>
+ Returns the value of the specified string resource for a given culture.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.Resources.GetString(System.String)">
+<summary>
+ Returns the value of the specified string resource for the current culture.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.Resources">
+<summary>
+ Provides a way of getting string values from the framework&apos;s resource files (files in src/FSharpLint.Framework/Resources/).
+ Used to retrieve multi-lingual strings inside of the app.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.ExpressionUtilities.countPrecedingCommentLines(System.String,FSharp.Compiler.Text.Position,FSharp.Compiler.Text.Position)">
+<summary>
+ Counts the number of comment lines preceding the given range of text.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.ExpressionUtilities.typeArgsToString(System.String,Microsoft.FSharp.Collections.FSharpList{FSharp.Compiler.Syntax.SynType})">
+<summary>
+ Converts a list of type args to its string representation.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.ExpressionUtilities.synTypeToString(System.String,FSharp.Compiler.Syntax.SynType)">
+<summary>
+ Converts a SynType to its string representation.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.ExpressionUtilities.tryFindTextOfRange(FSharp.Compiler.Text.Range,System.String)">
+<summary>
+ Tries to find the source code within a given range.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.ExpressionUtilities.longIdentWithDotsToString(FSharp.Compiler.Syntax.SynLongIdent)">
+<summary>
+ Converts a LongIdentWithDots to a String.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.ExpressionUtilities.longIdentToString(Microsoft.FSharp.Collections.FSharpList{FSharp.Compiler.Syntax.Ident})">
+<summary>
+ Converts a LongIdent to a String.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.ExpressionUtilities.findPos(FSharp.Compiler.Text.Position,System.String)">
+<summary>
+ Finds index of a given (line number, column) position in a string.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.ExpressionUtilities.removeParens(FSharp.Compiler.Syntax.SynExpr)">
+<summary>
+ Extracts an expression from parentheses e.g. ((x + 4)) -&gt; x + 4
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.ExpressionUtilities.identAsDecompiledOpName(FSharp.Compiler.Syntax.Ident)">
+<summary>
+ Converts an operator name e.g. op_Add to the operator symbol e.g. +
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.Utilities.hash2``2(``0,``1)">
+<summary>
+ Fast hash of two objects without having to allocate
+ (e.g. a common approach would be to take the hash code of a tuple of the two objects).
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.HintParser.NumericLiterals">
+<summary>
+ Not supporting hex single and hex float right now.
+ Decimal float currently will lose precision.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.HintParser.Identifiers">
+<summary>
+ Need to change isLetter so that it&apos;s using unicode character classes.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.HintParser.MergeSyntaxTrees.transposeHead(Microsoft.FSharp.Collections.FSharpList{System.Tuple{Microsoft.FSharp.Collections.FSharpList{System.Tuple{FSharpLint.Framework.HintParser.HintNode,System.Int32}},FSharpLint.Framework.HintParser.Hint}})">
+<summary>
+ Gets the head of each given list
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.HintParser.MergeSyntaxTrees">
+<summary>
+ Provides a way of creating a single list from any number of hint ASTs.
+ Means we can simply iterate over a single list for each node in the F# tree
+ when matching hints rather than check each hint AST for each node.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Suggestion.LintWarning.Details">
+<summary>
+ Details for the warning.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Suggestion.LintWarning.ErrorText">
+<summary>
+ Text that caused the error (the `Range` of the content of `FileName`).
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Suggestion.LintWarning.FilePath">
+<summary>
+ Path to the file where the error occurs.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Suggestion.LintWarning.RuleName">
+<summary>
+ Unique name for the rule that caused the warning.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Suggestion.LintWarning.RuleIdentifier">
+<summary>
+ Unique identifier for the rule that caused the warning.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.Suggestion.LintWarning">
+<summary>
+ A lint &quot;warning&quot;, sources the location of the warning with a suggestion on how it may be fixed.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Suggestion.WarningDetails.TypeChecks">
+<summary>
+ Type checks to be performed to confirm this suggestion is valid.
+ Suggestion is only considered valid when all type checks resolve to true.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Suggestion.WarningDetails.SuggestedFix">
+<summary>
+ Information to provide an automated fix.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Suggestion.WarningDetails.Message">
+<summary>
+ Suggestion message to describe the possible problem to the user.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Suggestion.WarningDetails.Range">
+<summary>
+ Location of the code that prompted the suggestion.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Suggestion.SuggestedFix.ToText">
+<summary>
+ Text to replace the `FromText`, i.e. the fix.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Suggestion.SuggestedFix.FromRange">
+<summary>
+ Location of the text to be replaced.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Suggestion.SuggestedFix.FromText">
+<summary>
+ Text to be replaced.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.Suggestion.SuggestedFix">
+<summary>
+ Information for consuming applications to provide an automated fix for a lint suggestion.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.Ast.AstNode">
+<summary>
+ Nodes in the AST to be visited.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.Ast.traverseNode(FSharpLint.Framework.Ast.AstNode,Microsoft.FSharp.Core.FSharpFunc{FSharpLint.Framework.Ast.AstNode,Microsoft.FSharp.Core.Unit})">
+<summary>
+ Extracts the child nodes to be visited from a given node.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.Ast.extractPatterns(FSharp.Compiler.Syntax.SynSimplePats)">
+<summary>
+ Concatenates the typed-or-untyped structure of `SynSimplePats` into a `SynSimplePat list` to keep other code
+ mostly unchanged.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.Ast.|StringLiteral|_|(FSharpLint.Framework.Ast.AstNode)">
+<summary>
+ Gets a string literal from the AST.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.Ast.|FuncApp|_|(FSharpLint.Framework.Ast.AstNode)">
+<summary>
+ Inlines pipe operators to give a flat function application expression
+ e.g. `x |&gt; List.map id` to `List.map id x`.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.Ast.extractAttributes(Microsoft.FSharp.Collections.FSharpList{FSharp.Compiler.Syntax.SynAttributeList})">
+<summary>
+ Concatenates the nested-list structure of `SynAttributes` into a `SynAttribute list` to keep other code
+ mostly unchanged.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.Ast">
+<summary>
+ Used to walk the FSharp Compiler&apos;s abstract syntax tree,
+ so that each node can be visited by a list of visitors.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.AstInfo.isOperator(System.String)">
+<summary>
+ Is an identifier an operator overload?
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.AstInfo.operators">
+<summary>
+ Operator identifiers can be made up of &quot;op_&quot; followed by a sequence of operators from this list.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.AbstractSyntaxArray.CurrentNode.Breadcrumbs">
+<summary>
+ A list of parent nodes e.g. parent, grand parent, grand grand parent.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.AbstractSyntaxArray.CurrentNode">
+<summary>
+ Contains information on the current node being visited.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.AbstractSyntaxArray.TempSkip">
+<summary>
+ Keep index of position so skip array can be created in the correct order.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.AbstractSyntaxArray.getHashCode(FSharpLint.Framework.Ast.AstNode)">
+<summary>
+ Get hash code of an ast node to be used for the fuzzy match of hints against the ast.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.AbstractSyntaxArray.getIdentHash``1(Microsoft.FSharp.Collections.FSharpList{``0})">
+<summary>
+ We just want a hash of the last identifier.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.ParseFile.FileParseInfo.File">
+<summary>
+ Path to the file.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.ParseFile.FileParseInfo.TypeCheckResults">
+<summary>
+ Optional results of inferring the types on the AST (allows for a more accurate lint).
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.ParseFile.FileParseInfo.Ast">
+<summary>
+ File represented as an AST.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.ParseFile.FileParseInfo.Text">
+<summary>
+ Contents of the file.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.ParseFile.FileParseInfo">
+<summary>
+ Information for a file to be linted that is given to the analysers.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.ParseFile.parseSourceFile(System.String,System.String,FSharp.Compiler.CodeAnalysis.FSharpChecker)">
+<summary>
+ Parses source code using `FSharp.Compiler.Service`.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.ParseFile.parseFile(System.String,FSharp.Compiler.CodeAnalysis.FSharpChecker,Microsoft.FSharp.Core.FSharpOption{FSharp.Compiler.CodeAnalysis.FSharpProjectOptions})">
+<summary>
+ Parses a file using `FSharp.Compiler.Service`.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.ParseFile">
+<summary>
+ Provides functionality to parse F# files using `FSharp.Compiler.Service`.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.Suppression.LineSuppression">
+<summary>
+ Specifies the suppressions for an individual line.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.Suppression.SuppressionInfo.DisableLine">
+<summary>
+ Disables rules for a single line.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.Suppression.SuppressionInfo.Disable">
+<summary>
+ Disables rules for the rest of the file.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.Suppression.SuppressionInfo.Enable">
+<summary>
+ Re-enables rules for the rest of the file.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.Suppression.SuppressionInfo">
+<summary>
+ Represents rule suppression information.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.Suppression.isSuppressed(System.String,System.Int32,Microsoft.FSharp.Collections.FSharpList{FSharpLint.Framework.Suppression.LineSuppression})">
+<summary>
+ Check if a rule is suppressed for a given line.
+ Given line suppressions must be in order by line - see parseSuppressionInfo.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.Suppression.parseSuppressionInfo(Microsoft.FSharp.Collections.FSharpSet{System.String},Microsoft.FSharp.Collections.FSharpList{System.String})">
+<summary>
+ Parses a given file to find lines containing rule suppressions.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.Suppression.extractRules(Microsoft.FSharp.Collections.FSharpSet{System.String},System.String)">
+<summary>
+ Extracts rule names from a whitespace separated string of rule names.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Configuration.Configuration.typography">
+<summary>
+ DEPRECATED, provide typography rules at root level.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Configuration.Configuration.conventions">
+<summary>
+ DEPRECATED, provide conventions rules at root level.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Configuration.Configuration.formatting">
+<summary>
+ DEPRECATED, provide formatting rules at root level.
+</summary>
+</member>
+<member name="P:FSharpLint.Framework.Configuration.defaultConfiguration">
+<summary>
+ A default configuration specifying every analyser and rule is included as a resource file in the framework.
+ This function loads and returns this default configuration.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.Configuration.loadConfig(System.String)">
+<summary>
+ Tries to parse the config file at the provided path.
+</summary>
+</member>
+<member name="M:FSharpLint.Framework.Configuration.parseConfig(System.String)">
+<summary>
+ Tries to parse the provided config text.
+</summary>
+</member>
+<member name="T:FSharpLint.Framework.Configuration">
+<summary>
+ Loads configuration file from JSON into an object.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.LintResult">
+<summary>
+ Result of running the linter.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.LintFailure.FailedToParseFilesInProject">
+<summary>
+ `FSharp.Compiler.Services` failed when trying to parse one or more files in a project.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.LintFailure.FailedToParseFile">
+<summary>
+ `FSharp.Compiler.Services` failed when trying to parse a file.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.LintFailure.RunTimeConfigError">
+<summary>
+ Failed to analyse a loaded FSharpLint configuration at runtime e.g. invalid hint.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.LintFailure.FailedToLoadFile">
+<summary>
+ The specified file for linting could not be found.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.LintFailure.FailedToLoadConfig">
+<summary>
+ Failed to load a FSharpLint configuration file.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.LintFailure.MSBuildFailedToLoadProjectFile">
+<summary>
+ Received exception when trying to get the list of F# file from the project file.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.LintFailure.ProjectFileCouldNotBeFound">
+<summary>
+ Project file path did not exist on the local filesystem.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.LintFailure">
+<summary>
+ Reason for the linter failing.
+</summary>
+</member>
+<member name="P:FSharpLint.Application.Lint.ParsedFileInformation.TypeCheckResults">
+<summary>
+ Optional results of inferring the types on the AST (allows for a more accurate lint).
+</summary>
+</member>
+<member name="P:FSharpLint.Application.Lint.ParsedFileInformation.Source">
+<summary>
+ Contents of the file.
+</summary>
+</member>
+<member name="P:FSharpLint.Application.Lint.ParsedFileInformation.Ast">
+<summary>
+ File represented as an AST.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.ParsedFileInformation">
+<summary>
+ If your application has already parsed the F# source files using `FSharp.Compiler.Services`
+ you want to lint then this can be used to provide the parsed information to prevent the
+ linter from parsing the file again.
+</summary>
+</member>
+<member name="P:FSharpLint.Application.Lint.OptionalLintParameters.ReceivedWarning">
+<summary>
+ This function will be called every time the linter finds a broken rule.
+</summary>
+</member>
+<member name="P:FSharpLint.Application.Lint.OptionalLintParameters.Configuration">
+<summary>
+ Lint configuration to use.
+ Can either specify a full configuration object, or a path to a file to load the configuration from.
+ You can also explicitly specify the default configuration.
+</summary>
+</member>
+<member name="P:FSharpLint.Application.Lint.OptionalLintParameters.CancellationToken">
+<summary>
+ Cancels a lint in progress.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.OptionalLintParameters">
+<summary>
+ Optional parameters that can be provided to the linter.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.ConfigurationParam.Default">
+<summary>
+ Tries to load the config from file `fsharplint.json`.
+ If this file doesn&apos;t exist or is invalid, falls back to the default configuration.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.ProjectProgress.Failed">
+<summary>
+ Failed to parse a file (file path, exception that caused failure).
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.ProjectProgress.ReachedEnd">
+<summary>
+ Finished parsing a file (file path).
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.ProjectProgress.Starting">
+<summary>
+ Started parsing a file (file path).
+</summary>
+</member>
+<member name="M:FSharpLint.Application.Lint.ProjectProgress.FilePath">
+<summary>
+ Path of the F# file the progress information is for.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint.ProjectProgress">
+<summary>
+ Provides information on what the linter is currently doing.
+</summary>
+</member>
+<member name="M:FSharpLint.Application.Lint.lintParsedFile(FSharpLint.Application.Lint.OptionalLintParameters,FSharpLint.Application.Lint.ParsedFileInformation,System.String)">
+<summary>
+ Lints an F# file that has already been parsed using
+ `FSharp.Compiler.Services` in the calling application.
+</summary>
+</member>
+<member name="M:FSharpLint.Application.Lint.lintFile(FSharpLint.Application.Lint.OptionalLintParameters,System.String)">
+<summary>
+ Lints an F# file from a given path to the `.fs` file.
+</summary>
+</member>
+<member name="M:FSharpLint.Application.Lint.lintParsedSource(FSharpLint.Application.Lint.OptionalLintParameters,FSharpLint.Application.Lint.ParsedFileInformation)">
+<summary>
+ Lints F# source code that has already been parsed using
+ `FSharp.Compiler.Services` in the calling application.
+</summary>
+</member>
+<member name="M:FSharpLint.Application.Lint.lintSource(FSharpLint.Application.Lint.OptionalLintParameters,System.String)">
+<summary>
+ Lints F# source code.
+</summary>
+</member>
+<member name="M:FSharpLint.Application.Lint.lintProject(FSharpLint.Application.Lint.OptionalLintParameters,System.String,Ionide.ProjInfo.Types.ToolsPath)">
+<summary>
+ Lints an entire F# project by retrieving the files from a given
+ path to the `.fsproj` file.
+</summary>
+</member>
+<member name="M:FSharpLint.Application.Lint.lintSolution(FSharpLint.Application.Lint.OptionalLintParameters,System.String,Ionide.ProjInfo.Types.ToolsPath)">
+<summary>
+ Lints an entire F# solution by linting all projects specified in the `.sln` file.
+</summary>
+</member>
+<member name="M:FSharpLint.Application.Lint.runLineRules(FSharpLint.Framework.Configuration.LineRules,FSharpLint.Framework.Rules.GlobalRuleConfig,System.String,System.String,System.String[],FSharpLint.Application.Lint.Context)">
+<summary>
+ Runs all rules which take a line of text as input.
+</summary>
+</member>
+<member name="M:FSharpLint.Application.Lint.runAstNodeRules(FSharpLint.Framework.Rules.RuleMetadata{FSharpLint.Framework.Rules.AstNodeRuleConfig}[],FSharpLint.Framework.Rules.GlobalRuleConfig,Microsoft.FSharp.Core.FSharpOption{FSharp.Compiler.CodeAnalysis.FSharpCheckFileResults},System.String,System.String,System.String[],FSharpLint.Framework.AbstractSyntaxArray.Node[])">
+<summary>
+ Runs all rules which take a node of the AST as input.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.Lint">
+<summary>
+ Provides an API for running FSharpLint from within another application.
+</summary>
+</member>
+<member name="M:FSharpLint.Application.ConfigurationManagement.loadConfigurationFile(System.String)">
+<summary>
+ Load a FSharpLint configuration file from the contents (string) of the file.
+</summary>
+</member>
+<member name="T:FSharpLint.Application.ConfigurationManagement">
+<summary>
+ Provides an API to manage/load FSharpLint configuration files.
+ &lt;see cref=&quot;FSharpLint.Framework.Configuration&quot; /&gt; for more information on
+ the default configuration and overriding configurations.
+</summary>
+</member>
+</members>
+</doc>
