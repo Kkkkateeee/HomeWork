@@ -8,6 +8,13 @@
         "fantomas"
       ],
       "rollForward": false
+    },
+    "dotnet-fsharplint": {
+      "version": "0.24.2",
+      "commands": [
+        "dotnet-fsharplint"
+      ],
+      "rollForward": false
     }
   }
 }
