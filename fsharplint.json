@@ -1,0 +1,15 @@
+{
+    "globals": {
+      "numIndentationSpaces": 4 
+    },
+    "sdk": {
+        "version": "6.0.403",
+        "rollForward": "minor"
+    },
+    "tupleCommaSpacing": {
+        "enabled": false
+    },
+    "tupleIndentation": {
+        "enabled": false
+    }
+}
