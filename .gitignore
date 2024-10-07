@@ -1,6 +1,6 @@
 /src/Library/bin/
 /src/Library/obj/
 
-/src/Tests/bin/
-/src/Tests/obj/
-/src/Tests/TestResults/
+Tests/bin/
+Tests/obj/
+Tests/TestResults/
