@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Library\Library.fsproj" />
+    <ProjectReference Include="..\src\Library\Library.fsproj" />
   </ItemGroup>
 
 </Project>
