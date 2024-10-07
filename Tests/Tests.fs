@@ -3,7 +3,8 @@ namespace Tests
 open System
 open Microsoft.VisualStudio.TestTools.UnitTesting
 
-open Library.sorts
+open Library.bubble
+open Library.quick
 
 
 [<TestClass>]
@@ -40,24 +41,24 @@ type sorts_test() =
         Assert.AreEqual(expected, res)
 
 
-    // [<TestMethod>]
-    // member this.TestQuickSort_int() =
-    //     for elem in int_test_cases do
-    //         let res = quick_sort elem
-    //         let expected = Array.sort elem
-    //         Assert.AreEqual(expected, res)
+    [<TestMethod>]
+    member this.TestQuickSort_int() =
+        for elem in int_test_cases do
+            let res = quick_sort elem
+            let expected = List.sort elem
+            Assert.AreEqual(expected, res)
 
-//     [<TestMethod>]
-//     member this.TestQuickSort_float() =
-//         let res = quick_sort float_test_cases
-//         let expected = Array.sort float_test_cases
-//         Assert.AreEqual(expected, res)
+    [<TestMethod>]
+    member this.TestQuickSort_float() =
+        let res = quick_sort float_test_cases
+        let expected = List.sort float_test_cases
+        Assert.AreEqual(expected, res)
 
-//     [<TestMethod>]
-//     member this.TestQuickSort_char() =
-//         let res = quick_sort char_test_cases
-//         let expected = Array.sort char_test_cases
-//         Assert.AreEqual(expected, res)
+    [<TestMethod>]
+    member this.TestQuickSort_char() =
+        let res = quick_sort char_test_cases
+        let expected = List.sort char_test_cases
+        Assert.AreEqual(expected, res)
 
 
 //     [<TestMethod>]
@@ -78,28 +79,3 @@ type sorts_test() =
 //         let res = merge_sort char_test_cases
 //         let expected = Array.sort char_test_cases
 //         Assert.AreEqual(expected, res)
-
-
-// type fibinacci_matrix_tests() =
-
-//     [<TestMethod>] // F0
-//     member this.Fib_0() = Assert.AreEqual(0L, fibonacci (0))
-
-//     [<TestMethod>] // F1
-//     member this.Fib_1() = Assert.AreEqual(1L, fibonacci (1))
-
-//     [<TestMethod>] // F2
-//     member this.Fib_2() = Assert.AreEqual(1L, fibonacci (2))
-
-//     [<TestMethod>] // F3
-//     member this.Fib_3() = Assert.AreEqual(2L, fibonacci (3))
-
-//     [<TestMethod>] // F30
-//     member this.Fib_30() =
-//         Assert.AreEqual(832040L, fibonacci (30))
-
-//     [<TestMethod>] // F(-1)
-//     member this.Fib_negative() =
-//         let ex = Assert.ThrowsException<System.Exception>(fun () -> fibonacci -1 :> obj)
-//         Assert.AreEqual("Fibonacci numbers for negative n are not defined\n", ex.Message)
-//
