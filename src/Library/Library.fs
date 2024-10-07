@@ -22,18 +22,12 @@ module sorts =
     let bubble_sort (arr: 't[]) : 't[] =
 
         let mutable array_len = arr.Length
-        let mutable swapped = true
 
-        while swapped do
-            swapped <- false
+        for i in 0 .. array_len - 2 do
+            if compare arr[i] arr[i + 1] > 0 then
+                swap arr i (i + 1)
 
-            for i in 0 .. array_len - 2 do
-                if compare arr[i] arr[i + 1] > 0 then
-                    swap arr i (i + 1)
-                    swapped <- true
-
-            array_len <- array_len - 1
-
+        array_len <- array_len - 1
         arr
 
 
