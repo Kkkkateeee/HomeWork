@@ -5,6 +5,7 @@ open Microsoft.VisualStudio.TestTools.UnitTesting
 
 open Library.bubble
 open Library.quick
+open Library.merge
 
 
 [<TestClass>]
@@ -61,21 +62,21 @@ type sorts_test() =
         Assert.AreEqual(expected, res)
 
 
-//     [<TestMethod>]
-//     member this.TestMergeSort_int() =
-//         for elem in int_test_cases do
-//             let res = merge_sort elem
-//             let expected = Array.sort elem
-//             Assert.AreEqual(expected, res)
+    [<TestMethod>]
+    member this.TestMergeSort_int() =
+        for elem in int_test_cases do
+            let res = merge_sort elem
+            let expected = List.sort elem
+            Assert.AreEqual(expected, res)
 
-//     [<TestMethod>]
-//     member this.TestMergeSort_float() =
-//         let res = merge_sort float_test_cases
-//         let expected = Array.sort float_test_cases
-//         Assert.AreEqual(expected, res)
+    [<TestMethod>]
+    member this.TestMergeSort_float() =
+        let res = merge_sort float_test_cases
+        let expected = List.sort float_test_cases
+        Assert.AreEqual(expected, res)
 
-//     [<TestMethod>]
-//     member this.TestMergeSort_char() =
-//         let res = merge_sort char_test_cases
-//         let expected = Array.sort char_test_cases
-//         Assert.AreEqual(expected, res)
+    [<TestMethod>]
+    member this.TestMergeSort_char() =
+        let res = merge_sort char_test_cases
+        let expected = List.sort char_test_cases
+        Assert.AreEqual(expected, res)

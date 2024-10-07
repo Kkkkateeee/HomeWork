@@ -30,3 +30,31 @@ module quick =
             let larger = List.filter(fun x -> compare x pivot > 0) other in
             quick_sort smaller @ (pivot :: equal) @ quick_sort larger
 
+
+module merge =
+    
+    let rec merge (left_list: 't list) (right_list: 't list) =
+        match left_list, right_list with
+        | [], _ -> right_list
+        | _, [] -> left_list
+        | x :: xs, y :: ys ->
+            if compare x y <= 0 then
+                x :: merge xs right_list
+            else
+                y :: merge left_list ys
+    
+    let rec separate (list: 't list) : ('t list * 't list) = 
+        match list with
+        | [] -> ([], [])
+        | [x] -> ([x], [])
+        | x :: y :: other ->
+            let (left_list, right_list) = separate other
+            (x :: left_list, y :: right_list)
+ 
+    let rec merge_sort (list: 't list) =
+        match list with
+        | [] -> []
+        | [x] -> [x]
+        | _ ->
+            let left_list, right_list = separate list
+            merge (merge_sort left_list)(merge_sort right_list)
