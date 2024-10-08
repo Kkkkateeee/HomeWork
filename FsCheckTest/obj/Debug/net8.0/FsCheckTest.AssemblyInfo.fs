@@ -10,7 +10,7 @@ open System.Reflection
 [<assembly: System.Reflection.AssemblyCompanyAttribute("FsCheckTest")>]
 [<assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")>]
 [<assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")>]
-[<assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1bb35cd60ec1ea4cbc49cfbcc775237668d909d4")>]
+[<assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eddad87894c70bae2b164dcdb8a897ca290a1a11")>]
 [<assembly: System.Reflection.AssemblyProductAttribute("FsCheckTest")>]
 [<assembly: System.Reflection.AssemblyTitleAttribute("FsCheckTest")>]
 [<assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")>]
