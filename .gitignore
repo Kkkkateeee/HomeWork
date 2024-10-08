@@ -4,3 +4,6 @@
 Tests/bin/
 Tests/obj/
 Tests/TestResults/
+
+FsCheckTest/bin
+FsCheckTest/obj
