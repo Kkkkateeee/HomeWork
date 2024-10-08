@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\Library\Library.fsproj" />
+    <ProjectReference Include="..\FsCheckTest\FsCheckTest.fsproj" />
   </ItemGroup>
 
 </Project>

@@ -1,2 +1,7 @@
-﻿// For more information see https://aka.ms/fsharp-console-apps
-printfn "Hello from F#"
+﻿module properties
+
+open FsCheck
+
+let prop_SortedList (xs: int list) =
+    let sorted = List.sort xs
+    List.forall2 (<=) sorted (List.tail sorted)
