@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "Ng/KgvuhBVA=",
+  "success": true,
+  "projectFilePath": "/home/banicsidy/Desktop/HomeWork/FsCheckTest/FsCheckTest.fsproj",
+  "expectedPackageFiles": [
+    "/home/banicsidy/.nuget/packages/fscheck/2.16.6/fscheck.2.16.6.nupkg.sha512",
+    "/home/banicsidy/.nuget/packages/fsharp.core/8.0.400/fsharp.core.8.0.400.nupkg.sha512"
+  ],
+  "logs": []
+}
