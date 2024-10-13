@@ -1,9 +1,5 @@
 /src/Library/bin/
 /src/Library/obj/
 
-Tests/bin/
-Tests/obj/
-Tests/TestResults/
-
-FsCheckTest/bin/
-FsCheckTest/obj/
+/Tests/bin/
+/Tests/obj/
