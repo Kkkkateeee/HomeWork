@@ -51,7 +51,15 @@ module sorts =
         | Cons (x, xs') -> Cons(x, append xs' ys)
 
 
-    let rec merge (left_list: MyList<'t>) (right_list: MyList<'t>) =
+    let rec merge_sort (list: MyList<'t>) : MyList<'t> =
+        match list with
+        | Empty -> Empty
+        | Cons(x, Empty) -> Cons(x, Empty)
+        | _ ->
+            let left_list, right_list = separate list
+            merge (merge_sort left_list)(merge_sort right_list)
+
+    and merge (left_list: MyList<'t>) (right_list: MyList<'t>) =
         match left_list, right_list with
         | Empty, _ -> right_list
         | _, Empty -> left_list
@@ -61,19 +69,11 @@ module sorts =
             else
                 Cons(y, (merge left_list ys))
     
-    let rec separate (list: MyList<'t>) : (MyList<'t>* MyList<'t>) = 
+    and separate (list: MyList<'t>) : (MyList<'t>* MyList<'t>) = 
         match list with
         | Empty -> (Empty, Empty)
         | Cons(x, Empty) -> (Cons(x, Empty), Empty)
         | Cons(x, Cons(y, other)) ->
             let (left_list, right_list) = separate other
             (Cons(x, left_list), Cons(y, right_list))
- 
-    let rec merge_sort (list: MyList<'t>) : MyList<'t> =
-        match list with
-        | Empty -> Empty
-        | Cons(x, Empty) -> Cons(x, Empty)
-        | _ ->
-            let left_list, right_list = separate list
-            merge (merge_sort left_list)(merge_sort right_list)
             
