@@ -25,13 +25,13 @@ module sorts =
         else
             bubble_sort sorted_list  
 
-    
+        
     let rec quick_sort (list: MyList<'t>) : MyList<'t> =
         match list with
         | Empty -> Empty
         | Cons (pivot, other) ->
             let smaller, equal, larger = partition pivot other
-            append (quick_sort smaller) (Cons(pivot, equal)) |> append (quick_sort larger)
+            append (quick_sort smaller) (append equal (Cons(pivot, quick_sort larger)))
 
     and partition pivot list =
         match list with
@@ -40,7 +40,7 @@ module sorts =
             let smaller, equal, larger = partition pivot tail
             if compare head pivot < 0 then
                 (Cons(head, smaller), equal, larger)
-            elif compare head pivot = 0 then
+            elif head = pivot then
                 (smaller, Cons(head, equal), larger)
             else
                 (smaller, equal, Cons(head, larger))
@@ -50,7 +50,7 @@ module sorts =
         | Empty -> ys
         | Cons (x, xs') -> Cons(x, append xs' ys)
 
-    
+
     let rec merge (left_list: MyList<'t>) (right_list: MyList<'t>) =
         match left_list, right_list with
         | Empty, _ -> right_list
