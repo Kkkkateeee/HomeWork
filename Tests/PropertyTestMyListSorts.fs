@@ -3,8 +3,8 @@ module RandomTests
 open Xunit
 open FsCheck
 open FsCheck.Xunit
-open Library.MyList
 open FsCheck.Arb
+open MyLIstSorts.MyList
 
 type Overrides() =
     static member Float() =

@@ -1,7 +1,7 @@
 module ModuleTests
 
 open Xunit
-open Library.MyList
+open MyLIstSorts.MyList
 
 
 module module_test =
