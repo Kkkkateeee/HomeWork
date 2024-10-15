@@ -1,20 +1,7 @@
 module ModuleTests
 
 open Xunit
-open Library.sorts
-
-
-module type_changer =
-    
-    let rec List_MyList (list: 't List) : (MyList<'t>) =
-        match list with 
-        | [] -> Empty
-        | head :: tail -> Cons(head, List_MyList tail)
-
-    let rec MyList_List (list: MyList<'t>) : ('t List) =
-        match list with 
-        | Empty -> []
-        | Cons(head, tail) -> head :: MyList_List tail
+open Library.MyList
 
 
 module module_test =
@@ -28,33 +15,24 @@ module module_test =
                [ 4; 2; 2; 8; 3; 3; 1 ] ]
 
         for elem in int_test_cases do
-            let actual = f (type_changer.List_MyList elem) |> type_changer.MyList_List
+            let actual = f (List_MyList elem) |> MyList_List
             let expected = List.sort elem
-            Assert.Equal(expected.Length, actual.Length)
-
-            for i in 0 .. expected.Length - 1 do
-                Assert.Equal(expected.[i], actual.[i])
-
+            Assert.True(expected.Length = actual.Length && List.forall2 (=) expected actual)
+        
 
     let floatTest (f: MyList<float> -> MyList<float>) =
         let float_test_cases = [ 3.14; 1.41; 2.71; 0.57; 4.67 ]
-        let actual = f (type_changer.List_MyList float_test_cases) |> type_changer.MyList_List
+        let actual = f (List_MyList float_test_cases) |> MyList_List
         let expected = List.sort float_test_cases
-        Assert.Equal(expected.Length, actual.Length)
-
-        for i in 0 .. expected.Length - 1 do
-            Assert.Equal(expected.[i], actual.[i])
-
+        Assert.True(expected.Length = actual.Length && List.forall2 (=) expected actual)
+        
 
     let charTest (f: MyList<char> -> MyList<char>) =
         let char_test_cases = [ 'D'; 'A'; 'C'; 'B'; 'E' ]
-        let actual = f (type_changer.List_MyList char_test_cases) |> type_changer.MyList_List
+        let actual = f (List_MyList char_test_cases) |> MyList_List
         let expected = List.sort char_test_cases
-        Assert.Equal(expected.Length, actual.Length)
-
-        for i in 0 .. expected.Length - 1 do
-            Assert.Equal(expected.[i], actual.[i])
-
+        Assert.True(expected.Length = actual.Length && List.forall2 (=) expected actual)
+        
 
     [<Fact>]
     let  ``intTestBubbleSort``() = intTest bubble_sort

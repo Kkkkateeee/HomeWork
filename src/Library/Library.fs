@@ -1,12 +1,23 @@
 ﻿namespace Library
 
 
-module sorts =
+module MyList =
 
     type MyList<'t> = 
         | Empty
         | Cons of 't * MyList<'t>
 
+    let rec List_MyList (list: 't List) : (MyList<'t>) =
+        match list with 
+        | [] -> Empty
+        | head :: tail -> Cons(head, List_MyList tail)
+
+    let rec MyList_List (list: MyList<'t>) : ('t List) =
+        match list with 
+        | Empty -> []
+        | Cons(head, tail) -> head :: MyList_List tail
+
+    
     
     let rec bubble_sort (list: MyList<'t>) : MyList<'t> =
         let rec bubble list =
