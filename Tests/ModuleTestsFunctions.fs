@@ -18,7 +18,8 @@ type factorial_tests() =
     member this.TestFactorial_One() = Assert.AreEqual<int>(1, factorial (1))
 
     [<TestMethod>] // 5!
-    member this.TestFactorial_Five() = Assert.AreEqual<int>(120, factorial (5))
+    member this.TestFactorial_Five() =
+        Assert.AreEqual<int>(120, factorial (5))
 
     [<TestMethod>] // (-1)!
     member this.TestFactorial_negative() =
@@ -31,16 +32,20 @@ type factorial_tests() =
 type fibinacci_matrix_tests() =
 
     [<TestMethod>] // F0
-    member this.Fib_0() = Assert.AreEqual<int64>(0L, fibonacci (0))
+    member this.Fib_0() =
+        Assert.AreEqual<int64>(0L, fibonacci (0))
 
     [<TestMethod>] // F1
-    member this.Fib_1() = Assert.AreEqual<int64>(1L, fibonacci (1))
+    member this.Fib_1() =
+        Assert.AreEqual<int64>(1L, fibonacci (1))
 
     [<TestMethod>] // F2
-    member this.Fib_2() = Assert.AreEqual<int64>(1L, fibonacci (2))
+    member this.Fib_2() =
+        Assert.AreEqual<int64>(1L, fibonacci (2))
 
     [<TestMethod>] // F3
-    member this.Fib_3() = Assert.AreEqual<int64>(2L, fibonacci (3))
+    member this.Fib_3() =
+        Assert.AreEqual<int64>(2L, fibonacci (3))
 
     [<TestMethod>] // F30
     member this.Fib_30() =
