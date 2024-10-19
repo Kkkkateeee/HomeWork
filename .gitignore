@@ -1,5 +1,5 @@
-/src/Library/bin/
-/src/Library/obj/
+src/Library/bin/
+src/Library/obj/
 
 Tests/bin/
 Tests/obj/
