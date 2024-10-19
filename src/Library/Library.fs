@@ -41,53 +41,51 @@ module SortFunctions =
 
 
     let rec quick_sort (list: MyList<'t>) : MyList<'t> =
+        let rec partition pivot list =
+            match list with
+            | Empty -> (Empty, Empty, Empty)
+            | Cons(head, tail) ->
+                let smaller, equal, larger = partition pivot tail
+
+                if compare head pivot < 0 then
+                    (Cons(head, smaller), equal, larger)
+                elif head = pivot then
+                    (smaller, Cons(head, equal), larger)
+                else
+                    (smaller, equal, Cons(head, larger))
+        let rec append xs ys =
+            match xs with
+            | Empty -> ys
+            | Cons(x, xs') -> Cons(x, append xs' ys)
+
         match list with
         | Empty -> Empty
         | Cons(pivot, other) ->
             let smaller, equal, larger = partition pivot other
             append (quick_sort smaller) (append equal (Cons(pivot, quick_sort larger)))
 
-    and partition pivot list =
-        match list with
-        | Empty -> (Empty, Empty, Empty)
-        | Cons(head, tail) ->
-            let smaller, equal, larger = partition pivot tail
-
-            if compare head pivot < 0 then
-                (Cons(head, smaller), equal, larger)
-            elif head = pivot then
-                (smaller, Cons(head, equal), larger)
-            else
-                (smaller, equal, Cons(head, larger))
-
-    and append xs ys =
-        match xs with
-        | Empty -> ys
-        | Cons(x, xs') -> Cons(x, append xs' ys)
-
 
     let rec merge_sort (list: MyList<'t>) : MyList<'t> =
+        let rec merge (left_list: MyList<'t>) (right_list: MyList<'t>) =
+            match left_list, right_list with
+            | Empty, _ -> right_list
+            | _, Empty -> left_list
+            | Cons(x, xs), Cons(y, ys) ->
+                if compare x y <= 0 then
+                    Cons(x, (merge xs right_list))
+                else
+                    Cons(y, (merge left_list ys))
+        let rec separate (list: MyList<'t>) : (MyList<'t> * MyList<'t>) =
+            match list with
+            | Empty -> (Empty, Empty)
+            | Cons(x, Empty) -> (Cons(x, Empty), Empty)
+            | Cons(x, Cons(y, other)) ->
+                let (left_list, right_list) = separate other
+                (Cons(x, left_list), Cons(y, right_list))
+
         match list with
         | Empty -> Empty
         | Cons(x, Empty) -> Cons(x, Empty)
         | _ ->
             let left_list, right_list = separate list
             merge (merge_sort left_list) (merge_sort right_list)
-
-    and merge (left_list: MyList<'t>) (right_list: MyList<'t>) =
-        match left_list, right_list with
-        | Empty, _ -> right_list
-        | _, Empty -> left_list
-        | Cons(x, xs), Cons(y, ys) ->
-            if compare x y <= 0 then
-                Cons(x, (merge xs right_list))
-            else
-                Cons(y, (merge left_list ys))
-
-    and separate (list: MyList<'t>) : (MyList<'t> * MyList<'t>) =
-        match list with
-        | Empty -> (Empty, Empty)
-        | Cons(x, Empty) -> (Cons(x, Empty), Empty)
-        | Cons(x, Cons(y, other)) ->
-            let (left_list, right_list) = separate other
-            (Cons(x, left_list), Cons(y, right_list))

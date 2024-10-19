@@ -20,22 +20,20 @@ module module_test =
         for elem in int_test_cases do
             let actual = f (ConvertListToMyList elem) |> ConvertMyListToList
             let expected = List.sort elem
-            Assert.True(expected.Length = actual.Length && List.forall2 (=) expected actual)
+            Assert.True(List.forall2 (=) actual expected)
 
 
     let floatTest (f: MyList<float> -> MyList<float>) =
         let float_test_cases = [ 3.14; 1.41; 2.71; 0.57; 4.67 ]
         let actual = f (ConvertListToMyList float_test_cases) |> ConvertMyListToList
         let expected = List.sort float_test_cases
-        Assert.True(expected.Length = actual.Length && List.forall2 (=) expected actual)
-
+        Assert.True(List.forall2 (=) actual expected)
 
     let charTest (f: MyList<char> -> MyList<char>) =
         let char_test_cases = [ 'D'; 'A'; 'C'; 'B'; 'E' ]
         let actual = f (ConvertListToMyList char_test_cases) |> ConvertMyListToList
         let expected = List.sort char_test_cases
-        Assert.True(expected.Length = actual.Length && List.forall2 (=) expected actual)
-
+        Assert.True(List.forall2 (=) actual expected)
 
     [<Fact>]
     let ``intTestBubbleSort`` () = intTest bubble_sort
