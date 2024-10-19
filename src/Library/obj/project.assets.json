@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net8.0": {
-      "FSharp.Core/8.0.400": {
+      "FSharp.Core/8.0.401": {
         "type": "package",
         "compile": {
           "lib/netstandard2.1/FSharp.Core.dll": {
@@ -59,15 +59,15 @@
     }
   },
   "libraries": {
-    "FSharp.Core/8.0.400": {
-      "sha512": "kHMdDDmlZl98tujgHCmL8/HNH9VKbxsRMC9s7wbwr4noR40SSa5D4d00yF8cMK52s8jabVuiLLcrUw9r+PkKDQ==",
+    "FSharp.Core/8.0.401": {
+      "sha512": "pvmquLrs82m8WqWB49Gj+hsmnWURkUbc++pJ0P2NdrEv1ZVVrhDNjSiFNP4wW4HiTowwaRhjiBc5IKNV35Vf/A==",
       "type": "package",
-      "path": "fsharp.core/8.0.400",
+      "path": "fsharp.core/8.0.401",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
-        "fsharp.core.8.0.400.nupkg.sha512",
+        "fsharp.core.8.0.401.nupkg.sha512",
         "fsharp.core.nuspec",
         "lib/netstandard2.0/FSharp.Core.dll",
         "lib/netstandard2.0/FSharp.Core.xml",
@@ -104,7 +104,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "FSharp.Core >= 8.0.400"
+      "FSharp.Core >= 8.0.401"
     ]
   },
   "packageFolders": {
@@ -126,7 +126,7 @@
         "net8.0"
       ],
       "sources": {
-        "/usr/share/dotnet/sdk/8.0.401/FSharp/library-packs": {},
+        "/snap/dotnet-sdk/252/sdk/8.0.403/FSharp/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -148,7 +148,7 @@
           "FSharp.Core": {
             "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
             "target": "Package",
-            "version": "[8.0.400, )",
+            "version": "[8.0.401, )",
             "generatePathProperty": true
           }
         },
@@ -168,7 +168,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.401/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/snap/dotnet-sdk/252/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -20,7 +20,7 @@
           "net8.0"
         ],
         "sources": {
-          "/usr/share/dotnet/sdk/8.0.401/FSharp/library-packs": {},
+          "/snap/dotnet-sdk/252/sdk/8.0.403/FSharp/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -42,7 +42,7 @@
             "FSharp.Core": {
               "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
               "target": "Package",
-              "version": "[8.0.400, )",
+              "version": "[8.0.401, )",
               "generatePathProperty": true
             }
           },
@@ -62,7 +62,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.401/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/snap/dotnet-sdk/252/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
