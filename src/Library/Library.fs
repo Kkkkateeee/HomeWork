@@ -6,22 +6,22 @@ type MyList<'t> =
     | Cons of 't * MyList<'t>
 
 
-module TypeConvertFunctions =
+module MyList =
 
-    let rec ConvertListToMyList (list: 't List) : (MyList<'t>) =
+    let rec toMyList (list: 't List) : (MyList<'t>) =
         match list with
         | [] -> Empty
-        | head :: tail -> Cons(head, ConvertListToMyList tail)
+        | head :: tail -> Cons(head, toMyList tail)
 
-    let rec ConvertMyListToList (list: MyList<'t>) : ('t List) =
+    let rec toList (list: MyList<'t>) : ('t List) =
         match list with
         | Empty -> []
-        | Cons(head, tail) -> head :: ConvertMyListToList tail
+        | Cons(head, tail) -> head :: toList tail
 
 
 module SortFunctions =
 
-    let rec bubble_sort (list: MyList<'t>) : MyList<'t> =
+    let rec bubbleSort (list: MyList<'t>) : MyList<'t> =
         let rec bubble list =
             match list with
             | Empty -> Empty
@@ -32,15 +32,15 @@ module SortFunctions =
                 else
                     Cons(x1, bubble (Cons(x2, other)))
 
-        let sorted_list = bubble list
+        let sortedList = bubble list
 
-        if sorted_list = list then
-            sorted_list
+        if sortedList = list then
+            sortedList
         else
-            bubble_sort sorted_list
+            bubbleSort sortedList
 
 
-    let rec quick_sort (list: MyList<'t>) : MyList<'t> =
+    let rec quickSort (list: MyList<'t>) : MyList<'t> =
         let rec partition pivot list =
             match list with
             | Empty -> (Empty, Empty, Empty)
@@ -62,30 +62,30 @@ module SortFunctions =
         | Empty -> Empty
         | Cons(pivot, other) ->
             let smaller, equal, larger = partition pivot other
-            append (quick_sort smaller) (append equal (Cons(pivot, quick_sort larger)))
+            append (quickSort smaller) (append equal (Cons(pivot, quickSort larger)))
 
 
-    let rec merge_sort (list: MyList<'t>) : MyList<'t> =
-        let rec merge (left_list: MyList<'t>) (right_list: MyList<'t>) =
-            match left_list, right_list with
-            | Empty, _ -> right_list
-            | _, Empty -> left_list
+    let rec mergeSort (list: MyList<'t>) : MyList<'t> =
+        let rec merge (leftList: MyList<'t>) (rightList: MyList<'t>) =
+            match leftList, rightList with
+            | Empty, _ -> rightList
+            | _, Empty -> leftList
             | Cons(x, xs), Cons(y, ys) ->
                 if compare x y <= 0 then
-                    Cons(x, (merge xs right_list))
+                    Cons(x, (merge xs rightList))
                 else
-                    Cons(y, (merge left_list ys))
+                    Cons(y, (merge leftList ys))
         let rec separate (list: MyList<'t>) : (MyList<'t> * MyList<'t>) =
             match list with
             | Empty -> (Empty, Empty)
             | Cons(x, Empty) -> (Cons(x, Empty), Empty)
             | Cons(x, Cons(y, other)) ->
-                let (left_list, right_list) = separate other
-                (Cons(x, left_list), Cons(y, right_list))
+                let (leftList, rightList) = separate other
+                (Cons(x, leftList), Cons(y, rightList))
 
         match list with
         | Empty -> Empty
         | Cons(x, Empty) -> Cons(x, Empty)
         | _ ->
-            let left_list, right_list = separate list
-            merge (merge_sort left_list) (merge_sort right_list)
+            let leftList, rightList = separate list
+            merge (mergeSort leftList) (mergeSort rightList)

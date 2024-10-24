@@ -1,4 +1,4 @@
-module RandomTests
+module PropertyTests
 
 open Xunit
 open FsCheck
@@ -6,7 +6,7 @@ open FsCheck.Xunit
 open FsCheck.Arb
 
 open MyListSorts.SortFunctions
-open MyListSorts.TypeConvertFunctions
+open MyListSorts
 
 type Overrides() =
     static member Float() =
@@ -17,129 +17,130 @@ Arb.register<Overrides> () |> ignore
 
 
 [<Properties(MaxTest = 10)>]
-type RandomTestsForBubleSort() =
+type PropertyTestsForBubleSort() =
 
     [<Property>]
-    member _.IntTest(test_cases: int list) =
-        let actual = bubble_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let expected = List.sort test_cases
-        Assert.True(List.forall2 (=) actual expected)
+    member _.intTest(testCases: int list) =
+        let actual = bubbleSort (MyList.toMyList testCases) |> MyList.toList
+        let expected = List.sort testCases
+        Assert.Equal<int>(expected, actual)
 
     [<Property(Arbitrary = [| typeof<Overrides> |])>]
-    member _.FloatTest(test_cases: float list) =
-        let actual = bubble_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let expected = List.sort test_cases
-        Assert.True(List.forall2 (=) actual expected)
+    member _.floatTest(testCases: float list) =
+        let actual = bubbleSort (MyList.toMyList testCases) |> MyList.toList
+        let expected = List.sort testCases
+        Assert.Equal<float>(expected, actual)
 
     [<Property>]
-    member _.CharTest(test_cases: char list) =
-        let actual = bubble_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let expected = List.sort test_cases
-        Assert.True(List.forall2 (=) actual expected)
+    member _.charTest(testCases: char list) =
+        let actual = bubbleSort (MyList.toMyList testCases) |> MyList.toList
+        let expected = List.sort testCases
+        Assert.Equal<char>(expected, actual)
 
 [<Properties(MaxTest = 10)>]
-type RandomTestsForQuickSor1t() =
+type PropertyTestsForQuickSor1t() =
 
     [<Property>]
-    member _.IntTest(test_cases: int list) =
-        let actual = quick_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let expected = List.sort test_cases
-        Assert.True(List.forall2 (=) actual expected)
+    member _.intTest(testCases: int list) =
+        let actual = quickSort (MyList.toMyList testCases) |> MyList.toList
+        let expected = List.sort testCases
+        Assert.Equal<int>(expected, actual)
 
     [<Property(Arbitrary = [| typeof<Overrides> |])>]
-    member _.FloatTest(test_cases: float list) =
-        let actual = quick_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let expected = List.sort test_cases
-        Assert.True(List.forall2 (=) actual expected)
+    member _.floatTest(testCases: float list) =
+        let actual = quickSort (MyList.toMyList testCases) |> MyList.toList
+        let expected = List.sort testCases
+        Assert.Equal<float>(expected, actual)
 
     [<Property>]
-    member _.CharTest(test_cases: char list) =
-        let actual = quick_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let expected = List.sort test_cases
-        Assert.True(List.forall2 (=) actual expected)
+    member _.fharTest(testCases: char list) =
+        let actual = quickSort (MyList.toMyList testCases) |> MyList.toList
+        let expected = List.sort testCases
+        Assert.Equal<char>(expected, actual)
 
 [<Properties(MaxTest = 10)>]
 type RandomTestsForMergeSort() =
 
     [<Property>]
-    member _.IntTest(test_cases: int list) =
-        let actual = merge_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let expected = List.sort test_cases
-        Assert.True(List.forall2 (=) actual expected)
+    member _.intTest(testCases: int list) =
+        let actual = mergeSort (MyList.toMyList testCases) |> MyList.toList
+        let expected = List.sort testCases
+        Assert.Equal<int>(expected, actual)
 
     [<Property(Arbitrary = [| typeof<Overrides> |])>]
-    member _.FloatTest(test_cases: float list) =
-        let actual = merge_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let expected = List.sort test_cases
-        Assert.True(List.forall2 (=) actual expected)
+    member _.floatTest(testCases: float list) =
+        let actual = mergeSort (MyList.toMyList testCases) |> MyList.toList
+        let expected = List.sort testCases
+        Assert.Equal<float>(expected, actual)
 
     [<Property>]
-    member _.CharTest(test_cases: char list) =
-        let actual = merge_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let expected = List.sort test_cases
-        Assert.True(List.forall2 (=) actual expected)
+    member _.charTest(testCases: char list) =
+        let actual = mergeSort (MyList.toMyList testCases) |> MyList.toList
+        let expected = List.sort testCases
+        Assert.Equal<char>(expected, actual)
+
+
 
 
 [<Properties(MaxTest = 10)>]
 type BubbleEqualsQuick() =
 
     [<Property>]
-    member _.IntTest(test_cases: int list) =
-        let bubble = bubble_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let quick = quick_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        Assert.True(List.forall2 (=) quick bubble)
+    member _.intTest(testCases: int list) =
+        let bubble = bubbleSort (MyList.toMyList testCases) |> MyList.toList
+        let quick = quickSort (MyList.toMyList testCases) |> MyList.toList
+        Assert.Equal<int>(bubble, quick)
 
     [<Property(Arbitrary = [| typeof<Overrides> |])>]
-    member _.FloatTest(test_cases: float list) =
-        let bubble = bubble_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let quick = quick_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        Assert.True(List.forall2 (=) quick bubble)
+    member _.floatTest(testCases: float list) =
+        let bubble = bubbleSort (MyList.toMyList testCases) |> MyList.toList
+        let quick = quickSort (MyList.toMyList testCases) |> MyList.toList
+        Assert.Equal<float>(bubble, quick)
 
     [<Property>]
-    member _.CharTest(test_cases: char list) =
-        let bubble = bubble_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let quick = quick_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        Assert.True(List.forall2 (=) quick bubble)
+    member _.charTest(testCases: char list) =
+        let bubble = bubbleSort (MyList.toMyList testCases) |> MyList.toList
+        let quick = quickSort (MyList.toMyList testCases) |> MyList.toList
+        Assert.Equal<char>(bubble, quick)
 
 [<Properties(MaxTest = 10)>]
 type BubbleEqualsMerge() =
 
     [<Property>]
-    member _.IntTest(test_cases: int list) =
-        let bubble = bubble_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let merge = merge_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        Assert.True(List.forall2 (=) merge bubble)
+    member _.ifntTest(testCases: int list) =
+        let bubble = bubbleSort (MyList.toMyList testCases) |> MyList.toList
+        let merge = mergeSort (MyList.toMyList testCases) |> MyList.toList
+        Assert.Equal<int>(bubble, merge)
 
     [<Property(Arbitrary = [| typeof<Overrides> |])>]
-    member _.FloatTest(test_cases: float list) =
-        let bubble = bubble_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let merge = merge_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        Assert.True(List.forall2 (=) merge bubble)
+    member _.floatTest(testCases: float list) =
+        let bubble = bubbleSort (MyList.toMyList testCases) |> MyList.toList
+        let merge = mergeSort (MyList.toMyList testCases) |> MyList.toList
+        Assert.Equal<float>(bubble, merge)
 
     [<Property>]
-    member _.CharTest(test_cases: char list) =
-        let bubble = bubble_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let merge = merge_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        Assert.True(List.forall2 (=) merge bubble)
+    member _.charTest(testCases: char list) =
+        let bubble = bubbleSort (MyList.toMyList testCases) |> MyList.toList
+        let merge = mergeSort (MyList.toMyList testCases) |> MyList.toList
+        Assert.Equal<char>(bubble, merge)
 
 
 [<Properties(MaxTest = 10)>]
 type MergeEqualsQuick() =
 
     [<Property>]
-    member _.IntTest(test_cases: int list) =
-        let merge = bubble_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let quick = quick_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        Assert.True(List.forall2 (=) merge quick)
-
+    member _.intTest(testCases: int list) =
+        let merge = bubbleSort (MyList.toMyList testCases) |> MyList.toList
+        let quick = quickSort (MyList.toMyList testCases) |> MyList.toList
+        Assert.Equal<int>(merge, quick)
     [<Property(Arbitrary = [| typeof<Overrides> |])>]
-    member _.FloatTest(test_cases: float list) =
-        let merge = bubble_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let quick = quick_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        Assert.True(List.forall2 (=) merge quick)
+    member _.floatTest(testCases: float list) =
+        let merge = bubbleSort (MyList.toMyList testCases) |> MyList.toList
+        let quick = quickSort (MyList.toMyList testCases) |> MyList.toList
+        Assert.Equal<float>(merge, quick)
 
     [<Property>]
-    member _.CharTest(test_cases: char list) =
-        let merge = bubble_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        let quick = quick_sort (ConvertListToMyList test_cases) |> ConvertMyListToList
-        Assert.True(List.forall2 (=) merge quick)
+    member _.charTest(testCases: char list) =
+        let merge = bubbleSort (MyList.toMyList testCases) |> MyList.toList
+        let quick = quickSort (MyList.toMyList testCases) |> MyList.toList
+        Assert.Equal<char>(merge, quick)
