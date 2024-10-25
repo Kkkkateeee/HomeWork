@@ -2,8 +2,8 @@ module UnitTests
 
 open Xunit
 
+open MyListSorts.MyList
 open MyListSorts
-open MyListSorts.SortFunctions
 
 
 module UnitTests =

@@ -5,7 +5,7 @@ open FsCheck
 open FsCheck.Xunit
 open FsCheck.Arb
 
-open MyListSorts.SortFunctions
+open MyListSorts.MyList
 open MyListSorts
 
 type Overrides() =

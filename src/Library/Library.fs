@@ -19,7 +19,6 @@ module MyList =
         | Cons(head, tail) -> head :: toList tail
 
 
-module SortFunctions =
 
     let rec bubbleSort (list: MyList<'t>) : MyList<'t> =
         let rec bubble list =
