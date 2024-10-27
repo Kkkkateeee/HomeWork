@@ -8,19 +8,19 @@ type MyList<'t> =
 
 module MyList =
 
-    let rec toMyList (list: 't List) : (MyList<'t>) =
+    let rec fromSystemList (list: 't List) : (MyList<'t>) =
         match list with
         | [] -> Empty
-        | head :: tail -> Cons(head, toMyList tail)
+        | head :: tail -> Cons(head, fromSystemList tail)
 
-    let rec toList (list: MyList<'t>) : ('t List) =
+    let rec fromMyList (list: MyList<'t>) : ('t List) =
         match list with
         | Empty -> []
-        | Cons(head, tail) -> head :: toList tail
+        | Cons(head, tail) -> head :: fromMyList tail
 
 
 
-    let rec bubbleSort (list: MyList<'t>) : MyList<'t> =
+    let bubbleSort (list: MyList<'t>) : MyList<'t> =
         let rec bubble list =
             match list with
             | Empty -> Empty
@@ -36,7 +36,7 @@ module MyList =
         if sortedList = list then
             sortedList
         else
-            bubbleSort sortedList
+            bubble sortedList
 
 
     let rec quickSort (list: MyList<'t>) : MyList<'t> =
