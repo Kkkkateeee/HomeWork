@@ -133,6 +133,7 @@ type MergeEqualsQuick() =
         let merge = bubbleSort (MyList.fromSystemList testCases) |> MyList.fromMyList
         let quick = quickSort (MyList.fromSystemList testCases) |> MyList.fromMyList
         Assert.Equal<int>(merge, quick)
+
     [<Property(Arbitrary = [| typeof<Overrides> |])>]
     member _.floatTest(testCases: float list) =
         let merge = bubbleSort (MyList.fromSystemList testCases) |> MyList.fromMyList

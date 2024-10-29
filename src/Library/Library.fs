@@ -20,23 +20,29 @@ module MyList =
 
 
 
+
     let bubbleSort (list: MyList<'t>) : MyList<'t> =
-        let rec bubble list =
+        let rec bubble list swapped =
             match list with
-            | Empty -> Empty
-            | Cons(x, Empty) -> Cons(x, Empty)
+            | Empty -> (Empty, swapped)
+            | Cons(x, Empty) -> (Cons(x, Empty), swapped)
             | Cons(x1, Cons(x2, other)) ->
+
                 if compare x1 x2 > 0 then
-                    Cons(x2, bubble (Cons(x1, other)))
+                    let (sortedTail, _) = bubble (Cons(x1, other)) true
+                    (Cons(x2, sortedTail), true)
+
                 else
-                    Cons(x1, bubble (Cons(x2, other)))
+                    let (sortedTail, s) = bubble (Cons(x2, other)) swapped
+                    (Cons(x1, sortedTail), s)
 
-        let sortedList = bubble list
+        let rec sort list =
+            let (newList, swapped) = bubble list false
+            if swapped then sort newList 
+             else newList
 
-        if sortedList = list then
-            sortedList
-        else
-            bubble sortedList
+        sort list
+
 
 
     let rec quickSort (list: MyList<'t>) : MyList<'t> =
@@ -52,6 +58,7 @@ module MyList =
                     (smaller, Cons(head, equal), larger)
                 else
                     (smaller, equal, Cons(head, larger))
+
         let rec append xs ys =
             match xs with
             | Empty -> ys
@@ -74,6 +81,7 @@ module MyList =
                     Cons(x, (merge xs rightList))
                 else
                     Cons(y, (merge leftList ys))
+
         let rec separate (list: MyList<'t>) : (MyList<'t> * MyList<'t>) =
             match list with
             | Empty -> (Empty, Empty)
@@ -88,3 +96,4 @@ module MyList =
         | _ ->
             let leftList, rightList = separate list
             merge (mergeSort leftList) (mergeSort rightList)
+
