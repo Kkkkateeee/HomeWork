@@ -13,11 +13,10 @@ module MyList =
         | [] -> Empty
         | head :: tail -> Cons(head, fromSystemList tail)
 
-    let rec fromMyList (list: MyList<'t>) : ('t List) =
+    let rec toSystemList (list: MyList<'t>) : ('t List) =
         match list with
         | Empty -> []
-        | Cons(head, tail) -> head :: fromMyList tail
-
+        | Cons(head, tail) -> head :: toSystemList tail
 
 
 

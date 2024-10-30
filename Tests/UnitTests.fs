@@ -17,20 +17,20 @@ module UnitTests =
               [ 4; 2; 2; 8; 3; 3; 1 ] ]
 
         for elem in intTestCases do
-            let actual = f (MyList.fromSystemList elem) |> MyList.fromMyList
+            let actual = f (MyList.fromSystemList elem) |> MyList.toSystemList
             let expected = List.sort elem
             Assert.Equal<int>(expected, actual)
 
 
     let floatTest (f: MyList<float> -> MyList<float>) =
         let floatTestCases = [ 3.14; 1.41; 2.71; 0.57; 4.67 ]
-        let actual = f (MyList.fromSystemList floatTestCases) |> MyList.fromMyList
+        let actual = f (MyList.fromSystemList floatTestCases) |> MyList.toSystemList
         let expected = List.sort floatTestCases
         Assert.Equal<float>(expected, actual)
 
     let charTest (f: MyList<char> -> MyList<char>) =
         let charTestCases = [ 'D'; 'A'; 'C'; 'B'; 'E' ]
-        let actual = f (MyList.fromSystemList charTestCases) |> MyList.fromMyList
+        let actual = f (MyList.fromSystemList charTestCases) |> MyList.toSystemList
         let expected = List.sort charTestCases
         Assert.Equal<char>(expected, actual)
 
