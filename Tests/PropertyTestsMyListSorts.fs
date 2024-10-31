@@ -8,6 +8,7 @@ open FsCheck.Arb
 open MyListSorts.MyList
 open MyListSorts
 
+
 type Overrides() =
     static member Float() =
         Arb.Default.Float()
@@ -80,8 +81,6 @@ type RandomTestsForMergeSort() =
         Assert.Equal<char>(expected, actual)
 
 
-
-
 [<Properties(MaxTest = 10)>]
 type BubbleEqualsQuick() =
 
@@ -123,7 +122,6 @@ type BubbleEqualsMerge() =
         let bubble = bubbleSort (MyList.fromSystemList testCases) |> MyList.toSystemList
         let merge = mergeSort (MyList.fromSystemList testCases) |> MyList.toSystemList
         Assert.Equal<char>(bubble, merge)
-
 
 [<Properties(MaxTest = 10)>]
 type MergeEqualsQuick() =

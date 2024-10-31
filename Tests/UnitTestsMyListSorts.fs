@@ -21,7 +21,6 @@ module UnitTests =
             let expected = List.sort elem
             Assert.Equal<int>(expected, actual)
 
-
     let floatTest (f: MyList<float> -> MyList<float>) =
         let floatTestCases = [ 3.14; 1.41; 2.71; 0.57; 4.67 ]
         let actual = f (MyList.fromSystemList floatTestCases) |> MyList.toSystemList

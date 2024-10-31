@@ -37,8 +37,7 @@ module MyList =
 
         let rec sort list =
             let (newList, swapped) = bubble list false
-            if swapped then sort newList 
-             else newList
+            if swapped then sort newList else newList
 
         sort list
 
