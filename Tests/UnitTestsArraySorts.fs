@@ -20,8 +20,6 @@ type sorts_test() =
         for elem in int_test_cases do
             let actual = f elem
             let expected = Array.sort elem
-            printf "ac: %A\n" actual
-            printf "ex: %A\n" expected
             Assert.AreEqual(expected.Length, actual.Length)
 
             for i in 0 .. expected.Length - 1 do
@@ -31,8 +29,6 @@ type sorts_test() =
         let float_test_cases = [| 3.14; 1.41; 2.71; 0.57; 4.67 |]
         let actual = f float_test_cases
         let expected = Array.sort float_test_cases
-        printf "%A\n" actual
-        printf "%A" expected
         Assert.AreEqual(expected.Length, actual.Length)
 
         for i in 0 .. expected.Length - 1 do
@@ -42,32 +38,30 @@ type sorts_test() =
         let char_test_cases = [| 'D'; 'A'; 'C'; 'B'; 'E' |]
         let actual = f char_test_cases
         let expected = Array.sort char_test_cases
-        printf "%A\n" actual
-        printf "%A" expected
         Assert.AreEqual(expected.Length, actual.Length)
 
         for i in 0 .. expected.Length - 1 do
             Assert.AreEqual(expected.[i], actual.[i])
 
 
-    // [<TestMethod>]
-    // member this.intTestBubbleSort() = intTest bubbleSort
+    [<TestMethod>]
+    member this.intTestBubbleSort() = intTest bubbleSort
 
-    // [<TestMethod>]
-    // member this.floatTestBubbleSort() = floatTest bubbleSort
+    [<TestMethod>]
+    member this.floatTestBubbleSort() = floatTest bubbleSort
 
-    // [<TestMethod>]
-    // member this.charTestBubbleSort() = charTest bubbleSort
+    [<TestMethod>]
+    member this.charTestBubbleSort() = charTest bubbleSort
 
 
-    // [<TestMethod>]
-    // member this.intTestQuickSort() = intTest quickSort
+    [<TestMethod>]
+    member this.intTestQuickSort() = intTest quickSort
 
-    // [<TestMethod>]
-    // member this.floatTestQuickSort() = floatTest quickSort
+    [<TestMethod>]
+    member this.floatTestQuickSort() = floatTest quickSort
 
-    // [<TestMethod>]
-    // member this.charTestQuickSort() = charTest quickSort
+    [<TestMethod>]
+    member this.charTestQuickSort() = charTest quickSort
 
 
     [<TestMethod>]

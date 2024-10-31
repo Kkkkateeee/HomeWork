@@ -51,22 +51,23 @@ module ArraySorts =
 
     let merge (arr: 't[]) (low: byref<int>) (high: byref<int>) (mid: byref<int>) =
         let mutable start2 = mid + 1
+        let mutable start1 = low
 
         if compare arr[mid] arr[start2] > 0 then
-            while low <= mid && start2 <= high do
-                if compare arr[low] arr[start2] <= 0 then
-                    low <- low + 1
+            while start1 <= mid && start2 <= high do
+                if compare arr[start1] arr[start2] <= 0 then
+                    start1 <- start1 + 1
                 else
                     let value = arr[start2]
                     let mutable index = start2
 
-                    while index <> low do
+                    while index > start1 do
                         arr[index] <- arr[index - 1]
                         index <- index - 1
 
-                    arr[low] <- value
+                    arr[start1] <- value
 
-                    low <- low + 1
+                    start1 <- start1 + 1
                     mid <- mid + 1
                     start2 <- start2 + 1
 
@@ -83,5 +84,3 @@ module ArraySorts =
         let mutable high = Array.length arr - 1
         inplaceMerge arr &low &high
         arr
-
-
