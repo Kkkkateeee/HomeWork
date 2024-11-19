@@ -1,9 +1,9 @@
 namespace ArraySorts
 
 
-module ArraySorts =
+module Arrays =
 
-    let swap (arr: 't[]) i j =
+    let private swap (arr: 't[]) i j =
         let elem = arr[i]
         arr[i] <- arr[j]
         arr[j] <- elem
@@ -49,7 +49,7 @@ module ArraySorts =
         arr
 
 
-    let merge (arr: 't[]) (low: byref<int>) (high: byref<int>) (mid: byref<int>) =
+    let private merge (arr: 't[]) (low: byref<int>) (high: byref<int>) (mid: byref<int>) =
         let mutable start2 = mid + 1
         let mutable start1 = low
 
@@ -71,7 +71,7 @@ module ArraySorts =
                     mid <- mid + 1
                     start2 <- start2 + 1
 
-    let rec inplaceMerge (arr: 't[]) (low: byref<int>) (high: byref<int>) =
+    let rec private inplaceMerge (arr: 't[]) (low: byref<int>) (high: byref<int>) =
         if low < high then
             let mutable mid = (low + high) / 2
             let mutable midPlus1 = mid + 1

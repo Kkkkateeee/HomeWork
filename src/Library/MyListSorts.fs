@@ -5,7 +5,6 @@ type MyList<'t> =
     | Empty
     | Cons of 't * MyList<'t>
 
-
 module MyList =
 
     let rec fromSystemList (list: 't List) : (MyList<'t>) =
@@ -17,7 +16,6 @@ module MyList =
         match list with
         | Empty -> []
         | Cons(head, tail) -> head :: toSystemList tail
-
 
 
     let bubbleSort (list: MyList<'t>) : MyList<'t> =
@@ -42,20 +40,18 @@ module MyList =
         sort list
 
 
-    let rec quickSort (list: MyList<'t>) : MyList<'t> =
-        let rec partition pivot list =
-            match list with
-            | Empty -> (Empty, Empty, Empty)
-            | Cons(head, tail) ->
-                let smaller, equal, larger = partition pivot tail
-
-                if compare head pivot < 0 then
-                    (Cons(head, smaller), equal, larger)
-                elif head = pivot then
-                    (smaller, Cons(head, equal), larger)
-                else
-                    (smaller, equal, Cons(head, larger))
-
+    let rec quickSort (list: MyList<'t>) : MyList<'t> when 't : comparison =
+        let myFilter (pred: 't -> bool) (list: MyList<'t>) : MyList<'t> =
+            let rec f (lst: MyList<'t>) (acc: MyList<'t>) =
+                match lst with 
+                | Empty -> acc
+                | Cons(head, tail) ->
+                    if pred head then 
+                        f tail (Cons(head, acc))
+                    else 
+                        f tail acc
+            f list Empty
+            
         let rec append xs ys =
             match xs with
             | Empty -> ys
@@ -64,8 +60,9 @@ module MyList =
         match list with
         | Empty -> Empty
         | Cons(pivot, other) ->
-            let smaller, equal, larger = partition pivot other
-            append (quickSort smaller) (append equal (Cons(pivot, quickSort larger)))
+            let smaller = myFilter((>) pivot) other
+            let larger = myFilter ((<=) pivot) other
+            append (quickSort smaller) (Cons(pivot, quickSort larger))
 
 
     let rec mergeSort (list: MyList<'t>) : MyList<'t> =
@@ -79,13 +76,15 @@ module MyList =
                 else
                     Cons(y, (merge leftList ys))
 
-        let rec separate (list: MyList<'t>) : (MyList<'t> * MyList<'t>) =
-            match list with
-            | Empty -> (Empty, Empty)
-            | Cons(x, Empty) -> (Cons(x, Empty), Empty)
-            | Cons(x, Cons(y, other)) ->
-                let (leftList, rightList) = separate other
-                (Cons(x, leftList), Cons(y, rightList))
+        let separate (list: MyList<'t>) : (MyList<'t> * MyList<'t>) =
+            let rec separateTailRec (lst: MyList<'t>) (left: MyList<'t>) (right: MyList<'t>) : (MyList<'t> * MyList<'t>) =
+                match lst with
+                | Empty -> (left, right)
+                | Cons(x, Empty) -> (Cons(x, left), right)
+                | Cons(x, Cons(y, other)) ->
+                    separateTailRec other (Cons(x, left)) (Cons(y, right))
+            
+            separateTailRec list Empty Empty
 
         match list with
         | Empty -> Empty
