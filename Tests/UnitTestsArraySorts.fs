@@ -3,7 +3,7 @@ namespace UnitTestsArraySorts
 open System
 open Microsoft.VisualStudio.TestTools.UnitTesting
 
-open ArraySorts.ArraySorts
+open ArraySorts.Arrays
 
 
 [<TestClass>]
