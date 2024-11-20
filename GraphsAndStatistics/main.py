@@ -32,7 +32,7 @@ def FileRead(path, lineNumber, resArray):
 FileRead('../Benchmarks/BenchmarkDotNet.Artifacts/ArrayBubleSort.log', 1187, ArrayBubbleSortRes)
 FileRead('../Benchmarks/BenchmarkDotNet.Artifacts/ArrayMergeSort.log', 1258, ArrayMergeSortRes)
 FileRead('../Benchmarks/BenchmarkDotNet.Artifacts/ArrayQuickSort.log', 1733, ArrayQuickSortRes)
-FileRead('../Benchmarks/BenchmarkDotNet.Artifacts/ArraySystemSort.log', 1592, ArraySystemSortRes)
+FileRead('../Benchmarks/BenchmarkDotNet.Artifacts/ArraySystemSort.log', 1593, ArraySystemSortRes)
 
 FileRead('../Benchmarks/BenchmarkDotNet.Artifacts/MyListBubbleSort.log', 643, MyListBubbleSortRes)
 FileRead('../Benchmarks/BenchmarkDotNet.Artifacts/MyListMergeSort.log', 1542, MyListMergeSortRes)
@@ -69,10 +69,10 @@ MyListSystemSortRes = [float(value.replace(',', '')) / 1000 for value in MyListS
 
 plt.figure(figsize=(10, 6))
 
-# plt.plot(X, ArrayBubbleSortRes, label='Array Bubble Sort')
-# plt.plot(X, ArrayMergeSortRes, label='Array Merge Sort')
-# plt.plot(X, ArrayQuickSortRes, label='Array Quick Sort')
-# plt.plot(X, ArraySystemSortRes, label='Array Systrm Sort')
+plt.plot(X, ArrayBubbleSortRes, label='Array Bubble Sort')
+plt.plot(X, ArrayMergeSortRes, label='Array Merge Sort')
+plt.plot(X, ArrayQuickSortRes, label='Array Quick Sort')
+plt.plot(X, ArraySystemSortRes, label='Array Systrm Sort')
 
 # plt.plot(X2, MyListBubbleSortRes, label='MyList Bubble Sort')
 # plt.plot(X1, MyListMergeSortRes, label='MyList Merge Sort')
@@ -85,13 +85,13 @@ plt.figure(figsize=(10, 6))
 # plt.plot(X, ArrayMergeSortRes, label='Array Merge Sort')
 # plt.plot(X1, MyListMergeSortRes, label='MyList Merge Sort')
 
-plt.plot(X, ArrayQuickSortRes, label='Array Quick Sort')
-plt.plot(X, MyListQuickSortRes, label='MyList Quick Sort')
+# plt.plot(X, ArrayQuickSortRes, label='Array Quick Sort')
+# plt.plot(X, MyListQuickSortRes, label='MyList Quick Sort')
 
 plt.title('List sorts vs Array sorts performance')
-plt.xlabel('numbers of elements')
+plt.xlabel('number of elements')
 plt.ylabel('time, sec')
 plt.yscale('log')
 plt.legend()
-plt.savefig("QuickCompare.png")
+plt.savefig("Array Performance.png")
 plt.show()
