@@ -10,3 +10,6 @@ Benchmarks/obj/
 Benchmarks/BenchmarkDotNet.Artifacts/
 
 GraphsAndStatistics/venv/
+
+src/ImageProcessing/bin/
+src/ImageProcessing/obj/
