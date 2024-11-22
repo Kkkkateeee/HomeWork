@@ -13,6 +13,8 @@
     <Compile Include="UnitTestsArraySorts.fs" />
     <Compile Include="PropertyTestsMyListSorts.fs" />
     <Compile Include="UnitTestsMyListSorts.fs" />
+    <Compile Include="UnitImageProcessing.fs" />
+    <Compile Include="PropertyImageProcessing.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
@@ -23,6 +25,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
     <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
     <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -32,6 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\Library\Library.fsproj" />
+    <ProjectReference Include="..\src\ImageProcessing\ImageProcessing.fsproj" />
   </ItemGroup>
 
 </Project>
