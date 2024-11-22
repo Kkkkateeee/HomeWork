@@ -13,6 +13,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Benchmarks", "Benchmarks\Be
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ImageProcessing", "src\ImageProcessing\ImageProcessing.fsproj", "{FB17409C-8BB9-4279-9EEC-3D9DF46E06F5}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ImageProcessing", "src\ImageProcessing\ImageProcessing.fsproj", "{FB17409C-8BB9-4279-9EEC-3D9DF46E06F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,13 @@ Global
 		{66023F5A-8456-4F66-9318-A0BFB68ED14A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66023F5A-8456-4F66-9318-A0BFB68ED14A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66023F5A-8456-4F66-9318-A0BFB68ED14A}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
+=======
+		{CAC5303C-D4CF-493E-94B4-4409BE7F2865}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAC5303C-D4CF-493E-94B4-4409BE7F2865}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAC5303C-D4CF-493E-94B4-4409BE7F2865}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAC5303C-D4CF-493E-94B4-4409BE7F2865}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> f6c216c (made hw5)
 		{FB17409C-8BB9-4279-9EEC-3D9DF46E06F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FB17409C-8BB9-4279-9EEC-3D9DF46E06F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB17409C-8BB9-4279-9EEC-3D9DF46E06F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
