@@ -10,3 +10,6 @@ Benchmarks/obj/
 Benchmarks/BenchmarkDotNet.Artifacts/
 
 GraphsAndStatistics/venv/
+
+src/Trees/bin/
+src/Trees/obj/
