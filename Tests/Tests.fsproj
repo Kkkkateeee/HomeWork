@@ -11,8 +11,10 @@
   <ItemGroup>
     <Compile Include="UnitTestsFunctions.fs" />
     <Compile Include="UnitTestsArraySorts.fs" />
-    <Compile Include="PropertyTestsMyListSorts.fs" />
     <Compile Include="UnitTestsMyListSorts.fs" />
+    <Compile Include="PropertyTestsMyListSorts.fs" />
+    <Compile Include="UnitTrees.fs" />
+    <Compile Include="PropertyTrees.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
@@ -32,6 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\Library\Library.fsproj" />
+    <ProjectReference Include="..\src\Trees\Trees.fsproj" />
   </ItemGroup>
 
 </Project>
