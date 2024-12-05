@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageId>LineralAlgebra</PackageId>
+    <Version>1.2.0</Version>
+    <Authors>Me</Authors>
+    <Owners>Also me</Owners>
+    <Description>This package is part of my homework that will be used in my other homework. But if you somehow stumbled upon it, here's its readme</Description>
+    <ProjectUrl></ProjectUrl>
+    <License>MIT</License>
+    <ReleaseNotes>I'm fixing all sorts of little things regarding documentation</ReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="LineralAlgebra.fs" />
+  </ItemGroup>
+
+</Project>
