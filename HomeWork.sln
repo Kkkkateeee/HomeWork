@@ -11,7 +11,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Tests", "Tests\Tests.fsproj
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Benchmarks", "Benchmarks\Benchmarks.fsproj", "{66023F5A-8456-4F66-9318-A0BFB68ED14A}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Q-Trees", "src\Q-Trees\Q-Trees.fsproj", "{59AAEAFF-EFCF-4317-96A9-F6677763F219}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "QTrees", "src\QTrees\QTrees.fsproj", "{59AAEAFF-EFCF-4317-96A9-F6677763F219}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

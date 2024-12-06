@@ -1,8 +1,8 @@
-﻿namespace Q_Trees
+﻿namespace QTrees
 
-type Qtree<'t> = 
+type QTree<'t> = 
     | Leaf of 't
-    | Node of Qtree<'t> * Qtree<'t> * Qtree<'t> * Qtree<'t> 
+    | Node of QTree<'t> * QTree<'t> * QTree<'t> * QTree<'t> 
 
     
 module QTrees = 
