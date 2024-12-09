@@ -34,7 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\Library\Library.fsproj" />
-    <ProjectReference Include="..\src\Q-Trees\Q-Trees.fsproj" />
+    <ProjectReference Include="..\src\QTrees\QTrees.fsproj" />
   </ItemGroup>
 
 </Project>

@@ -4,10 +4,10 @@ open Xunit
 open FsCheck
 open FsCheck.Xunit
 
-open Q_Trees
-open Q_Trees.QTrees
+open QTrees
+open QTrees.QTrees
 
 
-[<Properties(MaxTest = 10)>]
+[<Properties(MaxTest = 100)>]
 type mapProp() =
     let a = 1
