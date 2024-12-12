@@ -34,8 +34,8 @@ type mapProp() =
 
     [<Property>]
     member _.intListEqTree (tree: Tree<int>) = 
-        let list = List.map ((+) 1 ) (leafToList tree)
-        let treeList = leafToList (map (fun x -> x + 1) tree)
+        let list = List.map ((+) 1) (leafToList tree)
+        let treeList = leafToList (map ((+) 1) tree)
         list = treeList 
 
     [<Property>]
@@ -46,7 +46,7 @@ type mapProp() =
 
     [<Property>]
     member _.charListEqTree (tree: Tree<char>) = 
-        let list = List.map (fun c -> char (int c + 1)) (leafToList tree)
+        let list = List.map (char << ((+) 1 << int)) (leafToList tree)
         let treeList = leafToList (map (fun c -> char (int c + 1)) tree)
         list = treeList
 
@@ -72,8 +72,8 @@ type mapProp() =
 
     [<Property>]
     member _.charComposition (tree: Tree<char>)  =
-        let tree1 = map (fun c -> char (int c + 1)) (map (fun c -> char (int c + 1)) tree)
-        let tree2 = map (fun c -> char (int c + 2)) tree
+        let tree1 = map (char << ((+) 1 << int)) (map (char << ((+) 1 << int)) tree)
+        let tree2 = map (char << ((+) 2 << int)) tree
         tree1 = tree2
 
     [<Property>]
@@ -98,8 +98,8 @@ type mapProp() =
 
     [<Property>]
     member _.charHighIsConst (tree: Tree<char>) =
-        let h1 = high (map (fun c -> char (int c + 1)) tree)
-        let h2 = high (map (fun c -> char (int c + 2)) tree)
+        let h1 = high (map (char << ((+) 1 << int)) tree)
+        let h2 = high (map (char << ((+) 1 << int)) tree)
         h1 = h2
 
     [<Property>]

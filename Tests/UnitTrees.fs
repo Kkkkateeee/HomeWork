@@ -102,7 +102,7 @@ module map =
 
     [<Fact>]
     let charListEqTree () = 
-        let list = List.map (fun c -> char (int c + 1)) (leafToList charTree)
+        let list = List.map (char << ((+) 1 << int)) (leafToList charTree)
         let treeList = leafToList (map (fun c -> char (int c + 1)) charTree)
         let ex =  [ 'b'; 'c'; 'd' ]
         Assert.Equal<char>(ex, list)
@@ -136,8 +136,8 @@ module map =
 
     [<Fact>]
     let charComposition () =
-        let tree1 = map (fun c -> char (int c + 1)) (map (fun c -> char (int c + 1)) charTree)
-        let tree2 = map (fun c -> char (int c + 2)) charTree
+        let tree1 = map (char << ((+) 1 << int)) (map (char << ((+) 1 << int)) charTree)
+        let tree2 = map (char << ((+) 2 << int)) charTree
         let ex = Node(Cons(Node(Cons(Leaf('c'), Single (Leaf('d')))), Single (Node(Single (Leaf('e'))))))
         Assert.Equal<Tree<char>>(ex, tree1)
         Assert.Equal<Tree<char>>(ex, tree2)
@@ -164,7 +164,7 @@ module map =
 
     [<Fact>]
     let charHighIsConst () =
-        let h = high (map (fun c -> char (int c + 1)) charTree)
+        let h = high (map (char << ((+) 1 << int)) charTree)
         Assert.Equal<int>(3, h)
 
     [<Fact>]
