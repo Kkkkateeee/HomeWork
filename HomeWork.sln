@@ -13,6 +13,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Benchmarks", "Benchmarks\Be
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Trees", "src\Trees\Trees.fsproj", "{CAC5303C-D4CF-493E-94B4-4409BE7F2865}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ImageProcessing", "src\ImageProcessing\ImageProcessing.fsproj", "{7B9D1692-F56C-43C7-92BA-2CDDE21A7D57}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,9 +40,14 @@ Global
 		{CAC5303C-D4CF-493E-94B4-4409BE7F2865}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAC5303C-D4CF-493E-94B4-4409BE7F2865}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAC5303C-D4CF-493E-94B4-4409BE7F2865}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B9D1692-F56C-43C7-92BA-2CDDE21A7D57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B9D1692-F56C-43C7-92BA-2CDDE21A7D57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B9D1692-F56C-43C7-92BA-2CDDE21A7D57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B9D1692-F56C-43C7-92BA-2CDDE21A7D57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B853FD9B-45DA-4524-8E5D-9BDC24C29F63} = {00DFC406-0A95-4C11-8BF2-4FD28C28061D}
 		{CAC5303C-D4CF-493E-94B4-4409BE7F2865} = {00DFC406-0A95-4C11-8BF2-4FD28C28061D}
+		{7B9D1692-F56C-43C7-92BA-2CDDE21A7D57} = {00DFC406-0A95-4C11-8BF2-4FD28C28061D}
 	EndGlobalSection
 EndGlobal
