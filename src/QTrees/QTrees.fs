@@ -44,6 +44,10 @@ module QTrees =
             )
 
 
-    let mult qtree1 qtree2 =
-        let a = 1
-        a
+    // let rec mult qtree1 qtree2 (opMult: 't -> 't -> 't)  =
+    //     match qtree1, qtree2 with 
+    //     | Leaf value1, Leaf value2 -> 
+    //         Leaf(opMult value1 value2)
+    //     | Leaf value, Node (nw, ne, se, sw) ->
+    //         Node (mult value nw, mult value nw, mult value nw, mult value nw)
+        
