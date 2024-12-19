@@ -3,7 +3,7 @@ namespace UnitImageProcessing
 open Xunit
 open SixLabors.ImageSharp.PixelFormats
 
-open ImageProcessing.IProcessing
+open ImageProcessing.ImProcessing
 
 
 module Data =
@@ -29,7 +29,7 @@ module Data =
         |]
         |> Array.map (Array.map float32)
 
-    let kernelTrivial1 =
+    let shiftRight =
         [|
             [| 0; 0; 0 |]
             [| 0; 0; 1 |]
@@ -37,7 +37,7 @@ module Data =
         |]
         |> Array.map (Array.map float32)
 
-    let kernelTrivial2 =
+    let shiftDown =
         [|
             [| 0; 0; 0 |]
             [| 0; 0; 0 |]
@@ -45,7 +45,7 @@ module Data =
         |]
         |> Array.map (Array.map float32)
 
-    let kernelTrivial12 =
+    let shiftDiagonal =
         [|
             [| 0; 0; 0 |]
             [| 0; 0; 0 |]
@@ -91,12 +91,6 @@ module Filter =
     open Data
 
     [<Fact>]
-    let filterDoesntChangeSize () =
-        let imageAfterFilter = applyFilter gaussianBlur image1
-        Assert.Equal(image1.GetLength(0), imageAfterFilter.GetLength(0))
-        Assert.Equal(image1.GetLength(1), imageAfterFilter.GetLength(1))
-
-    [<Fact>]
     let idDoesntChangeData () =
         let imageAfterFilter = applyFilter id image1
         Assert.Equal(image1, imageAfterFilter)
@@ -113,8 +107,8 @@ module Filter =
 
     [<Fact>]
     let trivialComposition () =
-        let trivial1and2 = applyFilter kernelTrivial1 image1 |> applyFilter kernelTrivial2
-        let trivial12 = applyFilter kernelTrivial12 image1
+        let trivial1and2 = applyFilter shiftRight image1 |> applyFilter shiftDown
+        let trivial12 = applyFilter shiftDiagonal image1
         Assert.Equal(trivial1and2, trivial12)
 
     [<Fact>]
@@ -125,6 +119,6 @@ module Filter =
 
     [<Fact>]
     let someAreCommutative () =
-        let image12 = applyFilter kernelTrivial1 image1 |> applyFilter kernelTrivial2
-        let image21 = applyFilter kernelTrivial2 image1 |> applyFilter kernelTrivial1
+        let image12 = applyFilter shiftRight image1 |> applyFilter shiftDown
+        let image21 = applyFilter shiftDown image1 |> applyFilter shiftRight
         Assert.Equal(image12, image21)

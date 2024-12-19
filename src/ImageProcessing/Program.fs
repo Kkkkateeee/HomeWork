@@ -1,11 +1,11 @@
-﻿open ImageProcessing.IProcessing
-open System
+﻿open ImageProcessing.ImProcessing
 open Argu
 
-type CmdArgs =
+
+type Arguments =
     | [<Mandatory>] Input_File of string
     | [<Mandatory>] Out_File of string
-    | [<Mandatory>] Filter of string
+    | [<Mandatory>] Filter of string list
     interface IArgParserTemplate with
         member this.Usage =
             match this with 
@@ -13,10 +13,11 @@ type CmdArgs =
             | Out_File _ -> "Where to save result."
             | Filter _ -> "Which filters to apply (comma-separated)."
 
+
 [<EntryPoint>]
 let main argv = 
     
-    let parser = ArgumentParser.Create<CmdArgs>(programName = "ImageProcessing")  
+    let parser = ArgumentParser.Create<Arguments>(programName = "ImageProcessing")  
     let results = parser.Parse argv  
 
     let inFile = results.GetResult Input_File  
@@ -25,10 +26,8 @@ let main argv =
 
     let inImage = loadAsRgba2D inFile 
 
-    let filterList = filters.Split(',') |> Array.map (fun f -> f.Trim())
-
     let resultImage =
-        filterList |> Array.fold (fun img filter ->
+        filters |> List.fold (fun img filter ->
             match filter with 
             | "gaussianBlur" -> applyFilter gaussianBlur img 
             | "motionDiagonal135deg" -> applyFilter motionDiagonal135deg img 
@@ -49,7 +48,6 @@ let main argv =
                 printfn "Unknown filter: %s" filter
                 img 
         ) inImage
-
     
     saveRgbaImage resultImage outFile
     

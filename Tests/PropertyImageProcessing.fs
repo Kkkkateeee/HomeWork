@@ -5,47 +5,33 @@ open FsCheck
 open FsCheck.Xunit
 open SixLabors.ImageSharp.PixelFormats
 
-open ImageProcessing.IProcessing
+open ImageProcessing.ImProcessing
 open UnitImageProcessing.Data
 
 
+module ImageGenerator =
+    let private pixelGen : Gen<Rgba32> =
+        gen {
+            let! r = Gen.choose(0, 255) |> Gen.map byte
+            let! g = Gen.choose(0, 255) |> Gen.map byte
+            let! b = Gen.choose(0, 255) |> Gen.map byte
+            let a = byte 255
+            return Rgba32(r, g, b, a)
+        }
+
+    let array2DGen (width: int) (height: int) : Gen<Rgba32[,]> =
+        gen {
+            let! pixels = Gen.array2DOfDim (width, height) pixelGen
+            return pixels
+        }
+
 type Image() =
     static member Rgba32() =
-        let pixelGen : Gen<Rgba32> =
-            gen {
-                let! r = Gen.choose(0, 255) |> Gen.map byte
-                let! g = Gen.choose(0, 255) |> Gen.map byte
-                let! b = Gen.choose(0, 255) |> Gen.map byte
-                let a = byte 255
-                return Rgba32(r, g, b, a)
-            }
-
-        let array2DGen : Gen<Rgba32[,]> =
-            gen {
-                let! pixels = Gen.array2DOfDim (100, 100) pixelGen
-                return pixels
-            }
-
-        Arb.fromGen array2DGen
+        Arb.fromGen (ImageGenerator.array2DGen 100 100)
 
 type SmallImage() =
     static member Rgba32() =
-        let pixelGen : Gen<Rgba32> =
-            gen {
-                let! r = Gen.choose(0, 255) |> Gen.map byte
-                let! g = Gen.choose(0, 255) |> Gen.map byte
-                let! b = Gen.choose(0, 255) |> Gen.map byte
-                let a = byte 255 
-                return Rgba32(r, g, b, a)
-            }
-
-        let array2DGen : Gen<Rgba32[,]> =
-            gen {
-                let! pixels = Gen.array2DOfDim (2, 2) pixelGen
-                return pixels
-            }
-
-        Arb.fromGen array2DGen
+        Arb.fromGen (ImageGenerator.array2DGen 2 2)
 
 
 [<Properties(MaxTest = 100)>]
@@ -54,8 +40,8 @@ type Filter() =
     [<Property(Arbitrary = [| typeof<Image> |])>]
     member _.filterDoesntChangeSize (image: Rgba32[,]) =
         let imageAfterFilter = applyFilter gaussianBlur image
-        Assert.Equal(image.GetLength(0), imageAfterFilter.GetLength(0))
-        Assert.Equal(image.GetLength(1), imageAfterFilter.GetLength(1))
+        Assert.Equal(100, imageAfterFilter.GetLength(0))
+        Assert.Equal(100, imageAfterFilter.GetLength(1))
 
     [<Property(Arbitrary = [| typeof<Image> |])>]
     member _.idDoesntChangeData (image: Rgba32[,]) =
@@ -74,8 +60,8 @@ type Filter() =
 
     [<Property(Arbitrary = [| typeof<Image> |])>]
     member _.trivialComposition (image: Rgba32[,]) =
-        let trivial1and2 = applyFilter kernelTrivial1 image |> applyFilter kernelTrivial2
-        let trivial12 = applyFilter kernelTrivial12 image
+        let trivial1and2 = applyFilter shiftRight image |> applyFilter shiftDown
+        let trivial12 = applyFilter shiftDiagonal image
         Assert.Equal(trivial1and2, trivial12)
 
     [<Property(Arbitrary = [| typeof<Image> |])>]
@@ -86,6 +72,6 @@ type Filter() =
 
     [<Property(Arbitrary = [| typeof<Image> |])>]
     member _.someAreCommutative (image: Rgba32[,]) =
-        let image12 = applyFilter kernelTrivial1 image |> applyFilter kernelTrivial2
-        let image21 = applyFilter kernelTrivial2 image |> applyFilter kernelTrivial1
+        let image12 = applyFilter shiftRight image |> applyFilter shiftDown
+        let image21 = applyFilter shiftDown image |> applyFilter shiftRight
         Assert.Equal(image12, image21)

@@ -1,6 +1,5 @@
 namespace ImageProcessing
 
-open System
 open SixLabors.ImageSharp
 open SixLabors.ImageSharp.PixelFormats
 
@@ -19,11 +18,11 @@ type Image =
             Name = name
         }
     static member Create(width: int, height: int) =
-        let data = Array.init (height * width) (fun _ -> Rgba32(0uy, 0uy, 0uy, 255uy)) // Инициализация черным цветом
+        let data = Array.init (height * width) (fun _ -> Rgba32(0uy, 0uy, 0uy, 255uy)) 
         Image(data, width, height, "New Image")
 
 
-module IProcessing =
+module ImProcessing =
 
     let gaussianBlur =
         [|
@@ -213,27 +212,30 @@ module IProcessing =
         let filterD = (Array.length filter) / 2
         let filter = Array.concat filter
 
-        let processPixel px py channel =
-            let dataToHandle = [|
+        let processPixel px py =
+            let dataToHandle = [| 
                 for i in px - filterD .. px + filterD do
                     for j in py - filterD .. py + filterD do
                         if i < 0 || i >= imgH || j < 0 || j >= imgW then
-
-                            0.0f
+                            (0.0f, 0.0f, 0.0f) 
                         else
-                            match channel with
-                            | 'R' -> float32 img.[i, j].R
-                            | 'G' -> float32 img.[i, j].G
-                            | 'B' -> float32 img.[i, j].B
-                            | _ -> 0.0f 
-
+                            let pixel = img.[i, j]
+                            (float32 pixel.R, float32 pixel.G, float32 pixel.B)
             |]
 
-            Array.fold2 (fun s x y -> s + x * y) 0.0f filter dataToHandle
+            let mutable rSum = 0.0f
+            let mutable gSum = 0.0f
+            let mutable bSum = 0.0f
+
+            Array.iteri (fun index (r, g, b) ->
+                rSum <- rSum + r * filter.[index]
+                gSum <- gSum + g * filter.[index]
+                bSum <- bSum + b * filter.[index]
+            ) dataToHandle
+
+            (byte rSum, byte gSum, byte bSum)
 
         Array2D.mapi (fun x y _ ->
-            let r = byte (processPixel x y 'R')
-            let g = byte (processPixel x y 'G')
-            let b = byte (processPixel x y 'B')
+            let (r, g, b) = processPixel x y
             Rgba32(r, g, b, img.[x, y].A) 
         ) img
