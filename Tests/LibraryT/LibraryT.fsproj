@@ -9,12 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="UnitTestsFunctions.fs" />
-    <Compile Include="UnitTestsArraySorts.fs" />
-    <Compile Include="UnitTestsMyListSorts.fs" />
-    <Compile Include="PropertyTestsMyListSorts.fs" />
-    <Compile Include="UnitTrees.fs" />
-    <Compile Include="PropertyTrees.fs" />
+    <Compile Include="UnitFunctions.fs" />
+    <Compile Include="UnitArraySorts.fs" />
+    <Compile Include="UnitMyListSorts.fs" />
+    <Compile Include="PropertyMyListSorts.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
@@ -26,15 +24,14 @@
     <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
     <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
     <PackageReference Include="xunit" Version="2.9.2" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Library\Library.fsproj" />
-    <ProjectReference Include="..\src\Trees\Trees.fsproj" />
+    <ProjectReference Include="..\..\src\Library\Library.fsproj" />
   </ItemGroup>
 
 </Project>
