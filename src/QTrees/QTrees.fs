@@ -2,15 +2,22 @@
 
  
 type QTree<'t> =  
-    | Leaf of 't * int
-    | Node of QTree<'t> * QTree<'t> * QTree<'t> * QTree<'t>  
- 
+    | Leaf of 't 
+    | Node of QTree<'t> * QTree<'t> * QTree<'t> * QTree<'t> 
+
+
+type Matrix<'t> = 
+    {
+        n: int; 
+        qtree: QTree<'t> 
+    }
+
      
 module QTrees =  
 
-    let rec private toCorrectQTree qtree  =
+    let rec private toCorrectQTree qtree =
         match qtree with 
-        | Leaf (value, size) -> Leaf (value, size)
+        | Leaf value -> Leaf value
         
         | Node (nw, ne, se, sw) ->
             let NW = toCorrectQTree nw
@@ -19,67 +26,42 @@ module QTrees =
             let SW = toCorrectQTree sw
 
             match NW, NE, SE, SW with 
-            | Leaf (value1, size1), 
-                Leaf (value2, size2), 
-                Leaf (value3, size3), 
-                Leaf (value4, size4) 
+            |   Leaf value1, 
+                Leaf value2, 
+                Leaf value3, 
+                Leaf value4 
                 when value1 = value2 && value2 = value3 && value3 = value4 ->
                 
-                Leaf (value1, size1 + size2)
+                Leaf value1
 
             | _ -> Node (NW, NE, SE, SW) 
 
-    let rec private fromCorrectQTree qtree =
-        match qtree with 
-        | Leaf (value, 1) ->
-            Leaf (value, 1)
-
-        | Leaf (value, size) when size > 1 -> 
-            Node (
-                fromCorrectQTree (Leaf (value, size / 2)),
-                fromCorrectQTree (Leaf (value, size / 2)),
-                fromCorrectQTree (Leaf (value, size / 2)),
-                fromCorrectQTree (Leaf (value, size / 2))
-            )
-
-        | Node (nw, ne, se, sw) -> 
-            Node (
-                fromCorrectQTree nw,
-                fromCorrectQTree ne,
-                fromCorrectQTree se,
-                fromCorrectQTree sw
-            )
-
-        | Leaf(_, _) -> failwith "Not Implemented"
-
- 
     let rec map func qtree = 
         match qtree with  
-        | Leaf (value, size) -> Leaf (func value, size) 
+        | Leaf value -> Leaf (func value)
         | Node (nw,ne, se, sw) -> 
             Node (map func nw, map func ne, map func se, map func sw) 
         |> toCorrectQTree
         
-     
     let rec map2 func qtree1 qtree2 = 
         match qtree1, qtree2 with  
-        | Leaf (value1, size1), Leaf (value2, size2) ->
-            Leaf (func value1 value2, min size1 size2) 
+        | Leaf value1, Leaf value2 ->
+            Leaf (func value1 value2) 
 
-        | Leaf (value, size), Node (nw, ne, se, sw) -> 
+        | Leaf value, Node (nw, ne, se, sw) -> 
             Node ( 
-                map2 func (Leaf (value, size)) nw, 
-                map2 func (Leaf (value, size)) ne, 
-                map2 func (Leaf (value, size)) se, 
-                map2 func (Leaf (value, size)) sw  
+                map2 func (Leaf value) nw, 
+                map2 func (Leaf value) ne, 
+                map2 func (Leaf value) se, 
+                map2 func (Leaf value) sw  
             ) 
  
-        | Node (nw, ne, se, sw), Leaf (value, size) -> 
+        | Node (nw, ne, se, sw), Leaf value -> 
             Node ( 
-                map2 func nw (Leaf (value, size)), 
-                map2 func ne (Leaf (value, size)), 
-                map2 func se (Leaf (value, size)), 
-                map2 func sw (Leaf (value, size)) 
+                map2 func nw (Leaf value), 
+                map2 func ne (Leaf value), 
+                map2 func se (Leaf value), 
+                map2 func sw (Leaf value) 
             ) 
  
         | Node (nw, ne, se, sw), Node (NW, NE, SE, SW)  -> 
@@ -91,83 +73,91 @@ module QTrees =
             ) 
         |> toCorrectQTree
 
-    let rec private add qtree1 qtree2 (opAdd: 't -> 't -> 't) (opMult: 't -> 't -> 't) =
+    let rec private add qtree1 qtree2 size (opAdd: 't -> 't -> 't) (opMult: 't -> 't -> 't) =
         match qtree1, qtree2 with
-        | Leaf (value1, size1), Leaf (value2, size2) -> 
-            Leaf (opAdd value1 value2, size1)
+        | Leaf value1, Leaf value2 -> 
+            Leaf(opAdd value1 value2)
 
-        | Leaf (value, size), Node (nw, ne, se, sw) -> 
-            Node ( 
-                add (Leaf (value, size)) nw opAdd opMult,
-                add (Leaf (value, size)) ne opAdd opMult,
-                add (Leaf (value, size)) se opAdd opMult,
-                add (Leaf (value, size)) sw opAdd opMult
-            ) 
- 
-        | Node (nw, ne, se, sw), Leaf (value, size) -> 
-            Node ( 
-                add nw (Leaf (value, size)) opAdd opMult,
-                add ne (Leaf (value, size)) opAdd opMult,
-                add se (Leaf (value, size)) opAdd opMult,
-                add sw (Leaf (value, size)) opAdd opMult 
-            ) 
+        | Leaf _ , Node(nw, ne, sw, se) ->
+            Node(
+                add qtree1 nw (size / 2) opAdd opMult,
+                add qtree1 ne (size / 2) opAdd opMult,
+                add qtree1 sw (size / 2) opAdd opMult,
+                add qtree1 se (size / 2) opAdd opMult
+            )
 
-        | Node (nw, ne, se, sw), Node (NW, NE, SE, SW)  ->
-            Node ( 
-                add nw NW opAdd opMult,
-                add ne NE opAdd opMult,
-                add se SE opAdd opMult,
-                add sw SW opAdd opMult 
-            ) 
+        | Node(nw, ne, sw, se), Leaf _ ->
+            Node(
+                add nw qtree2 (size / 2) opAdd opMult,
+                add ne qtree2 (size / 2) opAdd opMult,
+                add sw qtree2 (size / 2) opAdd opMult,
+                add se qtree2 (size / 2) opAdd opMult
+            )
 
-    let rec private mult qtree1 qtree2 (opAdd: 't -> 't -> 't) (opMult: 't -> 't -> 't) =
+        | Node(nw, ne, sw, se), Node(NW, NE, SW, SE) ->
+            Node(
+                add nw NW (size / 2) opAdd opMult,
+                add ne NE (size / 2) opAdd opMult,
+                add sw SW (size / 2) opAdd opMult,
+                add se SE (size / 2) opAdd opMult
+            )
+
+    let rec private mult qtree1 qtree2 size (opAdd: 't -> 't -> 't) (opMult: 't -> 't -> 't) =
         match qtree1, qtree2 with
-            | Leaf (value1, size1), Leaf (value2, size2) -> 
-                Leaf(opMult value1 value2, size1 )
+        | Leaf value1, Leaf value2 -> 
+            let add = opMult value1 value2
+            let mutable value = Unchecked.defaultof<'t>
 
-            | Leaf (value, size), Node (nw, ne, se, sw) -> 
-                let Vnw = mult (Leaf (value, size)) nw opAdd opMult
-                let Vse = mult (Leaf (value, size)) se opAdd opMult
-                let Vne = mult (Leaf (value, size)) ne opAdd opMult
-                let Vsw = mult (Leaf (value, size)) sw opAdd opMult
-            
-                Node (
-                    add Vnw Vsw opAdd opMult, 
-                    add Vne Vse opAdd opMult, 
-                    add Vne Vse opAdd opMult, 
-                    add Vnw Vsw opAdd opMult
-                )
+            for i in 0 .. size - 1 do
+                value <- opAdd value add
 
-            | Node (nw, ne, se, sw), Leaf (value, size) -> 
-                let nwV = mult nw (Leaf (value, size)) opAdd opMult
-                let neV = mult ne (Leaf (value, size)) opAdd opMult
-                let seV = mult se (Leaf (value, size)) opAdd opMult
-                let swV = mult sw (Leaf (value, size)) opAdd opMult
+            Leaf value
 
-                Node (
-                    add nwV neV opAdd opMult, 
-                    add nwV neV opAdd opMult, 
-                    add swV seV opAdd opMult, 
-                    add swV seV opAdd opMult
-                )
+        | Leaf _ , Node(nw, ne, sw, se) ->
+            let Vnw = mult qtree1 nw (size / 2) opAdd opMult
+            let Vsw = mult qtree1 sw (size / 2) opAdd opMult
+            let Vne = mult qtree1 ne (size / 2) opAdd opMult
+            let Vse = mult qtree1 se (size / 2) opAdd opMult
 
-            | Node (nw, ne, se, sw), Node (NW, NE, SE, SW)  ->
-                let nwNW = mult nw NW opAdd opMult
-                let neSE = mult ne SE opAdd opMult
-                let nwNE = mult nw NE opAdd opMult
-                let neSW = mult ne SW opAdd opMult
-                let swNE = mult sw NE opAdd opMult
-                let seSE = mult se SE opAdd opMult
-                let swNW = mult sw NW opAdd opMult
-                let seSW = mult se SW opAdd opMult
-            
-                Node (
-                    add nwNW neSW opAdd opMult, 
-                    add nwNE neSE opAdd opMult, 
-                    add swNE seSE opAdd opMult, 
-                    add swNW seSW opAdd opMult
-                )
-        
-    let multiply qtree1 qtree2 (opAdd: 't -> 't -> 't) (opMult: 't -> 't -> 't) =
-        mult (qtree1 |> fromCorrectQTree) (qtree2 |> fromCorrectQTree) opAdd opMult
-        |> toCorrectQTree 
+            Node(
+                add Vnw Vsw (size / 2) opAdd opMult,
+                add Vne Vse (size / 2) opAdd opMult,
+                add Vnw Vsw (size / 2) opAdd opMult,
+                add Vne Vse (size / 2) opAdd opMult
+            )
+
+        | Node(nw, ne, sw, se), Leaf _ ->
+            let nwV = mult nw qtree2 (size / 2) opAdd opMult
+            let neV = mult ne qtree2 (size / 2) opAdd opMult
+            let swV = mult sw qtree2 (size / 2) opAdd opMult
+            let seV = mult se qtree2 (size / 2) opAdd opMult
+
+            Node(
+                add nwV neV (size / 2) opAdd opMult,
+                add nwV neV (size / 2) opAdd opMult,
+                add swV seV (size / 2) opAdd opMult,
+                add swV seV (size / 2) opAdd opMult
+            )
+
+        | Node(nw, ne, sw, se), Node(NW, NE, SW, SE) ->
+            let nwNW = mult nw NW (size / 2) opAdd opMult
+            let neSW = mult ne SW (size / 2) opAdd opMult
+            let nwNE = mult nw NE (size / 2) opAdd opMult
+            let neSE = mult ne SE (size / 2) opAdd opMult
+            let swNW = mult sw NW (size / 2) opAdd opMult
+            let seSW = mult se SW (size / 2) opAdd opMult
+            let swNE = mult sw NE (size / 2) opAdd opMult
+            let seSE = mult se SE (size / 2) opAdd opMult
+
+            Node(
+                add nwNW neSW (size / 2) opAdd opMult,
+                add nwNE neSE (size / 2) opAdd opMult,
+                add swNW seSW (size / 2) opAdd opMult,
+                add swNE seSE (size / 2) opAdd opMult
+            )
+
+    ///It is assumed that the matrices have already been converted to the same correct size: nxn where n = 2^N
+    let multiply (matr1: Matrix<'t>) (matr2: Matrix<'t>) (opAdd: 't -> 't -> 't) (opMult: 't -> 't -> 't) =
+        let result = mult matr1.qtree matr2.qtree matr1.n opAdd opMult
+        let matrix = result |> toCorrectQTree
+        { n = max matr1.n matr2.n; qtree = matrix }

@@ -27,13 +27,13 @@ module DataAndFuncs =
             floatQTreesAreEqual ne NE &&  
             floatQTreesAreEqual se SE &&  
             floatQTreesAreEqual sw SW 
-        | Leaf (value1, size1), Leaf (value2, size2) ->  
+        | Leaf value1, Leaf value2 ->  
             areAlmostEqual value1 value2 1e-5f 
         | _ -> false 
 
     let rec toCorrectQTree qtree  =
         match qtree with 
-        | Leaf (value, size) -> Leaf (value, size)
+        | Leaf value -> Leaf value
         
         | Node (nw, ne, se, sw) ->
             let NW = toCorrectQTree nw
@@ -42,13 +42,13 @@ module DataAndFuncs =
             let SW = toCorrectQTree sw
 
             match NW, NE, SE, SW with 
-            | Leaf (value1, size1), 
-                Leaf (value2, size2), 
-                Leaf (value3, size3), 
-                Leaf (value4, size4) 
+            |   Leaf value1, 
+                Leaf value2, 
+                Leaf value3, 
+                Leaf value4 
                 when value1 = value2 && value2 = value3 && value3 = value4 ->
                 
-                Leaf (value1, size1 + size2)
+                Leaf value1
 
             | _ -> Node (NW, NE, SE, SW)
  
