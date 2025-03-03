@@ -13,7 +13,6 @@ module DataAndFuncs =
     let MintOneLeaf1 = { n = 4; qtree = intOneLeaf1 }
 
     let intOneLeaf2 = Leaf 2
-    let MintOneLeaf2 = { n = 1; qtree = intOneLeaf2 }
 
     let intOneLeaf3 = Leaf 2
     let MintOneLeaf3 = { n = 1; qtree = intOneLeaf3 }
@@ -31,7 +30,6 @@ module DataAndFuncs =
     let MintZero = { n = 4; qtree = intZero }
 
     let floatOneLeaf = Leaf 1.0
-    let MfloatOneLeaf = { n = 1; qtree = floatOneLeaf }
     
     let intQTree1 = Node ( 
         Node ( Leaf 1, Leaf 2, Leaf 3, Leaf 4), 
@@ -55,7 +53,6 @@ module DataAndFuncs =
         Leaf 9.0, 
         Node ( Leaf -10.0, Leaf -11.0, Leaf -12.0, Leaf -13.0)  
     ) 
-    let MfloatQTree1 = { n = 4; qtree = floatQTree1 }
 
     let floatQTree2 = Node ( 
         Node ( Leaf 1.0, Leaf 2.0, Leaf 3.0, Leaf 4.0), 
@@ -63,7 +60,6 @@ module DataAndFuncs =
         Leaf 6.0, 
         Node ( Leaf 7.0, Leaf 8.0, Leaf 9.0, Leaf 10.0)  
     ) 
-    let MfloatQTree2 = { n = 4; qtree = floatQTree2 }
 
     let rec high qtree = 
         match qtree with  
