@@ -15,6 +15,7 @@ open UnitTrees.dataAndFuncs
  
 
 module DataAndFuncs = 
+
     let rec floatQTreesAreEqual (qtree1: QTree<float32>) (qtree2: QTree<float32>) : bool =  
         match qtree1, qtree2 with   
         | Node (nw, ne, se, sw), Node (NW, NE, SE, SW)  ->  
@@ -173,7 +174,7 @@ type Multiply() =
         Assert.Equal(arrayEx, arrayRess)
 
     [<Property>]
-    member _.Zero () =
+    member _.zero () =
         let matr1 = MatrixGen size "Zero"
         let matr2 = MatrixGen size "Node"
         let res = multiply matr1 matr2 (+) ( * )

@@ -335,7 +335,7 @@ module Mult =
         Assert.Equal(ex, res)
 
     [<Fact>]
-    let intZero () =
+    let zero () =
         let res1 = multiply MintQTree1 MintZero (+) ( * )
         let res2 = multiply MintZero MintQTree1 (+) ( * )
         let ex = { n = 4; qtree = Leaf 0 }
