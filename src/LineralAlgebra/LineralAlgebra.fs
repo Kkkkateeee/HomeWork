@@ -13,7 +13,7 @@ type Matrix<'t> =
     }
 
 
-module Private = 
+module private Private = 
 
     let rec private toCorrectQTreePrivate qtree =
         match qtree with 
