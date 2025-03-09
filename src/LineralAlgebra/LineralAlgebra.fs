@@ -38,7 +38,7 @@ module Private =
 
     let toCorrectQTree qtree = 
         qtree |> toCorrectQTreePrivate
-     
+
      
 open Private
 
@@ -82,40 +82,50 @@ module QTrees =
             ) 
         |> toCorrectQTree
 
-    let rec qtreeToArray2D (qtree: QTree<'t>) (size: int) : 't[,] =
-        match qtree with
-        | Leaf value when size = 1 ->
-            Array2D.create 1 1 value
+    /// <summary>Creates a square array2D with elements from a quadtree.</summary>
+    /// <param name="qtree">The quadtree from which the elements are taken.</param>
+    /// <param name="size">The output array size can only be a power of two due to the structure of quadtrees.</param>
+    /// <returns>The created array2D.</returns>
+    let qtreeToArray2D (qtree: QTree<'t>) (size: int) : 't[,] =
+        if size <= 0 || size &&& (size - 1) <> 0 then 
+            failwithf "\n\n The size is not a power of two or <= 0\n\n size: %d\n" size
 
-        | Leaf value when size > 1 ->
-            Array2D.create size size value
+        let rec qtrToArray2D (qtree: QTree<'t>) (size: int) : 't[,] = 
+            match qtree with
+            | Leaf value when size = 1 ->
+                Array2D.create 1 1 value
 
-        | Node (nw, ne, sw, se) ->
-            let NW = qtreeToArray2D nw (size / 2)
-            let NE = qtreeToArray2D ne (size / 2)
-            let SW = qtreeToArray2D sw (size / 2)
-            let SE = qtreeToArray2D se (size / 2)
+            | Leaf value when size > 1 ->
+                Array2D.create size size value
 
-            let mainSize = Array2D.length1 NW
+            | Node (nw, ne, sw, se) ->
+                let NW = qtrToArray2D nw (size / 2)
+                let NE = qtrToArray2D ne (size / 2)
+                let SW = qtrToArray2D sw (size / 2)
+                let SE = qtrToArray2D se (size / 2)
 
-            let matrix = Array2D.create (mainSize * 2) (mainSize * 2) Unchecked.defaultof<'t>
+                let mainSize = Array2D.length1 NW
 
-            for i in 0 .. mainSize - 1 do
-                for j in 0 .. mainSize - 1 do
-                    matrix[i, j] <- NW[i, j]
-                    matrix[i, j + mainSize] <- NE[i, j]
-                    matrix[i + mainSize, j] <- SW[i, j]
-                    matrix[i + mainSize, j + mainSize] <- SE[i, j]
+                let matrix = Array2D.create (mainSize * 2) (mainSize * 2) Unchecked.defaultof<'t>
 
-            matrix
+                for i in 0 .. mainSize - 1 do
+                    for j in 0 .. mainSize - 1 do
+                        matrix[i, j] <- NW[i, j]
+                        matrix[i, j + mainSize] <- NE[i, j]
+                        matrix[i + mainSize, j] <- SW[i, j]
+                        matrix[i + mainSize, j + mainSize] <- SE[i, j]
 
-        | Leaf _ -> failwith "Not Implemented"
+                matrix
 
-    let rec high qtree = 
+            | Leaf _ -> failwith "Not Implemented"
+
+        qtrToArray2D qtree size
+
+    let rec height qtree = 
         match qtree with  
             | Leaf _-> 1 
             | Node (nw, ne, se, sw) -> 
-                let heights = [| high nw; high ne; high se; high sw |] 
+                let heights = [| height nw; height ne; height se; height sw |] 
                 Array.max heights + 1 
 
 

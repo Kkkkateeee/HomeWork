@@ -177,15 +177,15 @@ module Map =
 
     [<Fact>] 
     let intHighIsConst () = 
-        let h1 = high intQTree1 
-        let h2 = high (map ((+) 1) intQTree1) 
+        let h1 = height intQTree1 
+        let h2 = height (map ((+) 1) intQTree1) 
         Assert.Equal(3, h1) 
         Assert.Equal(3, h2) 
  
     [<Fact>] 
     let floatHighIsConst () = 
-        let h1 = high floatQTree1 
-        let h2 = high (map ((+) 1.0) floatQTree1) 
+        let h1 = height floatQTree1 
+        let h2 = height (map ((+) 1.0) floatQTree1) 
         Assert.Equal(3, h1) 
         Assert.Equal(3, h2) 
 
@@ -197,12 +197,12 @@ module Map =
 
     [<Fact>] 
     let intHighIsExpected () = 
-        let h = high (map (fun (x: int) -> Math.Sign x) intQTree1) 
+        let h = height (map (fun (x: int) -> Math.Sign x) intQTree1) 
         Assert.Equal(2, h) 
  
     [<Fact>]
     let floatHighIsExpected () = 
-        let h = high (map (fun (x: float) -> Math.Sign x) floatQTree1) 
+        let h = height (map (fun (x: float) -> Math.Sign x) floatQTree1) 
         Assert.Equal(2, h) 
 
     
@@ -257,19 +257,19 @@ module Map2 =
  
     [<Fact>] 
     let intHighIsExpected () = 
-        let h1 = high intQTree1 
-        let h2 = high intOneLeaf1 
+        let h1 = height intQTree1 
+        let h2 = height intOneLeaf1 
         let h3 = max h1 h2 
-        let h4 = high (map2 (+) intQTree1 intOneLeaf1) 
+        let h4 = height (map2 (+) intQTree1 intOneLeaf1) 
         Assert.Equal(3, h3) 
         Assert.Equal(3, h4) 
      
     [<Fact>] 
     let floatHighIsExpected () = 
-        let h1 = high floatQTree1 
-        let h2 = high floatOneLeaf 
+        let h1 = height floatQTree1 
+        let h2 = height floatOneLeaf 
         let h3 = max h1 h2 
-        let h4 = high (map2 (+) floatQTree1 floatOneLeaf) 
+        let h4 = height (map2 (+) floatQTree1 floatOneLeaf) 
         Assert.Equal(3, h3) 
         Assert.Equal(3, h4) 
  

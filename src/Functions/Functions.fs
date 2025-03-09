@@ -2,6 +2,7 @@
 
 
 module Factorial =
+
     let rec factorial n =
         if n < 0 then
             failwith "The factorial of negative numbers is not calculated by this program\n"

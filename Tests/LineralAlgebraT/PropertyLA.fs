@@ -126,8 +126,8 @@ type Map() =
  
     [<Property>] 
     member _.intHighIsConst (qtree: QTree<int>) = 
-        let h1 = high (qtree |> toCorrectQTree) 
-        let h2 = high (map ((+) 1) qtree) 
+        let h1 = height (qtree |> toCorrectQTree) 
+        let h2 = height (map ((+) 1) qtree) 
         h1 = h2 
  
 
