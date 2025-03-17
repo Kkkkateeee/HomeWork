@@ -14,46 +14,78 @@ type Edjes<'t> =
 
 module Graphs =
 
-    /// <summary>Creates a new graph that is the transitive closure of the graph given as argument</summary>
-    /// <param name="graph">the graph whose transitive closure is to be constructed</param>
-    /// <returns>Transitive closure graph</returns>
-    let transitiveClosure (qtree: QTree<int>) : Map<int, Set<int>> =
-        let rec findReachable (qtree: QTree<int>) (reachable: Set<int>) =
-            match qtree with
-            | Leaf value ->
-                Set.add value reachable
-            | Node(nw, ne, se, sw) ->
-                let reachableFromNW = findReachable nw reachable
-                let reachableFromNE = findReachable ne reachableFromNW
-                let reachableFromSE = findReachable se reachableFromNE
-                findReachable sw reachableFromSE
+    let rec collectElements tree =
+        match tree with
+        | Leaf element -> Set.singleton element
+        | Node (nw, ne, sw, se) ->
+            Set.unionMany 
+                [
+                            collectElements nw; 
+                            collectElements ne; 
+                            collectElements sw; 
+                            collectElements se
+                        ]
 
-        // let rec findAllReachableFrom node =
-        //     match node with
-        //     | Leaf value -> 
-        //         value, Set.singleton value 
-        //     | Node(nw, ne, se, sw) ->
-        //         let nwValue, nwReachable = findAllReachableFrom nw
-        //         let neValue, neReachable = findAllReachableFrom ne
-        //         let seValue, seReachable = findAllReachableFrom se
-        //         let swValue, swReachable = findAllReachableFrom sw
+    let rec buildTransitiveClosure tree allElements =
+        match tree with
+        | Leaf element ->
+            Leaf element
 
-        //         let allReachable = Set.unionMany [nwReachable; neReachable; seReachable; swReachable]
-        //         nwValue, allReachable
+        | Node (nw, ne, sw, se) ->
 
-        let rec buildClosure qtree closure =
-            match qtree with
-            | Leaf value ->
-                Map.add value (Set.singleton value) closure
-            | Node(nw, ne, se, sw) ->
-                let closure' = buildClosure nw closure
-                let closure'' = buildClosure ne closure'
-                let closure''' = buildClosure se closure''
-                buildClosure sw closure'''
+            let newNw = buildTransitiveClosure nw allElements
+            let newNe = buildTransitiveClosure ne allElements
+            let newSw = buildTransitiveClosure sw allElements
+            let newSe = buildTransitiveClosure se allElements
 
-        let closureMap = buildClosure qtree Map.empty
+            Node (newNw, newNe, newSw, newSe)
 
-        closureMap |> Map.map (fun key _ -> findReachable qtree Set.empty)
+    let transitiveClosure (matrix: Matrix<'t>) : Matrix<'t> =
+        let allElements = collectElements matrix.qtree
+        let newQTree = buildTransitiveClosure matrix.qtree allElements
+        { n = matrix.n; qtree = newQTree }
+
+
+    // /// <summary>Creates a new graph that is the transitive closure of the graph given as argument</summary>
+    // /// <param name="graph">the graph whose transitive closure is to be constructed</param>
+    // /// <returns>Transitive closure graph</returns>
+    // let transitiveClosure (qtree: QTree<int>) : Map<int, Set<int>> =
+    //     let rec findReachable (qtree: QTree<int>) (reachable: Set<int>) =
+    //         match qtree with
+    //         | Leaf value ->
+    //             Set.add value reachable
+    //         | Node(nw, ne, se, sw) ->
+    //             let reachableFromNW = findReachable nw reachable
+    //             let reachableFromNE = findReachable ne reachableFromNW
+    //             let reachableFromSE = findReachable se reachableFromNE
+    //             findReachable sw reachableFromSE
+
+    //     // let rec findAllReachableFrom node =
+    //     //     match node with
+    //     //     | Leaf value -> 
+    //     //         value, Set.singleton value 
+    //     //     | Node(nw, ne, se, sw) ->
+    //     //         let nwValue, nwReachable = findAllReachableFrom nw
+    //     //         let neValue, neReachable = findAllReachableFrom ne
+    //     //         let seValue, seReachable = findAllReachableFrom se
+    //     //         let swValue, swReachable = findAllReachableFrom sw
+
+    //     //         let allReachable = Set.unionMany [nwReachable; neReachable; seReachable; swReachable]
+    //     //         nwValue, allReachable
+
+    //     let rec buildClosure qtree closure =
+    //         match qtree with
+    //         | Leaf value ->
+    //             Map.add value (Set.singleton value) closure
+    //         | Node(nw, ne, se, sw) ->
+    //             let closure' = buildClosure nw closure
+    //             let closure'' = buildClosure ne closure'
+    //             let closure''' = buildClosure se closure''
+    //             buildClosure sw closure'''
+
+    //     let closureMap = buildClosure qtree Map.empty
+
+    //     closureMap |> Map.map (fun key _ -> findReachable qtree Set.empty)
 
 
     /// <summary>Finds the shortest path between vertices i and j of the graph</summary>

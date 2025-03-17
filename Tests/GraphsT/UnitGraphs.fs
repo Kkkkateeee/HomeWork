@@ -26,8 +26,13 @@ module DataAndFuncs =
         ) 
 
     let Gnode = { n = 4; qtree = node }
-
-
+    let node1 = Node ( 
+        Node ( Leaf 0, Leaf 1, Leaf 0, Leaf 0), 
+        Node ( Leaf 0, Leaf 0, Leaf 1, Leaf 0), 
+        Leaf 0,  
+        Leaf 0  
+        ) 
+    let a = { n = 4; qtree = node1 }
 
 
 open DataAndFuncs
@@ -86,6 +91,30 @@ module ShortestWay =
 
 // module TransitiveClosure =
 
-    // [<Fact>]
-    // let leaf () = 
-    //     let res = transitiveClosure 
+//     [<Fact>]
+//     let node () = 
+//         let res = transitiveClosure a
+//         let node2 = Node ( 
+//                 Node ( Leaf 0, Leaf 1, Leaf 0, Leaf 0), 
+//                 Node ( Leaf 1, Leaf 0, Leaf 1, Leaf 0), 
+//                 Leaf 0,  
+//                 Leaf 0  
+//             ) 
+//         let a1 = { n = 4; qtree = node2 }
+//         //let ex = { n = 4; qtree = ex1 }
+//         Assert.Equal(a1, res)
+
+(*
+0 1 2 0
+0 0 1 0
+0 0 0 0
+0 0 0 0
+
+    let node1 = Node ( 
+        Node ( Leaf 0, Leaf 1, Leaf 0, Leaf 0), 
+        Node ( Leaf 0, Leaf 0, Leaf 1, Leaf 0), 
+        Leaf 0,  
+        Leaf 0  
+        ) 
+    let a = { n = 4; qtree = node1 }
+*)
