@@ -15,15 +15,15 @@ type Matrix<'t> =
 
 module private Private = 
 
-    let rec private toCorrectQTreePrivate qtree =
+    let rec toCorrectQTree qtree =
         match qtree with 
         | Leaf value -> Leaf value
         
         | Node (nw, ne, se, sw) ->
-            let NW = toCorrectQTreePrivate nw
-            let NE = toCorrectQTreePrivate ne
-            let SE = toCorrectQTreePrivate se
-            let SW = toCorrectQTreePrivate sw
+            let NW = toCorrectQTree nw
+            let NE = toCorrectQTree ne
+            let SE = toCorrectQTree se
+            let SW = toCorrectQTree sw
 
             match NW, NE, SE, SW with 
             |   Leaf value1, 
@@ -36,14 +36,13 @@ module private Private =
 
             | _ -> Node (NW, NE, SE, SW) 
 
-    let toCorrectQTree qtree = 
-        qtree |> toCorrectQTreePrivate
 
-     
 open Private
 
 
 module QTrees =  
+    let toCorrectQTree qtree =
+        qtree |> toCorrectQTree
     
     let rec map func qtree = 
         match qtree with  
