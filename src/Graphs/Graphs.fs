@@ -14,79 +14,62 @@ type Edjes<'t> =
 
 module Graphs =
 
-    let rec collectElements tree =
-        match tree with
-        | Leaf element -> Set.singleton element
-        | Node (nw, ne, sw, se) ->
-            Set.unionMany 
-                [
-                            collectElements nw; 
-                            collectElements ne; 
-                            collectElements sw; 
-                            collectElements se
-                        ]
 
-    let rec buildTransitiveClosure tree allElements =
-        match tree with
-        | Leaf element ->
-            Leaf element
+    let builder (qtreeOriginal: QTree<Edjes<'t>>) (set: Set<int * int * array<'t>>) =
+        qtreeOriginal
 
-        | Node (nw, ne, sw, se) ->
+    let rec finder (qtree: QTree<Edjes<'t>>) (size: int) (i: int) (j: int) (set: Set<int * int * array<'t>>) =
+        match qtree with 
+        | Leaf edjes ->
+            match edjes with 
+            | None -> set
+            | Some array -> set.Add (i, j, array)
 
-            let newNw = buildTransitiveClosure nw allElements
-            let newNe = buildTransitiveClosure ne allElements
-            let newSw = buildTransitiveClosure sw allElements
-            let newSe = buildTransitiveClosure se allElements
+        | Node(nw, ne, sw, se) ->
+            if i <= size / 2 && j <= size / 2 then 
+                finder nw (size / 2) i j set
+            elif i <= size / 2 && j > size / 2 then 
+                finder ne (size / 2) i (j - size / 2) set 
+            elif i > size / 2 && j <= size / 2 then 
+                finder sw (size / 2) (i - size / 2) j set 
+            else 
+                finder se (size / 2) (i - size / 2) (j - size / 2) set
 
-            Node (newNw, newNe, newSw, newSe)
+    let rec a (qtree: QTree<Edjes<'t>>) size i j =  // в i j подается size
+        match qtree with 
+        | Node(nw, ne, sw, se) ->
+            a nw (size / 2) (i / 2) (j / 2)
+            a ne (size / 2) (i / 2) j
+            a sw (size / 2) i (j / 2)
+            a se (size / 2) i j
 
-    let transitiveClosure (matrix: Matrix<'t>) : Matrix<'t> =
-        let allElements = collectElements matrix.qtree
-        let newQTree = buildTransitiveClosure matrix.qtree allElements
-        { n = matrix.n; qtree = newQTree }
+        | Leaf edjes when size > 1 ->
+            a (Leaf edjes) (size / 2) (i / 2) (j / 2)
+            a (Leaf edjes) (size / 2) (i / 2) j
+            a (Leaf edjes) (size / 2) i (j / 2)
+            a (Leaf edjes) (size / 2) i j
+        
+        | Leaf edges when size = 1 -> 
+            match edges with 
+            | None -> ignore
+            | Some array -> finder qtree size i j Set.empty
+        
+        
 
+    (*
+    nw ne  11 12
+    sw se  21 22
+    (set: Set<int * int * array<'t>>)
+    *)
 
-    // /// <summary>Creates a new graph that is the transitive closure of the graph given as argument</summary>
-    // /// <param name="graph">the graph whose transitive closure is to be constructed</param>
-    // /// <returns>Transitive closure graph</returns>
-    // let transitiveClosure (qtree: QTree<int>) : Map<int, Set<int>> =
-    //     let rec findReachable (qtree: QTree<int>) (reachable: Set<int>) =
-    //         match qtree with
-    //         | Leaf value ->
-    //             Set.add value reachable
-    //         | Node(nw, ne, se, sw) ->
-    //             let reachableFromNW = findReachable nw reachable
-    //             let reachableFromNE = findReachable ne reachableFromNW
-    //             let reachableFromSE = findReachable se reachableFromNE
-    //             findReachable sw reachableFromSE
-
-    //     // let rec findAllReachableFrom node =
-    //     //     match node with
-    //     //     | Leaf value -> 
-    //     //         value, Set.singleton value 
-    //     //     | Node(nw, ne, se, sw) ->
-    //     //         let nwValue, nwReachable = findAllReachableFrom nw
-    //     //         let neValue, neReachable = findAllReachableFrom ne
-    //     //         let seValue, seReachable = findAllReachableFrom se
-    //     //         let swValue, swReachable = findAllReachableFrom sw
-
-    //     //         let allReachable = Set.unionMany [nwReachable; neReachable; seReachable; swReachable]
-    //     //         nwValue, allReachable
-
-    //     let rec buildClosure qtree closure =
-    //         match qtree with
-    //         | Leaf value ->
-    //             Map.add value (Set.singleton value) closure
-    //         | Node(nw, ne, se, sw) ->
-    //             let closure' = buildClosure nw closure
-    //             let closure'' = buildClosure ne closure'
-    //             let closure''' = buildClosure se closure''
-    //             buildClosure sw closure'''
-
-    //     let closureMap = buildClosure qtree Map.empty
-
-    //     closureMap |> Map.map (fun key _ -> findReachable qtree Set.empty)
-
+    /// <summary>Creates a new graph that is the transitive closure of the graph given as argument</summary>
+    /// <param name="graph">the graph whose transitive closure is to be constructed</param>
+    /// <returns>Transitive closure graph</returns>
+    let transitiveClosure (graph: Matrix<Edjes<'t>>) =
+        let set = a graph.qtree graph.n graph.n graph.n
+        let qtree = builder graph.qtree |> toC
+        { n = graph.n  }
+        
 
     /// <summary>Finds the shortest path between vertices i and j of the graph</summary>
     /// <param name="graph">a graph in which the shortest path must be found</param>
@@ -114,10 +97,10 @@ module Graphs =
             | Node(nw, ne, sw, se) ->
                 if i <= size / 2 && j <= size / 2 then 
                     findValue nw (size / 2) i j
-                elif i > size / 2 && j <= size / 2 then 
-                    findValue sw (size / 2) (i / 2) j
                 elif i <= size / 2 && j > size / 2 then 
                     findValue ne (size / 2) i (j / 2)
+                elif i > size / 2 && j <= size / 2 then 
+                    findValue sw (size / 2) (i / 2) j
                 else 
                     findValue se (size / 2) (i / 2) (j / 2)
 
@@ -127,8 +110,8 @@ module Graphs =
     (*
     nw ne
     sw se
+    (set: Set<int * int * array<'t>>)
     *)
-
 (*      i
         A B C D E  <F>  <G> H
      A  0 0 0 0 1   2    0  0
