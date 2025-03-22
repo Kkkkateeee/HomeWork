@@ -8,7 +8,7 @@ open FsCheck
 open FsCheck.Xunit 
 open FsCheck.FSharp
  
-open LineralAlgebra 
+open LineralAlgebra
 open LineralAlgebra.QTrees
 open LineralAlgebra.Matrix
 open UnitTrees.dataAndFuncs
@@ -26,27 +26,6 @@ module DataAndFuncs =
         | Leaf value1, Leaf value2 ->  
             areAlmostEqual value1 value2 1e-5f 
         | _ -> false 
-
-    let rec toCorrectQTree qtree  =
-        match qtree with 
-        | Leaf value -> Leaf value
-        
-        | Node (nw, ne, se, sw) ->
-            let NW = toCorrectQTree nw
-            let NE = toCorrectQTree ne
-            let SE = toCorrectQTree se
-            let SW = toCorrectQTree sw
-
-            match NW, NE, SE, SW with 
-            |   Leaf value1, 
-                Leaf value2, 
-                Leaf value3, 
-                Leaf value4 
-                when value1 = value2 && value2 = value3 && value3 = value4 ->
-                
-                Leaf value1
-
-            | _ -> Node (NW, NE, SE, SW)
 
     let multiplyArray2D (arr1: 't[,]) (arr2: 't[,]) : 't[,] =
         let rows1 = Array2D.length1 arr1
