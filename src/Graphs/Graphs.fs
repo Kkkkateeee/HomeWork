@@ -14,63 +14,6 @@ type Edjes<'t> =
 
 module Graphs =
 
-
-    let builder (qtreeOriginal: QTree<Edjes<'t>>) (set: Set<int * int * array<'t>>) =
-        qtreeOriginal
-
-    let rec finder (qtree: QTree<Edjes<'t>>) (size: int) (i: int) (j: int) (set: Set<int * int * array<'t>>) =
-        match qtree with 
-        | Leaf edjes ->
-            match edjes with 
-            | None -> set
-            | Some array -> set.Add (i, j, array)
-
-        | Node(nw, ne, sw, se) ->
-            if i <= size / 2 && j <= size / 2 then 
-                finder nw (size / 2) i j set
-            elif i <= size / 2 && j > size / 2 then 
-                finder ne (size / 2) i (j - size / 2) set 
-            elif i > size / 2 && j <= size / 2 then 
-                finder sw (size / 2) (i - size / 2) j set 
-            else 
-                finder se (size / 2) (i - size / 2) (j - size / 2) set
-
-    let rec a (qtree: QTree<Edjes<'t>>) size i j =  // в i j подается size
-        match qtree with 
-        | Node(nw, ne, sw, se) ->
-            a nw (size / 2) (i / 2) (j / 2)
-            a ne (size / 2) (i / 2) j
-            a sw (size / 2) i (j / 2)
-            a se (size / 2) i j
-
-        | Leaf edjes when size > 1 ->
-            a (Leaf edjes) (size / 2) (i / 2) (j / 2)
-            a (Leaf edjes) (size / 2) (i / 2) j
-            a (Leaf edjes) (size / 2) i (j / 2)
-            a (Leaf edjes) (size / 2) i j
-        
-        | Leaf edges when size = 1 -> 
-            match edges with 
-            | None -> ignore
-            | Some array -> finder qtree size i j Set.empty
-        
-        
-
-    (*
-    nw ne  11 12
-    sw se  21 22
-    (set: Set<int * int * array<'t>>)
-    *)
-
-    /// <summary>Creates a new graph that is the transitive closure of the graph given as argument</summary>
-    /// <param name="graph">the graph whose transitive closure is to be constructed</param>
-    /// <returns>Transitive closure graph</returns>
-    let transitiveClosure (graph: Matrix<Edjes<'t>>) =
-        let set = a graph.qtree graph.n graph.n graph.n
-        let qtree = builder graph.qtree |> toC
-        { n = graph.n  }
-        
-
     /// <summary>Finds the shortest path between vertices i and j of the graph</summary>
     /// <param name="graph">a graph in which the shortest path must be found</param>
     /// <param name="i">row coordinate of the adjacency matrix of the graph</param>
@@ -106,20 +49,53 @@ module Graphs =
 
         let value = findValue graph.qtree graph.n i j
         value
-        
-    (*
-    nw ne
-    sw se
-    (set: Set<int * int * array<'t>>)
-    *)
-(*      i
-        A B C D E  <F>  <G> H
-     A  0 0 0 0 1   2    0  0
- j   B  0 0 0 0 3   0    0  0
-     C->9 9 9 0 0  1+1  (1) 0
-     D  9 9 9 0 0   0    1  0
-     E  1 1 1 1 1   1    1  1
-     F  0 0 0 0 0   0    0  0
-     G->0 0 0 0 0  (1)   0  0
-     H->0 0 0 0 0   1    0  0 
-*) 
+
+
+    /// <summary>Creates a new graph that is the transitive closure of the graph given as argument</summary>
+    /// <param name="graph">the graph whose transitive closure is to be constructed</param>
+    /// <returns>Transitive closure graph</returns>
+    let transitiveClosure (graph: Matrix<Edjes<'t>>) = 
+        let toAdjacencyMatrix (graph: Matrix<Edjes<'t>>) =
+            let rec toAdjacencyQTree (qtree: QTree<Edjes<'t>>) =
+                match qtree with 
+                | Leaf edjes -> 
+                    match edjes with 
+                    | Some _ -> Leaf 1
+                    | None -> Leaf 0
+                | Node(nw, ne, sw, se) -> 
+                    let NW = toAdjacencyQTree nw      
+                    let NE = toAdjacencyQTree ne
+                    let SW = toAdjacencyQTree sw
+                    let SE = toAdjacencyQTree se
+                    Node(NW, NE, SW, SE)  
+
+            let res = toAdjacencyQTree graph.qtree
+            { n = graph.n; qtree = res }
+
+        let valueReset (matrix: Matrix<int>) =
+            let rec valueResetQTree (qtree: QTree<int>) =
+                match matrix.qtree with 
+                | Leaf value when value = 1 -> Leaf 1
+                | Leaf value when value > 1 -> Leaf 1
+                | Node (nw, ne, sw, se) ->
+                    let NW = valueResetQTree nw      
+                    let NE = valueResetQTree ne
+                    let SW = valueResetQTree sw
+                    let SE = valueResetQTree se
+                    Node(NW, NE, SW, SE)
+                | Leaf(_) -> failwith "Not Implemented"  
+                
+            let res = valueResetQTree matrix.qtree
+            { n = matrix.n; qtree = res }
+
+
+        let mutable adjM = toAdjacencyMatrix graph
+       
+        let mutable param = true 
+        while param do
+            if valueReset (adjM + Matrix.multiply adjM adjM (+) ( * )) = adjM then param <- false
+            else 
+                adjM <- valueReset (adjM + Matrix.multiply adjM adjM (+) ( * )) 
+            
+
+        adjM
