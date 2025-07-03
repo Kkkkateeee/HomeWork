@@ -4,8 +4,6 @@ open System
 open Xunit  
  
 open LineralAlgebra 
-open LineralAlgebra.QTrees
-open LineralAlgebra.Matrix
  
  
 module DataAndFuncs = 
@@ -68,18 +66,18 @@ module Map =
  
     [<Fact>] 
     let intId () = 
-        let res = map id intQTree1 
+        let res = QTrees.map id intQTree1 
         Assert.Equal(intQTree1, res) 
  
     [<Fact>] 
     let floatId () = 
-        let res = map id floatQTree1 
+        let res = QTrees.map id floatQTree1 
         Assert.Equal(floatQTree1, res) 
   
  
     [<Fact>] 
     let intAdd () = 
-        let res = map ((+) 1) intQTree1 
+        let res = QTrees.map ((+) 1) intQTree1 
         let ex = Node ( 
             Node ( Leaf 2, Leaf 3, Leaf 4, Leaf 5), 
             Node ( Leaf -4, Leaf -5, Leaf -6, Leaf -7), 
@@ -90,7 +88,7 @@ module Map =
 
     [<Fact>] 
     let floatAdd () = 
-        let res = map ((+) 1.0) floatQTree1 
+        let res = QTrees.map ((+) 1.0) floatQTree1 
         let ex = Node ( 
             Node ( Leaf 2.0, Leaf 3.0, Leaf 4.0, Leaf 5.0), 
             Node ( Leaf -4.0, Leaf -5.0, Leaf -6.0, Leaf -7.0), 
@@ -102,7 +100,7 @@ module Map =
  
     [<Fact>] 
     let intMult () = 
-        let res = map (fun x -> 2 * x) intQTree1 
+        let res = QTrees.map (fun x -> 2 * x) intQTree1 
         let ex = Node ( 
             Node ( Leaf 2, Leaf 4, Leaf 6, Leaf 8), 
             Node ( Leaf -10, Leaf -12, Leaf -14, Leaf -16), 
@@ -113,7 +111,7 @@ module Map =
   
     [<Fact>] 
     let floatMult () = 
-        let res = map (fun x -> 2.0 * x) floatQTree1 
+        let res = QTrees.map (fun x -> 2.0 * x) floatQTree1 
         let ex = Node ( 
             Node ( Leaf 2.0, Leaf 4.0, Leaf 6.0, Leaf 8.0), 
             Node ( Leaf -10.0, Leaf -12.0, Leaf -14.0, Leaf -16.0), 
@@ -127,7 +125,7 @@ module Map =
 
     [<Fact>] 
     let intSign () =
-        let res = map (fun (x: int) -> Math.Sign x) intQTree1
+        let res = QTrees.map (fun (x: int) -> Math.Sign x) intQTree1
         let ex = Node (
             Leaf 1,
             Leaf -1,
@@ -138,7 +136,7 @@ module Map =
 
     [<Fact>] 
     let floatSign () =
-        let res = map (fun (x: float) -> Math.Sign x) floatQTree1
+        let res = QTrees.map (fun (x: float) -> Math.Sign x) floatQTree1
         let ex = Node (
             Leaf 1,
             Leaf -1,
@@ -150,8 +148,8 @@ module Map =
  
     [<Fact>] 
     let intComposition () = 
-        let tree1 = map ((+) 1)((map ((+) 2)) intQTree1) 
-        let tree2 = map ((+) 3) intQTree1 
+        let tree1 = QTrees.map ((+) 1)((QTrees.map ((+) 2)) intQTree1) 
+        let tree2 = QTrees.map ((+) 3) intQTree1 
         let ex = Node ( 
             Node ( Leaf 4, Leaf 5, Leaf 6, Leaf 7), 
             Node ( Leaf -2, Leaf -3, Leaf -4, Leaf -5), 
@@ -163,8 +161,8 @@ module Map =
 
     [<Fact>] 
     let floatComposition () = 
-        let tree1 = map ((+) 1.0) (map ((+) 2.0) floatQTree1) 
-        let tree2 = map ((+) 3.0) floatQTree1 
+        let tree1 = QTrees.map ((+) 1.0) (QTrees.map ((+) 2.0) floatQTree1) 
+        let tree2 = QTrees.map ((+) 3.0) floatQTree1 
         let ex = Node ( 
             Node ( Leaf 4.0, Leaf 5.0, Leaf 6.0, Leaf 7.0), 
             Node ( Leaf -2.0, Leaf -3.0, Leaf -4.0, Leaf -5.0), 
@@ -177,15 +175,15 @@ module Map =
 
     [<Fact>] 
     let intHighIsConst () = 
-        let h1 = height intQTree1 
-        let h2 = height (map ((+) 1) intQTree1) 
+        let h1 = QTrees.height intQTree1 
+        let h2 = QTrees.height (QTrees.map ((+) 1) intQTree1) 
         Assert.Equal(3, h1) 
         Assert.Equal(3, h2) 
  
     [<Fact>] 
     let floatHighIsConst () = 
-        let h1 = height floatQTree1 
-        let h2 = height (map ((+) 1.0) floatQTree1) 
+        let h1 = QTrees.height floatQTree1 
+        let h2 = QTrees.height (QTrees.map ((+) 1.0) floatQTree1) 
         Assert.Equal(3, h1) 
         Assert.Equal(3, h2) 
 
@@ -197,12 +195,12 @@ module Map =
 
     [<Fact>] 
     let intHighIsExpected () = 
-        let h = height (map (fun (x: int) -> Math.Sign x) intQTree1) 
+        let h = QTrees.height (QTrees.map (fun (x: int) -> Math.Sign x) intQTree1) 
         Assert.Equal(2, h) 
  
     [<Fact>]
     let floatHighIsExpected () = 
-        let h = height (map (fun (x: float) -> Math.Sign x) floatQTree1) 
+        let h = QTrees.height (QTrees.map (fun (x: float) -> Math.Sign x) floatQTree1) 
         Assert.Equal(2, h) 
 
     
@@ -211,7 +209,7 @@ module Map2 =
  
     [<Fact>] 
     let intAdd () = 
-        let res = map2 (+) intQTree1 intQTree2 
+        let res = QTrees.map2 (+) intQTree1 intQTree2 
         let ex = Node ( 
             Node ( Leaf 2, Leaf 4, Leaf 6, Leaf 8), 
             Node ( Leaf 0, Leaf -1, Leaf -2, Leaf -3), 
@@ -222,7 +220,7 @@ module Map2 =
 
     [<Fact>] 
     let floatAdd () = 
-        let res = map2 (+) floatQTree1 floatQTree2 
+        let res = QTrees.map2 (+) floatQTree1 floatQTree2 
         let ex = Node ( 
             Node ( Leaf 2.0, Leaf 4.0, Leaf 6.0, Leaf 8.0), 
             Node ( Leaf 0.0, Leaf -1.0, Leaf -2.0, Leaf -3.0), 
@@ -234,7 +232,7 @@ module Map2 =
  
     [<Fact>] 
     let intMult () = 
-        let res = map2 (fun x y -> x * y) intQTree1 intQTree2 
+        let res = QTrees.map2 (fun x y -> x * y) intQTree1 intQTree2 
         let ex = Node ( 
             Node ( Leaf 1, Leaf 4, Leaf 9, Leaf 16), 
             Node ( Leaf -25, Leaf -30, Leaf -35, Leaf -40), 
@@ -245,7 +243,7 @@ module Map2 =
 
     [<Fact>] 
     let floatMult () = 
-        let res = map2 (fun x y -> x * y) floatQTree1 floatQTree2 
+        let res = QTrees.map2 (fun x y -> x * y) floatQTree1 floatQTree2 
         let ex = Node ( 
             Node ( Leaf 1.0, Leaf 4.0, Leaf 9.0, Leaf 16.0), 
             Node ( Leaf -25.0, Leaf -30.0, Leaf -35.0, Leaf -40.0), 
@@ -257,19 +255,19 @@ module Map2 =
  
     [<Fact>] 
     let intHighIsExpected () = 
-        let h1 = height intQTree1 
-        let h2 = height intOneLeaf1 
+        let h1 = QTrees.height intQTree1 
+        let h2 = QTrees.height intOneLeaf1 
         let h3 = max h1 h2 
-        let h4 = height (map2 (+) intQTree1 intOneLeaf1) 
+        let h4 = QTrees.height (QTrees.map2 (+) intQTree1 intOneLeaf1) 
         Assert.Equal(3, h3) 
         Assert.Equal(3, h4) 
      
     [<Fact>] 
     let floatHighIsExpected () = 
-        let h1 = height floatQTree1 
-        let h2 = height floatOneLeaf 
+        let h1 = QTrees.height floatQTree1 
+        let h2 = QTrees.height floatOneLeaf 
         let h3 = max h1 h2 
-        let h4 = height (map2 (+) floatQTree1 floatOneLeaf) 
+        let h4 = QTrees.height (QTrees.map2 (+) floatQTree1 floatOneLeaf) 
         Assert.Equal(3, h3) 
         Assert.Equal(3, h4) 
  
@@ -279,22 +277,22 @@ module Mult =
 
     [<Fact>]
     let sizeIsImportant () =
-        let res1 = multiply MintOneLeaf3 MintOneLeaf4 (+) ( * )
+        let res1 = Matrix.multiply MintOneLeaf3 MintOneLeaf4 (+) ( * )
         let ex1 = { n = 1; qtree = Leaf 6 }
-        let res2 = multiply MintNode1 MintNode2 (+) ( * )
+        let res2 = Matrix.multiply MintNode1 MintNode2 (+) ( * )
         let ex2 = { n = 2; qtree = Leaf 12 }
         Assert.Equal(ex1, res1)
         Assert.Equal(ex2, res2)
     
     [<Fact>]
     let leafLeaf () =
-        let res = multiply MintOneLeaf3 MintOneLeaf4 (+) ( * )
+        let res = Matrix.multiply MintOneLeaf3 MintOneLeaf4 (+) ( * )
         let ex = { n = 1; qtree = Leaf 6 }
         Assert.Equal(ex, res)
 
     [<Fact>]
     let nodeLeaf () =
-        let res = multiply MintQTree1 MintOneLeaf1 (+) ( * )
+        let res = Matrix.multiply MintQTree1 MintOneLeaf1 (+) ( * )
         let ex = { 
             n = 4; 
             qtree = Node ( 
@@ -308,7 +306,7 @@ module Mult =
 
     [<Fact>]
     let leafNode () =
-        let res = multiply MintOneLeaf1 MintQTree1 (+) ( * )
+        let res = Matrix.multiply MintOneLeaf1 MintQTree1 (+) ( * )
         let ex = { 
             n = 4; 
             qtree = Node ( 
@@ -322,7 +320,7 @@ module Mult =
 
     [<Fact>]
     let nodeNode () =
-        let res = multiply MintQTree1 MintQTree2 (+) ( * )
+        let res = Matrix.multiply MintQTree1 MintQTree2 (+) ( * )
         let ex = { 
             n = 4; 
             qtree = Node ( 
@@ -336,8 +334,8 @@ module Mult =
 
     [<Fact>]
     let zero () =
-        let res1 = multiply MintQTree1 MintZero (+) ( * )
-        let res2 = multiply MintZero MintQTree1 (+) ( * )
+        let res1 = Matrix.multiply MintQTree1 MintZero (+) ( * )
+        let res2 = Matrix.multiply MintZero MintQTree1 (+) ( * )
         let ex = { n = 4; qtree = Leaf 0 }
         Assert.Equal(ex, res1)
         Assert.Equal(ex, res2)
