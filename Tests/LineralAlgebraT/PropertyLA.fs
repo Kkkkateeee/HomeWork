@@ -9,8 +9,6 @@ open FsCheck.Xunit
 open FsCheck.FSharp
  
 open LineralAlgebra
-open LineralAlgebra.QTrees
-open LineralAlgebra.Matrix
 open UnitTrees.dataAndFuncs
  
 
@@ -69,7 +67,7 @@ module DataAndFuncs =
 
         let MatrGen (size: int) =
             let qtree = QTreeGen size typeOfMatr
-            { n = size; qtree = toCorrectQTree qtree }
+            { n = size; qtree = QTrees.toCorrectQTree qtree }
 
         let res = MatrGen size
         res
@@ -82,31 +80,31 @@ type Map() =
      
     [<Property>] 
     member _.intId (qtree: QTree<int>) = 
-        qtree |> toCorrectQTree = map id qtree 
+        qtree |> QTrees.toCorrectQTree = QTrees.map id qtree 
  
     [<Property>] 
     member _.floatId (qtree: QTree<float32>) = 
-        let res = map id qtree 
-        Assert.True(floatQTreesAreEqual (qtree |> toCorrectQTree) res) 
+        let res = QTrees.map id qtree 
+        Assert.True(floatQTreesAreEqual (qtree |> QTrees.toCorrectQTree) res) 
          
  
     [<Property>] 
     member _.intComposition (qtree: QTree<int>) = 
-        let qtree1 = map ((+) 1)((map ((+) 2)) qtree) 
-        let qtree2 = map ((+) 3) qtree 
+        let qtree1 = QTrees.map ((+) 1)((QTrees.map ((+) 2)) qtree) 
+        let qtree2 = QTrees.map ((+) 3) qtree 
         qtree1 = qtree2 
  
     [<Property>] 
     member _.floatComposition (qtree: QTree<float32>) = 
-        let qtree1 = map ((+) 1.0f) (map ((+) 2.0f) qtree) 
-        let qtree2 = map ((+) 3.0f) qtree 
+        let qtree1 = QTrees.map ((+) 1.0f) (QTrees.map ((+) 2.0f) qtree) 
+        let qtree2 = QTrees.map ((+) 3.0f) qtree 
         Assert.True(floatQTreesAreEqual qtree1 qtree2) 
  
  
     [<Property>] 
     member _.intHighIsConst (qtree: QTree<int>) = 
-        let h1 = height (qtree |> toCorrectQTree) 
-        let h2 = height (map ((+) 1) qtree) 
+        let h1 = QTrees.height (qtree |> QTrees.toCorrectQTree) 
+        let h2 = QTrees.height (QTrees.map ((+) 1) qtree) 
         h1 = h2 
  
 
@@ -120,47 +118,47 @@ type Multiply() =
     member _.leafLeaf () =
         let matr1 = MatrixGen 1 "Leaf"
         let matr2 = MatrixGen 1 "Leaf"
-        let res = multiply matr1 matr2 (+) ( * )
-        let arrayRess = qtreeToArray2D res.qtree res.n
-        let arrayEx = multiplyArray2D (qtreeToArray2D matr1.qtree matr1.n) (qtreeToArray2D matr2.qtree matr2.n)
+        let res = Matrix.multiply matr1 matr2 (+) ( * )
+        let arrayRess = QTrees.qtreeToArray2D res.qtree res.n
+        let arrayEx = multiplyArray2D (QTrees.qtreeToArray2D matr1.qtree matr1.n) (QTrees.qtreeToArray2D matr2.qtree matr2.n)
         Assert.Equal(arrayEx, arrayRess)
 
     [<Property>]
     member _.nodeLeaf () =
         let matr1 = MatrixGen size "Node"
         let matr2 = MatrixGen size "Leaf"
-        let res = multiply matr1 matr2 (+) ( * )
-        let arrayRess = qtreeToArray2D res.qtree res.n
-        let arrayEx = multiplyArray2D (qtreeToArray2D matr1.qtree matr1.n) (qtreeToArray2D matr2.qtree matr2.n)
+        let res = Matrix.multiply matr1 matr2 (+) ( * )
+        let arrayRess = QTrees.qtreeToArray2D res.qtree res.n
+        let arrayEx = multiplyArray2D (QTrees.qtreeToArray2D matr1.qtree matr1.n) (QTrees.qtreeToArray2D matr2.qtree matr2.n)
         Assert.Equal(arrayEx, arrayRess)
 
     [<Property>]
     member _.leafNode () =
         let matr1 = MatrixGen size "Leaf"
         let matr2 = MatrixGen size "Node"
-        let res = multiply matr1 matr2 (+) ( * )
-        let arrayRess = qtreeToArray2D res.qtree res.n
-        let arrayEx = multiplyArray2D (qtreeToArray2D matr1.qtree matr1.n) (qtreeToArray2D matr2.qtree matr2.n)
+        let res = Matrix.multiply matr1 matr2 (+) ( * )
+        let arrayRess = QTrees.qtreeToArray2D res.qtree res.n
+        let arrayEx = multiplyArray2D (QTrees.qtreeToArray2D matr1.qtree matr1.n) (QTrees.qtreeToArray2D matr2.qtree matr2.n)
         Assert.Equal(arrayEx, arrayRess)
 
     [<Property>]
     member _.nodeNode () =
         let matr1 = MatrixGen size "Node"
         let matr2 = MatrixGen size "Node"
-        let res = multiply matr1 matr2 (+) ( * )
-        let arrayRess = qtreeToArray2D res.qtree res.n
-        let arrayEx = multiplyArray2D (qtreeToArray2D matr1.qtree matr1.n) (qtreeToArray2D matr2.qtree matr2.n)
+        let res = Matrix.multiply matr1 matr2 (+) ( * )
+        let arrayRess = QTrees.qtreeToArray2D res.qtree res.n
+        let arrayEx = multiplyArray2D (QTrees.qtreeToArray2D matr1.qtree matr1.n) (QTrees.qtreeToArray2D matr2.qtree matr2.n)
         Assert.Equal(arrayEx, arrayRess)
 
     [<Property>]
     member _.zero () =
         let matr1 = MatrixGen size "Zero"
         let matr2 = MatrixGen size "Node"
-        let res = multiply matr1 matr2 (+) ( * )
-        let arrayRess = qtreeToArray2D res.qtree res.n
-        let res1 = multiply matr2 matr1 (+) ( * )
-        let arrayRess1 = qtreeToArray2D res1.qtree res1.n
+        let res = Matrix.multiply matr1 matr2 (+) ( * )
+        let arrayRess = QTrees.qtreeToArray2D res.qtree res.n
+        let res1 = Matrix.multiply matr2 matr1 (+) ( * )
+        let arrayRess1 = QTrees.qtreeToArray2D res1.qtree res1.n
         
-        let arrayEx = multiplyArray2D (qtreeToArray2D matr1.qtree matr1.n) (qtreeToArray2D matr2.qtree matr2.n)
+        let arrayEx = multiplyArray2D (QTrees.qtreeToArray2D matr1.qtree matr1.n) (QTrees.qtreeToArray2D matr2.qtree matr2.n)
         Assert.Equal(arrayEx, arrayRess)
         Assert.Equal(arrayEx, arrayRess1)
