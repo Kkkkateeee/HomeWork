@@ -59,6 +59,38 @@ module DataAndFuncs =
         let res = MatrGen size
         res
 
+    let transitiveClosureMatrices (matrix: int array2d) =
+        let n = matrix.Length
+        let res = Array2D.copy matrix
+
+        for k in 0 .. n - 1 do
+            for i in 0 .. n - 1 do
+                for j in 0 .. n - 1 do
+                    if res.[i,k] = 1 && res.[k,j] = 1 then
+                        res.[i,j] <- 1
+                    else
+                        res.[i,j] <- max res.[i,j] res.[i,k] * res.[k,j]  
+                    
+        res
+
+    let toAdjacencyMatrix (graph: Matrix<Edjes<'t>>) =
+        let rec toAdjacencyQTree (qtree: QTree<Edjes<'t>>) =
+            match qtree with 
+            | Leaf edjes -> 
+                match edjes with 
+                | Some _ -> Leaf 1
+                | None -> Leaf 0
+            | Node(nw, ne, sw, se) -> 
+                let NW = toAdjacencyQTree nw      
+                let NE = toAdjacencyQTree ne
+                let SW = toAdjacencyQTree sw
+                let SE = toAdjacencyQTree se
+                Node(NW, NE, SW, SE)  
+
+        let res = toAdjacencyQTree graph.qtree
+        { n = graph.n; qtree = res }
+
+
 
 open DataAndFuncs
 
@@ -101,5 +133,16 @@ type ShortestWay() =
         Assert.Equal(ex, res)
 
 
-// [<Properties(MaxTest = 100)>] 
-// type TransitiveClosure() = 
+[<Properties(MaxTest = 100)>] 
+type TransitiveClosure() = 
+    let power = Random().Next(1, 6)
+    let size = pown 2 power
+
+    [<Property>]
+    member _.leaf1 () =
+        let graph = GraphGen size "Node"
+        let res = transitiveClosure graph
+        let matr = qtreeToArray2D graph.qtree
+        
+        let ex = qtreeToArray2D matrTR
+        Assert.Equal(ex, res)

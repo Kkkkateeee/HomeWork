@@ -51,7 +51,7 @@ module Graphs =
         value
 
 
-    /// <summary>Creates a new graph that is the transitive closure of the graph given as argument</summary>
+    /// <summary>Creates a new graph that is the transitive closure of the underected graph given as argument</summary>
     /// <param name="graph">the graph whose transitive closure is to be constructed</param>
     /// <returns>Transitive closure graph</returns>
     let transitiveClosure (graph: Matrix<Edjes<'t>>) = 
@@ -73,29 +73,15 @@ module Graphs =
             { n = graph.n; qtree = res }
 
         let valueReset (matrix: Matrix<int>) =
-            let rec valueResetQTree (qtree: QTree<int>) =
-                match matrix.qtree with 
-                | Leaf value when value = 1 -> Leaf 1
-                | Leaf value when value > 1 -> Leaf 1
-                | Node (nw, ne, sw, se) ->
-                    let NW = valueResetQTree nw      
-                    let NE = valueResetQTree ne
-                    let SW = valueResetQTree sw
-                    let SE = valueResetQTree se
-                    Node(NW, NE, SW, SE)
-                | Leaf(_) -> failwith "Not Implemented"  
-                
-            let res = valueResetQTree matrix.qtree
-            { n = matrix.n; qtree = res }
+            let resetValue (value: int) = if value > 0 then 1 else 0
+            let resetQTree (qtree:QTree<int>) = QTrees.map (fun x -> resetValue x ) qtree
+            { n = matrix.n; qtree = resetQTree matrix.qtree |> QTrees.map(fun x -> int x) }
 
+        let adjM = toAdjacencyMatrix graph
+        let mutable result = adjM
 
-        let mutable adjM = toAdjacencyMatrix graph
-       
-        let mutable param = true 
-        while param do
-            if valueReset (adjM + Matrix.multiply adjM adjM (+) ( * )) = adjM then param <- false
-            else 
-                adjM <- valueReset (adjM + Matrix.multiply adjM adjM (+) ( * )) 
-            
+        for i in 2 .. graph.n do
+            let power = Matrix.multiply result adjM (+) ( * )
+            result <- valueReset { n = graph.n; qtree = QTrees.map2 (+) result.qtree power.qtree }
 
-        adjM
+        result
