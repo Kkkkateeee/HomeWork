@@ -128,7 +128,15 @@ module QTrees =
                 Array.max heights + 1 
 
 
-module Matrix = 
+module Matrix =   
+
+    let map func (matr: Matrix<'t>) = 
+        let res = QTrees.map func matr.qtree
+        { n = matr.n; qtree = res } 
+
+    let map2 func (matr1: Matrix<'t>) (matr2: Matrix<'t>) =
+        let res = QTrees.map2 func matr1.qtree matr2.qtree
+        { n = max matr1.n matr2.n; qtree = res } 
 
     let rec private add qtree1 qtree2 size (opAdd: 't -> 't -> 't) (opMult: 't -> 't -> 't) =
         match qtree1, qtree2 with
