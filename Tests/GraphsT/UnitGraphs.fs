@@ -138,3 +138,4 @@ module TransitiveClosure =
             ) 
         let ex = { n = 4; qtree = node }
         Assert.Equal(ex, res)
+        
