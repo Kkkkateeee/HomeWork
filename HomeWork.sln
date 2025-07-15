@@ -29,6 +29,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LineralAlgebra", "src\Liner
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LineralAlgebraT", "Tests\LineralAlgebraT\LineralAlgebraT.fsproj", "{C42A6017-8A61-4469-8FCD-EEBF49198D80}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "App", "App\App.fsproj", "{9C6529F4-1014-4655-A47E-D807D8604BD0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{C42A6017-8A61-4469-8FCD-EEBF49198D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C42A6017-8A61-4469-8FCD-EEBF49198D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C42A6017-8A61-4469-8FCD-EEBF49198D80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C6529F4-1014-4655-A47E-D807D8604BD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C6529F4-1014-4655-A47E-D807D8604BD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C6529F4-1014-4655-A47E-D807D8604BD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C6529F4-1014-4655-A47E-D807D8604BD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F793D6BB-E68A-473E-B11F-1D7888DF4D4A} = {00DFC406-0A95-4C11-8BF2-4FD28C28061D}
