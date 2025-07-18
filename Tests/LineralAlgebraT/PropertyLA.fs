@@ -118,7 +118,7 @@ type Multiply() =
     member _.leafLeaf () =
         let matr1 = MatrixGen 1 "Leaf"
         let matr2 = MatrixGen 1 "Leaf"
-        let res = Matrix.multiply matr1 matr2 (+) ( * )
+        let res = Matrix.multiply matr1 matr2 (+) ( * ) 0
         let arrayRess = QTrees.qtreeToArray2D res.qtree res.n
         let arrayEx = multiplyArray2D (QTrees.qtreeToArray2D matr1.qtree matr1.n) (QTrees.qtreeToArray2D matr2.qtree matr2.n)
         Assert.Equal(arrayEx, arrayRess)
@@ -127,8 +127,8 @@ type Multiply() =
     member _.nodeLeaf () =
         let matr1 = MatrixGen size "Node"
         let matr2 = MatrixGen size "Leaf"
-        let res = Matrix.multiply matr1 matr2 (+) ( * )
-        let arrayRess = QTrees.qtreeToArray2D res.qtree res.n
+        let res = Matrix.multiply matr1 matr2 (+) ( * ) 0
+        let arrayRess = QTrees.qtreeToArray2D res.qtree res.n 
         let arrayEx = multiplyArray2D (QTrees.qtreeToArray2D matr1.qtree matr1.n) (QTrees.qtreeToArray2D matr2.qtree matr2.n)
         Assert.Equal(arrayEx, arrayRess)
 
@@ -136,7 +136,7 @@ type Multiply() =
     member _.leafNode () =
         let matr1 = MatrixGen size "Leaf"
         let matr2 = MatrixGen size "Node"
-        let res = Matrix.multiply matr1 matr2 (+) ( * )
+        let res = Matrix.multiply matr1 matr2 (+) ( * ) 0
         let arrayRess = QTrees.qtreeToArray2D res.qtree res.n
         let arrayEx = multiplyArray2D (QTrees.qtreeToArray2D matr1.qtree matr1.n) (QTrees.qtreeToArray2D matr2.qtree matr2.n)
         Assert.Equal(arrayEx, arrayRess)
@@ -145,7 +145,7 @@ type Multiply() =
     member _.nodeNode () =
         let matr1 = MatrixGen size "Node"
         let matr2 = MatrixGen size "Node"
-        let res = Matrix.multiply matr1 matr2 (+) ( * )
+        let res = Matrix.multiply matr1 matr2 (+) ( * ) 0
         let arrayRess = QTrees.qtreeToArray2D res.qtree res.n
         let arrayEx = multiplyArray2D (QTrees.qtreeToArray2D matr1.qtree matr1.n) (QTrees.qtreeToArray2D matr2.qtree matr2.n)
         Assert.Equal(arrayEx, arrayRess)
@@ -154,9 +154,9 @@ type Multiply() =
     member _.zero () =
         let matr1 = MatrixGen size "Zero"
         let matr2 = MatrixGen size "Node"
-        let res = Matrix.multiply matr1 matr2 (+) ( * )
+        let res = Matrix.multiply matr1 matr2 (+) ( * ) 0
         let arrayRess = QTrees.qtreeToArray2D res.qtree res.n
-        let res1 = Matrix.multiply matr2 matr1 (+) ( * )
+        let res1 = Matrix.multiply matr2 matr1 (+) ( * ) 0
         let arrayRess1 = QTrees.qtreeToArray2D res1.qtree res1.n
         
         let arrayEx = multiplyArray2D (QTrees.qtreeToArray2D matr1.qtree matr1.n) (QTrees.qtreeToArray2D matr2.qtree matr2.n)
