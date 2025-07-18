@@ -272,27 +272,27 @@ module Map2 =
         Assert.Equal(3, h4) 
  
  
-module Mult = 
+module Multiply = 
     open DataAndFuncs
 
     [<Fact>]
     let sizeIsImportant () =
-        let res1 = Matrix.multiply MintOneLeaf3 MintOneLeaf4 (+) ( * )
+        let res1 = Matrix.multiply MintOneLeaf3 MintOneLeaf4 (+) ( * ) 0
         let ex1 = { n = 1; qtree = Leaf 6 }
-        let res2 = Matrix.multiply MintNode1 MintNode2 (+) ( * )
+        let res2 = Matrix.multiply MintNode1 MintNode2 (+) ( * ) 0
         let ex2 = { n = 2; qtree = Leaf 12 }
         Assert.Equal(ex1, res1)
         Assert.Equal(ex2, res2)
     
     [<Fact>]
     let leafLeaf () =
-        let res = Matrix.multiply MintOneLeaf3 MintOneLeaf4 (+) ( * )
+        let res = Matrix.multiply MintOneLeaf3 MintOneLeaf4 (+) ( * ) 0
         let ex = { n = 1; qtree = Leaf 6 }
         Assert.Equal(ex, res)
 
     [<Fact>]
     let nodeLeaf () =
-        let res = Matrix.multiply MintQTree1 MintOneLeaf1 (+) ( * )
+        let res = Matrix.multiply MintQTree1 MintOneLeaf1 (+) ( * ) 0
         let ex = { 
             n = 4; 
             qtree = Node ( 
@@ -306,7 +306,7 @@ module Mult =
 
     [<Fact>]
     let leafNode () =
-        let res = Matrix.multiply MintOneLeaf1 MintQTree1 (+) ( * )
+        let res = Matrix.multiply MintOneLeaf1 MintQTree1 (+) ( * ) 0
         let ex = { 
             n = 4; 
             qtree = Node ( 
@@ -320,7 +320,7 @@ module Mult =
 
     [<Fact>]
     let nodeNode () =
-        let res = Matrix.multiply MintQTree1 MintQTree2 (+) ( * )
+        let res = Matrix.multiply MintQTree1 MintQTree2 (+) ( * ) 0
         let ex = { 
             n = 4; 
             qtree = Node ( 
@@ -334,8 +334,8 @@ module Mult =
 
     [<Fact>]
     let zero () =
-        let res1 = Matrix.multiply MintQTree1 MintZero (+) ( * )
-        let res2 = Matrix.multiply MintZero MintQTree1 (+) ( * )
+        let res1 = Matrix.multiply MintQTree1 MintZero (+) ( * ) 0
+        let res2 = Matrix.multiply MintZero MintQTree1 (+) ( * ) 0
         let ex = { n = 4; qtree = Leaf 0 }
         Assert.Equal(ex, res1)
         Assert.Equal(ex, res2)
