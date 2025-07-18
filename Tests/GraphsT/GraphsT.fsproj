@@ -10,6 +10,10 @@
 
   <ItemGroup>
     <Compile Include="DataAndFuncs.fs" />
+    <Compile Include="UnitSSSP.fs" />
+    <Compile Include="PropertySSSP.fs" />
+    <Compile Include="UnitBFS.fs" />
+    <Compile Include="PropertyBFS.fs" />
     <Compile Include="UnitGraphs.fs" />
     <Compile Include="PropertyGraphs.fs" />
     <Compile Include="Program.fs" />
