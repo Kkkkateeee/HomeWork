@@ -1,37 +1,20 @@
-﻿open System
+﻿(*
+ДЗ 3: парарллельная асинхронная обработка изображений. 
+
+Используя примитивы F# распараллелить свёртку одного изображения
+-1) Последовательно
+0) По пикселям
+1) На "произвольные" части
+2) Строки 
+3) Столбцы
+
+и реализовать асинхронное чтение-запись при потоковой обработке нескольких изображений. 
+*)
+
+open System
 open System.Threading
 open ImageProcessing.ImProcessing
 open Argu
-
-
-// Определяем типы сообщений
-type Message =
-    | Add of int * int * AsyncReplyChannel<int>
-    | Subtract of int * int * AsyncReplyChannel<int>
-    | Stop
-
-// Создаем MailboxProcessor
-let calculator = 
-    MailboxProcessor<Message>.Start(fun inbox ->
-        let rec loop () =
-            async {
-                let! msg = inbox.Receive() // Получаем сообщение из очереди
-                match msg with
-                | Add (x, y, replyChannel) ->
-                    let result = x + y
-                    replyChannel.Reply(result) // Отправляем ответ обратно
-                    return! loop () // Продолжаем цикл
-
-                | Subtract (x, y, replyChannel) ->
-                    let result = x - y
-                    replyChannel.Reply(result) // Отправляем ответ обратно
-                    return! loop () // Продолжаем цикл
-
-                | Stop ->
-                    printfn "Stopping the calculator."
-                    return () // Завершаем обработку
-            }
-        loop ()) // Запускаем цикл
 
 
 type Filters =
@@ -100,16 +83,6 @@ let main argv =
         ) inImage
     
     saveRgbaImage resultImage outFile
-
-    // Отправляем сообщения и ждем ответов
-    let addResult = calculator.PostAndReply(fun replyChannel -> Add(5, 3, replyChannel))
-    printfn "5 + 3 = %d" addResult
-
-    let subtractResult = calculator.PostAndReply(fun replyChannel -> Subtract(10, 4, replyChannel))
-    printfn "10 - 4 = %d" subtractResult
-
-    // Останавливаем MailboxProcessor
-    calculator.Post(Stop)
     
     0
     
