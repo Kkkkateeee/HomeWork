@@ -2,6 +2,7 @@ namespace ImageProcessing
 
 open SixLabors.ImageSharp
 open SixLabors.ImageSharp.PixelFormats
+open System.Threading.Tasks
 
 [<Struct>]
 type Image =
@@ -194,8 +195,8 @@ module ImProcessing =
         res
 
     let saveRgbaImage (rgbaData: Rgba32[,]) file =
-        let h = rgbaData.GetLength(0)
-        let w = rgbaData.GetLength(1)
+        let h = rgbaData.GetLength 0
+        let w = rgbaData.GetLength 1
 
         use img = new Image<Rgba32>(w, h)
 
@@ -203,39 +204,129 @@ module ImProcessing =
             for y in 0 .. w - 1 do
                 img.[y, x] <- rgbaData.[x, y] 
 
-        img.Save(file)
+        img.Save file
 
-    let applyFilter (filter: float32[][]) (img: Rgba32[,]) =
+    let processPixel px py (filter: float32 array) filterD (img: Rgba32[,]) imgH imgW =
+        let dataToHandle = [| 
+            for i in px - filterD .. px + filterD do
+                for j in py - filterD .. py + filterD do
+                    if i < 0 || i >= imgH || j < 0 || j >= imgW then
+                        0.0f, 0.0f, 0.0f
+                    else
+                        let pixel = img.[i, j]
+                        float32 pixel.R, float32 pixel.G, float32 pixel.B
+        |]
+
+        let mutable rSum = 0.0f
+        let mutable gSum = 0.0f
+        let mutable bSum = 0.0f
+
+        Array.iteri (fun index (r, g, b) ->
+            rSum <- rSum + r * filter.[index]
+            gSum <- gSum + g * filter.[index]
+            bSum <- bSum + b * filter.[index]
+        ) dataToHandle
+
+        byte rSum, byte gSum, byte bSum
+
+    let applyFilterNoParallelism (filter: float32[][]) (img: Rgba32[,]) =
         let imgH = img.GetLength 0
         let imgW = img.GetLength 1
 
-        let filterD = (Array.length filter) / 2
+        let filterD = Array.length filter / 2
         let filter = Array.concat filter
 
-        let processPixel px py =
-            let dataToHandle = [| 
-                for i in px - filterD .. px + filterD do
-                    for j in py - filterD .. py + filterD do
-                        if i < 0 || i >= imgH || j < 0 || j >= imgW then
-                            (0.0f, 0.0f, 0.0f) 
-                        else
-                            let pixel = img.[i, j]
-                            (float32 pixel.R, float32 pixel.G, float32 pixel.B)
-            |]
-
-            let mutable rSum = 0.0f
-            let mutable gSum = 0.0f
-            let mutable bSum = 0.0f
-
-            Array.iteri (fun index (r, g, b) ->
-                rSum <- rSum + r * filter.[index]
-                gSum <- gSum + g * filter.[index]
-                bSum <- bSum + b * filter.[index]
-            ) dataToHandle
-
-            (byte rSum, byte gSum, byte bSum)
-
         Array2D.mapi (fun x y _ ->
-            let (r, g, b) = processPixel x y
+            let r, g, b = processPixel x y filter filterD img imgH imgW
             Rgba32(r, g, b, img.[x, y].A) 
         ) img
+
+    let applyFilterPixelParallelism (filter: float32[][]) (img: Rgba32[,]) =
+        let imgH = img.GetLength 0
+        let imgW = img.GetLength 1
+
+        let filterD = Array.length filter / 2
+        let filter = Array.concat filter
+
+        let res = Array2D.create imgH imgW (Rgba32(0.0f, 0.0f, 0.0f, 0.0f))
+
+        Parallel.For(0, imgH * imgW, fun k ->
+            let i = k / imgW
+            let j = k % imgW  
+
+            let r, g, b = processPixel i j filter filterD img imgH imgW
+            res.[i, j] <- Rgba32(r, g, b, img.[i, j].A)
+
+        ) |> ignore
+        res
+
+    let applyFilterParallelismInParts (filter: float32[][]) (img: Rgba32[,]) =
+        let imgH = img.GetLength 0
+        let imgW = img.GetLength 1
+
+        let filterD = Array.length filter / 2
+        let filter = Array.concat filter
+
+        let halfImgH = imgH / 2
+        let halfImgW = imgW / 2
+
+        let res = Array2D.create imgH imgW (Rgba32(0.0f, 0.0f, 0.0f, 0.0f))
+
+        Parallel.For (0, 4, fun k -> 
+            if k = 0 then 
+                for i in 0 .. halfImgH - 1 do 
+                    for j in 0 .. halfImgW - 1 do 
+                        let r, g, b = processPixel i j filter filterD img imgH imgW
+                        res.[i, j] <- Rgba32(r, g, b, img.[i, j].A)
+
+            elif k = 1 then 
+                for i in halfImgH .. imgH - 1 do 
+                    for j in 0 .. halfImgW - 1 do 
+                        let r, g, b = processPixel i j filter filterD img imgH imgW
+                        res.[i, j] <- Rgba32(r, g, b, img.[i, j].A)                
+            
+            elif k = 2 then 
+                for i in 0 .. halfImgH - 1 do 
+                    for j in halfImgW .. imgW - 1 do 
+                        let r, g, b = processPixel i j filter filterD img imgH imgW
+                        res.[i, j] <- Rgba32(r, g, b, img.[i, j].A)   
+
+            else 
+                for i in halfImgH .. imgH - 1 do 
+                    for j in halfImgW .. imgW - 1 do 
+                        let r, g, b = processPixel i j filter filterD img imgH imgW
+                        res.[i, j] <- Rgba32(r, g, b, img.[i, j].A)  
+        ) |> ignore
+        res
+
+    let applyFilterRowParallelism (filter: float32[][]) (img: Rgba32[,]) =
+        let imgH = img.GetLength 0
+        let imgW = img.GetLength 1
+
+        let filterD = Array.length filter / 2
+        let filter = Array.concat filter
+
+        let res = Array2D.create imgH imgW (Rgba32(0.0f, 0.0f, 0.0f, 0.0f))
+
+        Parallel.For (0, imgH, fun k -> 
+            for i in 0 .. imgW - 1 do 
+                let r, g, b = processPixel k i filter filterD img imgH imgW
+                res.[k, i] <- Rgba32(r, g, b, img.[k, i].A)      
+        ) |> ignore
+        res
+
+    let applyFilterColParallelism (filter: float32[][]) (img: Rgba32[,]) =
+        let imgH = img.GetLength 0
+        let imgW = img.GetLength 1
+
+        let filterD = Array.length filter / 2
+        let filter = Array.concat filter
+
+        let res = Array2D.create imgH imgW (Rgba32(0.0f, 0.0f, 0.0f, 0.0f))
+
+        Parallel.For (0, imgW, fun k -> 
+            for i in 0 .. imgH - 1 do 
+                let r, g, b = processPixel i k filter filterD img imgH imgW
+                res.[i, k] <- Rgba32(r, g, b, img.[i, k].A)      
+        ) |> ignore
+        res

@@ -2,13 +2,14 @@
 ДЗ 3: парарллельная асинхронная обработка изображений. 
 
 Используя примитивы F# распараллелить свёртку одного изображения
--1) Последовательно
-0) По пикселям
-1) На "произвольные" части
-2) Строки 
-3) Столбцы
+0) По пикселям +
+1) На "произвольные" части +
+2) Строки +
+3) Столбцы +
 
-и реализовать асинхронное чтение-запись при потоковой обработке нескольких изображений. 
+реализовать асинхронное чтение-запись при потоковой обработке нескольких изображений. 
+
+анализ производительности
 *)
 
 open System
@@ -34,16 +35,26 @@ type Filters =
     | emboss = 14
     | embossHard = 15
 
+type ParallelismTypes =
+    | noParallelism = 0
+    | pixelParallelism = 1
+    | parallelismInParts = 2
+    | rowParallelism = 3
+    | colParallelism = 4
+
+
 type Arguments =
     | [<Mandatory>] Input_File of string
     | [<Mandatory>] Out_File of string
     | [<Mandatory>] Filters of list<Filters>
+    | [<Mandatory>] Parallelism of list<ParallelismTypes>
     interface IArgParserTemplate with
         member this.Usage =
             match this with 
             | Input_File _ -> "File to process."
-            | Out_File _ -> "Where to save result."
+            | Out_File _ -> "Result name."
             | Filters _ -> "Which filters to apply (comma-separated)."
+            | Parallelism _ -> "Type of parallelism."
 
 
 [<EntryPoint>]
@@ -55,34 +66,46 @@ let main argv =
     let inFile = results.GetResult Input_File  
     let outFile = results.GetResult Out_File
     let filters = results.GetResult Filters
+    let parallelisms = results.GetResult Parallelism
 
     let inImage = loadAsRgba2D inFile 
 
+    let applyFilterWithParallelism filter img parallelism =
+        match parallelism with
+        | ParallelismTypes.noParallelism -> applyFilterNoParallelism filter img
+        | ParallelismTypes.pixelParallelism -> applyFilterPixelParallelism filter img
+        | ParallelismTypes.parallelismInParts -> applyFilterParallelismInParts filter img
+        | ParallelismTypes.rowParallelism -> applyFilterRowParallelism filter img
+        | ParallelismTypes.colParallelism -> applyFilterColParallelism filter img
+        | _ -> 
+            printfn "Unknown parallelism type"
+            img
+
     let resultImage =
-        filters |> List.fold (fun img filter ->
+        List.zip filters parallelisms |> List.fold (fun img (filter, parallelism) ->
             match filter with 
-            | Filters.gaussianBlur -> applyFilter gaussianBlur img 
-            | Filters.motionDiagonal135deg -> applyFilter motionDiagonal135deg img 
-            | Filters.motionDiagonal315deg -> applyFilter motionDiagonal315deg img 
-            | Filters.motionVertical -> applyFilter motionVertical img 
-            | Filters.motionHorizontal -> applyFilter motionHorizontal img 
-            | Filters.edgesHorizontal -> applyFilter edgesHorizontal img 
-            | Filters.edgesVertical -> applyFilter edgesVertical img 
-            | Filters.edgesDioganal135deg -> applyFilter edgesDioganal135deg img 
-            | Filters.edgesDioganal315deg -> applyFilter edgesDioganal315deg img 
-            | Filters.edgesAllDirections -> applyFilter edgesAllDirections img 
-            | Filters.sharpen -> applyFilter sharpen img 
-            | Filters.sharpenSoft -> applyFilter sharpenSoft img 
-            | Filters.sharpenWithEdges -> applyFilter sharpenWithEdges img 
-            | Filters.emboss -> applyFilter emboss img 
-            | Filters.embossHard -> applyFilter embossHard img 
+            | Filters.gaussianBlur -> applyFilterWithParallelism gaussianBlur img parallelism 
+            | Filters.motionDiagonal135deg -> applyFilterWithParallelism motionDiagonal135deg img parallelism 
+            | Filters.motionDiagonal315deg -> applyFilterWithParallelism motionDiagonal315deg img parallelism 
+            | Filters.motionVertical -> applyFilterWithParallelism motionVertical img parallelism 
+            | Filters.motionHorizontal -> applyFilterWithParallelism motionHorizontal img parallelism 
+            | Filters.edgesHorizontal -> applyFilterWithParallelism edgesHorizontal img parallelism 
+            | Filters.edgesVertical -> applyFilterWithParallelism edgesVertical img parallelism 
+            | Filters.edgesDioganal135deg -> applyFilterWithParallelism edgesDioganal135deg img parallelism 
+            | Filters.edgesDioganal315deg -> applyFilterWithParallelism edgesDioganal315deg img parallelism 
+            | Filters.edgesAllDirections -> applyFilterWithParallelism edgesAllDirections img parallelism 
+            | Filters.sharpen -> applyFilterWithParallelism sharpen img parallelism 
+            | Filters.sharpenSoft -> applyFilterWithParallelism sharpenSoft img parallelism 
+            | Filters.sharpenWithEdges -> applyFilterWithParallelism sharpenWithEdges img parallelism 
+            | Filters.emboss -> applyFilterWithParallelism emboss img parallelism 
+            | Filters.embossHard -> applyFilterWithParallelism embossHard img parallelism 
             | _ -> 
                 printfn "Unknown filter"
                 img
-                
         ) inImage
+
+    //let resultImage = applyFilterColParallelism motionDiagonal135deg inImage
     
     saveRgbaImage resultImage outFile
     
     0
-    

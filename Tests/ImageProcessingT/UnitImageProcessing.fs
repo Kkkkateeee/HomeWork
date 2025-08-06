@@ -106,29 +106,112 @@ module Filter =
 
     [<Fact>]
     let idDoesntChangeData () =
-        let imageAfterFilter = applyFilter id image1
-        Assert.Equal(imageId, imageAfterFilter)
+        let resNoParallelism = applyFilterNoParallelism id image1
+        let resPixelParallelism = applyFilterPixelParallelism id image1
+        let resPartsParallelism = applyFilterParallelismInParts id image1
+        let resRowParallelism = applyFilterRowParallelism id image1
+        let resColParallelism = applyFilterColParallelism id image1
+        Assert.Equal(imageId, resNoParallelism)
+        Assert.Equal(imageId, resPixelParallelism)
+        Assert.Equal(imageId, resPartsParallelism)
+        Assert.Equal(imageId, resRowParallelism)
+        Assert.Equal(imageId, resColParallelism)
 
     [<Fact>]
     let shiftComposition () =
-        let shiftRightDown = applyFilter shiftRight image1 |> applyFilter shiftDown
-        let shiftDiagonal = applyFilter shiftDiagonal image1
+        let shiftRightDown_NoParallelism = applyFilterNoParallelism shiftRight image1 |> applyFilterNoParallelism shiftDown
+        let shiftDiagonal_NoParallelism = applyFilterNoParallelism shiftDiagonal image1
+
+        let shiftRightDown_PixelParallelism = applyFilterPixelParallelism shiftRight image1 |> applyFilterPixelParallelism shiftDown
+        let shiftDiagonal_PixelParallelism = applyFilterPixelParallelism shiftDiagonal image1
+
+        let shiftRightDown_PartsParallelism = applyFilterParallelismInParts shiftRight image1 |> applyFilterParallelismInParts shiftDown
+        let shiftDiagonal_PartsParallelism = applyFilterParallelismInParts shiftDiagonal image1
+
+        let shiftRightDown_RowParallelism = applyFilterRowParallelism shiftRight image1 |> applyFilterRowParallelism shiftDown
+        let shiftDiagonal_RowParallelism = applyFilterRowParallelism shiftDiagonal image1
+
+        let shiftRightDown_ColParallelism = applyFilterColParallelism shiftRight image1 |> applyFilterColParallelism shiftDown
+        let shiftDiagonal_ColParallelism = applyFilterColParallelism shiftDiagonal image1
+
         Assert.Equal(imageShiftRightDown, imageShiftDiagonal)
-        Assert.Equal(imageShiftRightDown, shiftRightDown)
-        Assert.Equal(imageShiftRightDown, shiftDiagonal)
+        Assert.Equal(imageShiftRightDown, shiftRightDown_NoParallelism)
+        Assert.Equal(imageShiftRightDown, shiftDiagonal_NoParallelism)
+
+        Assert.Equal(imageShiftRightDown, shiftRightDown_PixelParallelism)
+        Assert.Equal(imageShiftRightDown, shiftDiagonal_PixelParallelism)
+
+        Assert.Equal(imageShiftRightDown, shiftRightDown_PartsParallelism)
+        Assert.Equal(imageShiftRightDown, shiftDiagonal_PartsParallelism)
+
+        Assert.Equal(imageShiftRightDown, shiftRightDown_RowParallelism)
+        Assert.Equal(imageShiftRightDown, shiftDiagonal_RowParallelism)
+
+        Assert.Equal(imageShiftRightDown, shiftRightDown_ColParallelism)
+        Assert.Equal(imageShiftRightDown, shiftDiagonal_ColParallelism)
 
     [<Fact>]
     let extendedComposition () =
-        let kernel = applyFilter kernel image1 
-        let kernelExtended = applyFilter kernelExtended image1
+        let kernel_NoParallelism = applyFilterNoParallelism kernel image1 
+        let kernelExtended_NoParallelism = applyFilterNoParallelism kernelExtended image1
+
+        let kernel_PixelParallelism = applyFilterPixelParallelism kernel image1 
+        let kernelExtended_PixelParallelism = applyFilterPixelParallelism kernelExtended image1
+
+        let kernel_PartsParallelism = applyFilterParallelismInParts kernel image1 
+        let kernelExtended_PartsParallelism = applyFilterParallelismInParts kernelExtended image1
+
+        let kernel_RowParallelism = applyFilterRowParallelism kernel image1 
+        let kernelExtended_RowParallelism = applyFilterRowParallelism kernelExtended image1
+
+        let kernel_ColParallelism = applyFilterColParallelism kernel image1 
+        let kernelExtended_ColParallelism = applyFilterColParallelism kernelExtended image1
+
         Assert.Equal(imageKernel, imageKernelExtended)
-        Assert.Equal(imageKernel, kernel)
-        Assert.Equal(imageKernel, kernelExtended)
+        Assert.Equal(imageKernel, kernel_NoParallelism)
+        Assert.Equal(imageKernel, kernelExtended_NoParallelism)
+
+        Assert.Equal(imageKernel, kernel_PixelParallelism)
+        Assert.Equal(imageKernel, kernelExtended_PixelParallelism)
+
+        Assert.Equal(imageKernel, kernel_PartsParallelism)
+        Assert.Equal(imageKernel, kernelExtended_PartsParallelism)
+
+        Assert.Equal(imageKernel, kernel_RowParallelism)
+        Assert.Equal(imageKernel, kernelExtended_RowParallelism)
+
+        Assert.Equal(imageKernel, kernel_ColParallelism)
+        Assert.Equal(imageKernel, kernelExtended_ColParallelism)
 
     [<Fact>]
     let someAreCommutative () =
-        let imageRD = applyFilter shiftRight image1 |> applyFilter shiftDown
-        let imageDR = applyFilter shiftDown image1 |> applyFilter shiftRight
+        let imageRD_NoParallelism = applyFilterNoParallelism shiftRight image1 |> applyFilterNoParallelism shiftDown
+        let imageDR_NoParallelism = applyFilterNoParallelism shiftDown image1 |> applyFilterNoParallelism shiftRight
+
+        let imageRD_PixelParallelism = applyFilterPixelParallelism shiftRight image1 |> applyFilterPixelParallelism shiftDown
+        let imageDR_PixelParallelism = applyFilterPixelParallelism shiftDown image1 |> applyFilterPixelParallelism shiftRight
+
+        let imageRD_PartsParallelism = applyFilterParallelismInParts shiftRight image1 |> applyFilterParallelismInParts shiftDown
+        let imageDR_PartsParallelism = applyFilterParallelismInParts shiftDown image1 |> applyFilterParallelismInParts shiftRight
+
+        let imageRD_RowParallelism = applyFilterRowParallelism shiftRight image1 |> applyFilterRowParallelism shiftDown
+        let imageDR_RowParallelism = applyFilterRowParallelism shiftDown image1 |> applyFilterRowParallelism shiftRight
+
+        let imageRD_ColParallelism = applyFilterColParallelism shiftRight image1 |> applyFilterColParallelism shiftDown
+        let imageDR_ColParallelism = applyFilterColParallelism shiftDown image1 |> applyFilterColParallelism shiftRight
+
         Assert.Equal(imageShiftDownRight, imageShiftRightDown)
-        Assert.Equal(imageShiftDownRight, imageDR)
-        Assert.Equal(imageShiftDownRight, imageRD)
+        Assert.Equal(imageShiftDownRight, imageDR_NoParallelism)
+        Assert.Equal(imageShiftDownRight, imageRD_NoParallelism)
+
+        Assert.Equal(imageShiftDownRight, imageDR_PixelParallelism)
+        Assert.Equal(imageShiftDownRight, imageRD_PixelParallelism)
+
+        Assert.Equal(imageShiftDownRight, imageDR_PartsParallelism)
+        Assert.Equal(imageShiftDownRight, imageRD_PartsParallelism)
+
+        Assert.Equal(imageShiftDownRight, imageDR_RowParallelism)
+        Assert.Equal(imageShiftDownRight, imageRD_RowParallelism)
+
+        Assert.Equal(imageShiftDownRight, imageDR_ColParallelism)
+        Assert.Equal(imageShiftDownRight, imageRD_ColParallelism)
