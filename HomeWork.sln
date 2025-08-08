@@ -17,11 +17,11 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SortingsT", "Tests\Sortings
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SortingsB", "Benchmarks\SortingsB\Benchmarks.fsproj", "{66023F5A-8456-4F66-9318-A0BFB68ED14A}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ImageProcessingB", "Benchmarks\ImageProcessingB\ImageProcessingB.fsproj", "{538E3C6C-8ADC-44EE-919C-EAD4C67C3AF0}"
-EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ImageProcessing", "src\ImageProcessing\ImageProcessing.fsproj", "{7B9D1692-F56C-43C7-92BA-2CDDE21A7D57}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ImageProcessingT", "Tests\ImageProcessingT\ImageProcessingT.fsproj", "{EB2F699B-DE06-42EC-974A-A2C39E5C8D2A}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ImageProcessingB", "Benchmarks\ImageProcessingB\ImageProcessingB.fsproj", "{538E3C6C-8ADC-44EE-919C-EAD4C67C3AF0}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Trees", "src\Trees\Trees.fsproj", "{CAC5303C-D4CF-493E-94B4-4409BE7F2865}"
 EndProject

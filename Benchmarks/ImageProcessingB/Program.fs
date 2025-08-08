@@ -1,49 +1,55 @@
-﻿// namespace ImageProcessingB
+﻿namespace ImageProcessingB
 
-// open System
-// open BenchmarkDotNet.Attributes
-// open BenchmarkDotNet.Running
-// open BenchmarkDotNet.Configs
-// open BenchmarkDotNet.Reports
-// open Perfolizer.Horology
+open System
+open BenchmarkDotNet.Attributes
+open BenchmarkDotNet.Running
+open BenchmarkDotNet.Configs
+open BenchmarkDotNet.Reports
+open Perfolizer.Horology
 
-// open ImageProcessing
+open ImageProcessing.ImProcessing
+open SixLabors.ImageSharp.PixelFormats
 
-// type ipBenchmark() =
+type ipBenchmark() =
 
-//     static member sizes = [|10000..10000..100000|]
-//     member this.Random = Random()
+    static member Sizes = [|10000..10000..100000|]
+    member this.Random = System.Random()
 
-//     [<ParamsSource("sizes")>]
-//     member val ArrayLength = 0 with get, set
-//     member val ArrayToSort = [|0.0|] with get, set
+    [<ParamsSource("Sizes")>]
+    member val MatrixSize = 0 with get, set
+    member val MatrixToSort = Array2D.zeroCreate<Rgba32> 1 1 with get, set
 
-//     [<IterationSetup>]
-//     member this.GetArrayToSort () = 
-//         this.ArrayToSort <- Array.init this.ArrayLength (fun _ -> this.Random.NextDouble()) 
+    [<IterationSetup>]
+    member this.GetArrayToSort () = 
+        this.MatrixToSort <- Array2D.init this.MatrixSize this.MatrixSize (fun _ _ -> 
+            let r = byte (this.Random.Next 256)
+            let g = byte (this.Random.Next 256)
+            let b = byte (this.Random.Next 256)
+            let a = byte (this.Random.Next 256)
+            Rgba32 (r, g, b, a)
+        ) 
 
-//     [<Benchmark>]
-//     member this.ArrayQuickSort () =  this.ArrayToSort
+    [<Benchmark>]
+    member this.NoParallelism () = applyFilterNoParallelism gaussianBlur this.MatrixToSort
 
-//     // [<Benchmark>]
-//     // member this.ArrayBubbleSort () = Arrays.bubbleSort this.ArrayToSort
+    [<Benchmark>]
+    member this.PixelParallelism () = applyFilterPixelParallelism gaussianBlur this.MatrixToSort
 
-//     // [<Benchmark>]
-//     // member this.ArrayMergeSort () = Arrays.mergeSort this.ArrayToSort
+    [<Benchmark>]
+    member this.ParallelismInParts () = applyFilterParallelismInParts gaussianBlur this.MatrixToSort
 
-//     // [<Benchmark>]
-//     // member this.ArraySystem () = Array.Sort this.ArrayToSort
-    
+    [<Benchmark>]
+    member this.RowParallelism () = applyFilterRowParallelism gaussianBlur this.MatrixToSort
 
-// module Main =
-//     [<EntryPoint>]
-//     let main argv =
-        
-//         let config = ManualConfig.Create(DefaultConfig.Instance)
-//                         .WithSummaryStyle(SummaryStyle.Default.WithTimeUnit(TimeUnit.Millisecond)) 
-//                         .WithOptions(ConfigOptions.DisableOptimizationsValidator) 
-//         let benchmarks =
-//             BenchmarkSwitcher [| typeof<ArraysBenchmark> |]
+    [<Benchmark>]
+    member this.ColParallelism () = applyFilterColParallelism gaussianBlur this.MatrixToSort
 
-//         benchmarks.Run argv |> ignore
-//         0
+
+module Main =
+    [<EntryPoint>]
+    let main argv =
+        let benchmarks =
+            BenchmarkSwitcher [| typeof<ipBenchmark> |]
+
+        benchmarks.Run argv |> ignore
+        0

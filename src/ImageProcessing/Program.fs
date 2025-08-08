@@ -7,9 +7,9 @@
 2) Строки +
 3) Столбцы +
 
-реализовать асинхронное чтение-запись при потоковой обработке нескольких изображений. 
+реализовать асинхронное чтение-запись при потоковой обработке нескольких изображений
 
-анализ производительности
+анализ производительности +
 *)
 
 open System
@@ -103,8 +103,6 @@ let main argv =
                 printfn "Unknown filter"
                 img
         ) inImage
-
-    //let resultImage = applyFilterColParallelism motionDiagonal135deg inImage
     
     saveRgbaImage resultImage outFile
     

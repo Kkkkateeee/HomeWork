@@ -3,6 +3,8 @@ namespace ImageProcessing
 open SixLabors.ImageSharp
 open SixLabors.ImageSharp.PixelFormats
 open System.Threading.Tasks
+open Microsoft.FSharp.Control
+open System.IO
 
 [<Struct>]
 type Image =
