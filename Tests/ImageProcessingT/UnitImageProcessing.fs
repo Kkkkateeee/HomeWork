@@ -19,12 +19,12 @@ module Data =
     let imShiftDiagonal = "../../../Images/shiftDiagonal.png"
     let imKernel = "../../../Images/kernel.png"
     let imKernelExtended = "../../../Images/kernelExtended.png"
-    let imageId= loadAsRgba2DA imId
-    let imageShiftRightDown= loadAsRgba2DA imShiftRightDown
-    let imageShiftDownRight= loadAsRgba2DA imShiftDownRight
-    let imageShiftDiagonal= loadAsRgba2DA imShiftDiagonal
-    let imageKernel= loadAsRgba2DA imKernel
-    let imageKernelExtended= loadAsRgba2DA imKernelExtended
+    let imageId= loadAsRgba2DA imId |> Async.RunSynchronously
+    let imageShiftRightDown= loadAsRgba2DA imShiftRightDown |> Async.RunSynchronously
+    let imageShiftDownRight= loadAsRgba2DA imShiftDownRight |> Async.RunSynchronously
+    let imageShiftDiagonal= loadAsRgba2DA imShiftDiagonal |> Async.RunSynchronously
+    let imageKernel= loadAsRgba2DA imKernel |> Async.RunSynchronously
+    let imageKernelExtended= loadAsRgba2DA imKernelExtended |> Async.RunSynchronously
 
 
     let id = 
@@ -115,11 +115,12 @@ module Filter =
         let resPartsParallelism = applyFilterParallelismInPartsA id image1
         let resRowParallelism = applyFilterRowParallelismA id image1
         let resColParallelism = applyFilterColParallelismA id image1
-        Assert.Equal(imageId, resNoParallelism)
-        Assert.Equal(imageId, resPixelParallelism)
-        Assert.Equal(imageId, resPartsParallelism)
-        Assert.Equal(imageId, resRowParallelism)
-        Assert.Equal(imageId, resColParallelism)
+
+        Assert.Equal(imageId, resNoParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageId, resPixelParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageId, resPartsParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageId, resRowParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageId, resColParallelism |> Async.RunSynchronously)
 
     [<Fact>]
     let shiftComposition () =
@@ -139,20 +140,20 @@ module Filter =
         let shiftDiagonal_ColParallelism = applyFilterColParallelismA shiftDiagonal image1
 
         Assert.Equal(imageShiftRightDown, imageShiftDiagonal)
-        Assert.Equal(imageShiftRightDown, shiftRightDown_NoParallelism)
-        Assert.Equal(imageShiftRightDown, shiftDiagonal_NoParallelism)
+        Assert.Equal(imageShiftRightDown, shiftRightDown_NoParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageShiftRightDown, shiftDiagonal_NoParallelism |> Async.RunSynchronously)
 
-        Assert.Equal(imageShiftRightDown, shiftRightDown_PixelParallelism)
-        Assert.Equal(imageShiftRightDown, shiftDiagonal_PixelParallelism)
+        Assert.Equal(imageShiftRightDown, shiftRightDown_PixelParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageShiftRightDown, shiftDiagonal_PixelParallelism |> Async.RunSynchronously)
 
-        Assert.Equal(imageShiftRightDown, shiftRightDown_PartsParallelism)
-        Assert.Equal(imageShiftRightDown, shiftDiagonal_PartsParallelism)
+        Assert.Equal(imageShiftRightDown, shiftRightDown_PartsParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageShiftRightDown, shiftDiagonal_PartsParallelism |> Async.RunSynchronously)
 
-        Assert.Equal(imageShiftRightDown, shiftRightDown_RowParallelism)
-        Assert.Equal(imageShiftRightDown, shiftDiagonal_RowParallelism)
+        Assert.Equal(imageShiftRightDown, shiftRightDown_RowParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageShiftRightDown, shiftDiagonal_RowParallelism |> Async.RunSynchronously)
 
-        Assert.Equal(imageShiftRightDown, shiftRightDown_ColParallelism)
-        Assert.Equal(imageShiftRightDown, shiftDiagonal_ColParallelism)
+        Assert.Equal(imageShiftRightDown, shiftRightDown_ColParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageShiftRightDown, shiftDiagonal_ColParallelism |> Async.RunSynchronously)
 
     [<Fact>]
     let extendedComposition () =
@@ -172,20 +173,20 @@ module Filter =
         let kernelExtended_ColParallelism = applyFilterColParallelismA kernelExtended image1
 
         Assert.Equal(imageKernel, imageKernelExtended)
-        Assert.Equal(imageKernel, kernel_NoParallelism)
-        Assert.Equal(imageKernel, kernelExtended_NoParallelism)
+        Assert.Equal(imageKernel, kernel_NoParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageKernel, kernelExtended_NoParallelism |> Async.RunSynchronously)
 
-        Assert.Equal(imageKernel, kernel_PixelParallelism)
-        Assert.Equal(imageKernel, kernelExtended_PixelParallelism)
+        Assert.Equal(imageKernel, kernel_PixelParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageKernel, kernelExtended_PixelParallelism |> Async.RunSynchronously)
 
-        Assert.Equal(imageKernel, kernel_PartsParallelism)
-        Assert.Equal(imageKernel, kernelExtended_PartsParallelism)
+        Assert.Equal(imageKernel, kernel_PartsParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageKernel, kernelExtended_PartsParallelism |> Async.RunSynchronously)
 
-        Assert.Equal(imageKernel, kernel_RowParallelism)
-        Assert.Equal(imageKernel, kernelExtended_RowParallelism)
+        Assert.Equal(imageKernel, kernel_RowParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageKernel, kernelExtended_RowParallelism |> Async.RunSynchronously)
 
-        Assert.Equal(imageKernel, kernel_ColParallelism)
-        Assert.Equal(imageKernel, kernelExtended_ColParallelism)
+        Assert.Equal(imageKernel, kernel_ColParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageKernel, kernelExtended_ColParallelism |> Async.RunSynchronously)
 
     [<Fact>]
     let someAreCommutative () =
@@ -205,17 +206,17 @@ module Filter =
         let imageDR_ColParallelism = applyFilterColParallelismA shiftDown image1 |> applyFilterColParallelismA shiftRight
 
         Assert.Equal(imageShiftDownRight, imageShiftRightDown)
-        Assert.Equal(imageShiftDownRight, imageDR_NoParallelism)
-        Assert.Equal(imageShiftDownRight, imageRD_NoParallelism)
+        Assert.Equal(imageShiftDownRight, imageDR_NoParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageShiftDownRight, imageRD_NoParallelism |> Async.RunSynchronously)
 
-        Assert.Equal(imageShiftDownRight, imageDR_PixelParallelism)
-        Assert.Equal(imageShiftDownRight, imageRD_PixelParallelism)
+        Assert.Equal(imageShiftDownRight, imageDR_PixelParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageShiftDownRight, imageRD_PixelParallelism |> Async.RunSynchronously)
 
-        Assert.Equal(imageShiftDownRight, imageDR_PartsParallelism)
-        Assert.Equal(imageShiftDownRight, imageRD_PartsParallelism)
+        Assert.Equal(imageShiftDownRight, imageDR_PartsParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageShiftDownRight, imageRD_PartsParallelism |> Async.RunSynchronously)
 
-        Assert.Equal(imageShiftDownRight, imageDR_RowParallelism)
-        Assert.Equal(imageShiftDownRight, imageRD_RowParallelism)
+        Assert.Equal(imageShiftDownRight, imageDR_RowParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageShiftDownRight, imageRD_RowParallelism |> Async.RunSynchronously)
 
-        Assert.Equal(imageShiftDownRight, imageDR_ColParallelism)
-        Assert.Equal(imageShiftDownRight, imageRD_ColParallelism)
+        Assert.Equal(imageShiftDownRight, imageDR_ColParallelism |> Async.RunSynchronously)
+        Assert.Equal(imageShiftDownRight, imageRD_ColParallelism |> Async.RunSynchronously)

@@ -301,7 +301,7 @@ module ImProcessing =
 
             let res = Array2D.create imgH imgW (Rgba32(0.0f, 0.0f, 0.0f, 0.0f))
 
-            Parallel.For (0, 3, fun k -> 
+            Parallel.For (0, 4, fun k -> 
                 if k = 0 then 
                     for i in 0 .. halfImgH - 1 do 
                         for j in 0 .. halfImgW - 1 do 
