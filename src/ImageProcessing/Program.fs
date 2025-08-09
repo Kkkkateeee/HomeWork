@@ -68,15 +68,15 @@ let main argv =
     let filters = results.GetResult Filters
     let parallelisms = results.GetResult Parallelism
 
-    let inImage = loadAsRgba2D inFile 
+    let inImage = loadAsRgba2DA inFile 
 
     let applyFilterWithParallelism filter img parallelism =
         match parallelism with
-        | ParallelismTypes.noParallelism -> applyFilterNoParallelism filter img
-        | ParallelismTypes.pixelParallelism -> applyFilterPixelParallelism filter img
-        | ParallelismTypes.parallelismInParts -> applyFilterParallelismInParts filter img
-        | ParallelismTypes.rowParallelism -> applyFilterRowParallelism filter img
-        | ParallelismTypes.colParallelism -> applyFilterColParallelism filter img
+        | ParallelismTypes.noParallelism -> applyFilterNoParallelismA filter img
+        | ParallelismTypes.pixelParallelism -> applyFilterPixelParallelismA filter img
+        | ParallelismTypes.parallelismInParts -> applyFilterParallelismInPartsA filter img
+        | ParallelismTypes.rowParallelism -> applyFilterRowParallelismA filter img
+        | ParallelismTypes.colParallelism -> applyFilterColParallelismA filter img
         | _ -> 
             printfn "Unknown parallelism type"
             img
@@ -104,6 +104,6 @@ let main argv =
                 img
         ) inImage
     
-    saveRgbaImage resultImage outFile
+    saveRgbaImageA resultImage outFile |> ignore
     
     0

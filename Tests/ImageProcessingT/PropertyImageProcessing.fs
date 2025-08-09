@@ -18,12 +18,13 @@ module ImageGen =
             let a = byte 255
             return Rgba32(r, g, b, a)
         }
-    let array2DGen (size: int) : Gen<Rgba32[,]> =
+    let array2DGen (size: int) : Gen<Async<Rgba32[, ]>> = 
         gen {
             let! pixels = Gen.array2DOfDim (size, size) pixelGen
-            return pixels
+            return async { return pixels }
         }
-    
+
+
 type Image100() =
     static member Rgba32() =
         Arb.fromGen (ImageGen.array2DGen 100)
@@ -37,12 +38,26 @@ type Image2() =
 type Filter() =
 
     [<Property(Arbitrary = [| typeof<Image100> |])>]
-    member _.filterDoesntChangeSize (image: Rgba32[,]) =
-        let resNoParallelism = applyFilterNoParallelism gaussianBlur image
-        let resPixelParallelism = applyFilterPixelParallelism gaussianBlur image
-        let resPartsParallelism = applyFilterParallelismInParts gaussianBlur image
-        let resRowParallelism = applyFilterRowParallelism gaussianBlur image
-        let resColParallelism = applyFilterColParallelism gaussianBlur image
+    member _.filterDoesntChangeSize (image: Async<Rgba32[, ]>) =
+        let resNoParallelism = 
+            applyFilterNoParallelismA gaussianBlur image
+            |> Async.RunSynchronously
+
+        let resPixelParallelism = 
+            applyFilterPixelParallelismA gaussianBlur image
+            |> Async.RunSynchronously
+
+        let resPartsParallelism = 
+            applyFilterParallelismInPartsA gaussianBlur image
+            |> Async.RunSynchronously
+
+        let resRowParallelism = 
+            applyFilterRowParallelismA gaussianBlur image
+            |> Async.RunSynchronously
+
+        let resColParallelism = 
+            applyFilterColParallelismA gaussianBlur image
+            |> Async.RunSynchronously
 
         Assert.Equal(100, resNoParallelism.GetLength 0)
         Assert.Equal(100, resNoParallelism.GetLength 1)
@@ -60,12 +75,12 @@ type Filter() =
         Assert.Equal(100, resColParallelism.GetLength 1)
 
     [<Property(Arbitrary = [| typeof<Image100> |])>]
-    member _.idDoesntChangeData (image: Rgba32[,]) =
-        let resNoParallelism = applyFilterNoParallelism id image
-        let resPixelParallelism = applyFilterPixelParallelism id image
-        let resPartsParallelism = applyFilterParallelismInParts id image
-        let resRowParallelism = applyFilterRowParallelism id image
-        let resColParallelism = applyFilterColParallelism id image
+    member _.idDoesntChangeData (image: Async<Rgba32[, ]>) =
+        let resNoParallelism = applyFilterNoParallelismA id image
+        let resPixelParallelism = applyFilterPixelParallelismA id image
+        let resPartsParallelism = applyFilterParallelismInPartsA id image
+        let resRowParallelism = applyFilterRowParallelismA id image
+        let resColParallelism = applyFilterColParallelismA id image
 
         Assert.Equal(image, resNoParallelism)
         Assert.Equal(image, resPixelParallelism)
@@ -74,12 +89,12 @@ type Filter() =
         Assert.Equal(image, resColParallelism)
 
     [<Property(Arbitrary = [| typeof<Image2> |])>]
-    member _.imageSmallerThanFilter (image: Rgba32[,]) =
-        let resNoParallelism = applyFilterNoParallelism black image
-        let resPixelParallelism = applyFilterPixelParallelism black image
-        let resPartsParallelism = applyFilterParallelismInParts black image
-        let resRowParallelism = applyFilterRowParallelism black image
-        let resColParallelism = applyFilterColParallelism black image
+    member _.imageSmallerThanFilter (image: Async<Rgba32[, ]>) =
+        let resNoParallelism = applyFilterNoParallelismA black image
+        let resPixelParallelism = applyFilterPixelParallelismA black image
+        let resPartsParallelism = applyFilterParallelismInPartsA black image
+        let resRowParallelism = applyFilterRowParallelismA black image
+        let resColParallelism = applyFilterColParallelismA black image
         
         Assert.Equal(true, imageIsBlack resNoParallelism)
         Assert.Equal(true, imageIsBlack resPixelParallelism)
@@ -88,12 +103,12 @@ type Filter() =
         Assert.Equal(true, imageIsBlack resColParallelism)
 
     [<Property(Arbitrary = [| typeof<Image100> |])>]
-    member _.blackFilter (image: Rgba32[,]) =
-        let imageBlack_NoParallelism = applyFilterNoParallelism black image
-        let imageBlack_PixelParallelism = applyFilterPixelParallelism black image
-        let imageBlack_PartsParallelism = applyFilterParallelismInParts black image
-        let imageBlac_RowParallelism = applyFilterRowParallelism black image
-        let imageBlack_ColParallelism = applyFilterColParallelism black image
+    member _.blackFilter (image: Async<Rgba32[, ]>) =
+        let imageBlack_NoParallelism = applyFilterNoParallelismA black image
+        let imageBlack_PixelParallelism = applyFilterPixelParallelismA black image
+        let imageBlack_PartsParallelism = applyFilterParallelismInPartsA black image
+        let imageBlac_RowParallelism = applyFilterRowParallelismA black image
+        let imageBlack_ColParallelism = applyFilterColParallelismA black image
         
         Assert.Equal(true, imageIsBlack imageBlack_NoParallelism)
         Assert.Equal(true, imageIsBlack imageBlack_PixelParallelism)
@@ -102,21 +117,21 @@ type Filter() =
         Assert.Equal(true, imageIsBlack imageBlack_ColParallelism)
 
     [<Property(Arbitrary = [| typeof<Image100> |])>]
-    member _.shiftComposition (image: Rgba32[,]) =
-        let trivial1and2_NoParallelism = applyFilterNoParallelism shiftRight image |> applyFilterNoParallelism shiftDown
-        let trivial12_NoParallelism = applyFilterNoParallelism shiftDiagonal image
+    member _.shiftComposition (image: Async<Rgba32[, ]>) =
+        let trivial1and2_NoParallelism = applyFilterNoParallelismA shiftRight image |> applyFilterNoParallelismA shiftDown
+        let trivial12_NoParallelism = applyFilterNoParallelismA shiftDiagonal image
 
-        let trivial1and2_PixelParallelism = applyFilterPixelParallelism shiftRight image |> applyFilterPixelParallelism shiftDown
-        let trivial12_PixelParallelism = applyFilterPixelParallelism shiftDiagonal image
+        let trivial1and2_PixelParallelism = applyFilterPixelParallelismA shiftRight image |> applyFilterPixelParallelismA shiftDown
+        let trivial12_PixelParallelism = applyFilterPixelParallelismA shiftDiagonal image
 
-        let trivial1and2_PartsParallelism = applyFilterParallelismInParts shiftRight image |> applyFilterParallelismInParts shiftDown
-        let trivial12_PartsParallelism = applyFilterParallelismInParts shiftDiagonal image
+        let trivial1and2_PartsParallelism = applyFilterParallelismInPartsA shiftRight image |> applyFilterParallelismInPartsA shiftDown
+        let trivial12_PartsParallelism = applyFilterParallelismInPartsA shiftDiagonal image
 
-        let trivial1and2_RowParallelism = applyFilterRowParallelism shiftRight image |> applyFilterRowParallelism shiftDown
-        let trivial12_RowParallelism = applyFilterRowParallelism shiftDiagonal image
+        let trivial1and2_RowParallelism = applyFilterRowParallelismA shiftRight image |> applyFilterRowParallelismA shiftDown
+        let trivial12_RowParallelism = applyFilterRowParallelismA shiftDiagonal image
 
-        let trivial1and2_ColParallelism = applyFilterColParallelism shiftRight image |> applyFilterColParallelism shiftDown
-        let trivial12_ColParallelism = applyFilterColParallelism shiftDiagonal image
+        let trivial1and2_ColParallelism = applyFilterColParallelismA shiftRight image |> applyFilterColParallelismA shiftDown
+        let trivial12_ColParallelism = applyFilterColParallelismA shiftDiagonal image
 
         Assert.Equal(trivial1and2_NoParallelism, trivial12_NoParallelism)
         Assert.Equal(trivial1and2_PixelParallelism, trivial12_PixelParallelism)
@@ -125,21 +140,21 @@ type Filter() =
         Assert.Equal(trivial1and2_ColParallelism, trivial12_ColParallelism)
 
     [<Property(Arbitrary = [| typeof<Image100> |])>]
-    member _.extendedComposition (image: Rgba32[,])  =
-        let imageAfterFilter_NoParallelism = applyFilterNoParallelism kernel image
-        let imageAfterExtendedFilter_NoParallelism = applyFilterNoParallelism kernelExtended image
+    member _.extendedComposition (image: Async<Rgba32[, ]>)  =
+        let imageAfterFilter_NoParallelism = applyFilterNoParallelismA kernel image
+        let imageAfterExtendedFilter_NoParallelism = applyFilterNoParallelismA kernelExtended image
 
-        let imageAfterFilter_PixelParallelism = applyFilterPixelParallelism kernel image
-        let imageAfterExtendedFilter_PixelParallelism = applyFilterPixelParallelism kernelExtended image
+        let imageAfterFilter_PixelParallelism = applyFilterPixelParallelismA kernel image
+        let imageAfterExtendedFilter_PixelParallelism = applyFilterPixelParallelismA kernelExtended image
 
-        let imageAfterFilter_PartsParallelism = applyFilterParallelismInParts kernel image
-        let imageAfterExtendedFilter_PartsParallelism = applyFilterParallelismInParts kernelExtended image
+        let imageAfterFilter_PartsParallelism = applyFilterParallelismInPartsA kernel image
+        let imageAfterExtendedFilter_PartsParallelism = applyFilterParallelismInPartsA kernelExtended image
 
-        let imageAfterFilter_RowParallelism = applyFilterRowParallelism kernel image
-        let imageAfterExtendedFilter_RowParallelism = applyFilterRowParallelism kernelExtended image
+        let imageAfterFilter_RowParallelism = applyFilterRowParallelismA kernel image
+        let imageAfterExtendedFilter_RowParallelism = applyFilterRowParallelismA kernelExtended image
 
-        let imageAfterFilter_ColParallelism = applyFilterColParallelism kernel image
-        let imageAfterExtendedFilter_ColParallelism = applyFilterColParallelism kernelExtended image
+        let imageAfterFilter_ColParallelism = applyFilterColParallelismA kernel image
+        let imageAfterExtendedFilter_ColParallelism = applyFilterColParallelismA kernelExtended image
 
         Assert.Equal(imageAfterFilter_NoParallelism, imageAfterExtendedFilter_NoParallelism)
         Assert.Equal(imageAfterFilter_PixelParallelism, imageAfterExtendedFilter_PixelParallelism)
@@ -148,21 +163,21 @@ type Filter() =
         Assert.Equal(imageAfterFilter_ColParallelism, imageAfterExtendedFilter_ColParallelism)
 
     [<Property(Arbitrary = [| typeof<Image100> |])>]
-    member _.someAreCommutative (image: Rgba32[,]) =
-        let image12_NoParallelism = applyFilterNoParallelism shiftRight image |> applyFilterNoParallelism shiftDown
-        let image21_NoParallelism = applyFilterNoParallelism shiftDown image |> applyFilterNoParallelism shiftRight
+    member _.someAreCommutative (image: Async<Rgba32[, ]>) =
+        let image12_NoParallelism = applyFilterNoParallelismA shiftRight image |> applyFilterNoParallelismA shiftDown
+        let image21_NoParallelism = applyFilterNoParallelismA shiftDown image |> applyFilterNoParallelismA shiftRight
 
-        let image12_PixelParallelism = applyFilterPixelParallelism shiftRight image |> applyFilterPixelParallelism shiftDown
-        let image21_PixelParallelism = applyFilterPixelParallelism shiftDown image |> applyFilterPixelParallelism shiftRight
+        let image12_PixelParallelism = applyFilterPixelParallelismA shiftRight image |> applyFilterPixelParallelismA shiftDown
+        let image21_PixelParallelism = applyFilterPixelParallelismA shiftDown image |> applyFilterPixelParallelismA shiftRight
 
-        let image12_PartsParallelism = applyFilterParallelismInParts shiftRight image |> applyFilterParallelismInParts shiftDown
-        let image21_PartsParallelism = applyFilterParallelismInParts shiftDown image |> applyFilterParallelismInParts shiftRight
+        let image12_PartsParallelism = applyFilterParallelismInPartsA shiftRight image |> applyFilterParallelismInPartsA shiftDown
+        let image21_PartsParallelism = applyFilterParallelismInPartsA shiftDown image |> applyFilterParallelismInPartsA shiftRight
 
-        let image12_RowParallelism = applyFilterRowParallelism shiftRight image |> applyFilterRowParallelism shiftDown
-        let image21_RowParallelism = applyFilterRowParallelism shiftDown image |> applyFilterRowParallelism shiftRight
+        let image12_RowParallelism = applyFilterRowParallelismA shiftRight image |> applyFilterRowParallelismA shiftDown
+        let image21_RowParallelism = applyFilterRowParallelismA shiftDown image |> applyFilterRowParallelismA shiftRight
 
-        let image12_ColParallelism = applyFilterColParallelism shiftRight image |> applyFilterColParallelism shiftDown
-        let image21_ColParallelism = applyFilterColParallelism shiftDown image |> applyFilterColParallelism shiftRight
+        let image12_ColParallelism = applyFilterColParallelismA shiftRight image |> applyFilterColParallelismA shiftDown
+        let image21_ColParallelism = applyFilterColParallelismA shiftDown image |> applyFilterColParallelismA shiftRight
         
         Assert.Equal(image12_NoParallelism, image21_NoParallelism)
         Assert.Equal(image12_PixelParallelism, image21_PixelParallelism)
