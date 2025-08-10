@@ -199,7 +199,7 @@ module ImProcessing =
 
             return res
         } 
-
+        
     let saveRgbaImageA (rgbaDataAsync: Async<Rgba32[,]>) file =
         async {
             let! rgbaData = rgbaDataAsync
@@ -216,7 +216,6 @@ module ImProcessing =
             let! _ =  img.SaveAsync file |> Async.AwaitTask
             return ()
         }
-
 
     let processPixel px py (filter: float32 array) filterD (img: Rgba32[,]) imgH imgW =
         let dataToHandle = [| 
@@ -241,7 +240,6 @@ module ImProcessing =
 
         byte rSum, byte gSum, byte bSum // Async<[,]<Rgba32>>
 
-
     let applyFilterNoParallelismA (filter: float32[][]) (imgAsync: Async<Rgba32[,]>) =
         async {
             let! img = imgAsync
@@ -259,7 +257,6 @@ module ImProcessing =
                 ) img
             return res
         }
-
 
     let applyFilterPixelParallelismA (filter: float32[][]) (imgAsync: Async<Rgba32[,]>) =
         async {
@@ -284,7 +281,6 @@ module ImProcessing =
 
             return res
         }
-
 
     let applyFilterParallelismInPartsA (filter: float32[][]) (imgAsync: Async<Rgba32[,]>) =
         async {
@@ -330,7 +326,6 @@ module ImProcessing =
             return res
         }
 
-
     let applyFilterRowParallelismA (filter: float32[][]) (imgAsync: Async<Rgba32[,]>) =
         async {
             let! img = imgAsync
@@ -351,7 +346,6 @@ module ImProcessing =
 
             return res
         }
-
 
     let applyFilterColParallelismA (filter: float32[][]) (imgAsync: Async<Rgba32[,]>) =
         async {
@@ -375,6 +369,10 @@ module ImProcessing =
         }
 
 
+
+// СИНХРОННАЯ ВЕРСИЯ ФУНКЦИЙ ВЫШЕ
+
+
     let loadAsRgba2D (file: string) =
         let img = Image.Load<Rgba32> file
         let res = Array2D.zeroCreate<Rgba32> img.Height img.Width
@@ -382,7 +380,6 @@ module ImProcessing =
         for i in 0 .. img.Width - 1 do
             for j in 0 .. img.Height - 1 do
                 res.[j, i] <- img.[i, j]
-
         res
 
     let saveRgbaImage (rgbaData: Rgba32[,]) file =
@@ -409,7 +406,6 @@ module ImProcessing =
             Rgba32(r, g, b, img.[x, y].A) 
         ) img
 
-
     let applyFilterPixelParallelism (filter: float32[][]) (img: Rgba32[,]) =
         let imgH = img.GetLength 0
         let imgW = img.GetLength 1
@@ -428,7 +424,6 @@ module ImProcessing =
 
         ) |> ignore
         res 
-
 
     let applyFilterParallelismInParts (filter: float32[][]) (img: Rgba32[,]) =
         let imgH = img.GetLength 0
@@ -469,7 +464,6 @@ module ImProcessing =
         ) |> ignore
         res
 
-
     let applyFilterRowParallelism (filter: float32[][]) (img: Rgba32[,]) =
         let imgH = img.GetLength 0
         let imgW = img.GetLength 1
@@ -485,7 +479,6 @@ module ImProcessing =
                 res.[k, i] <- Rgba32(r, g, b, img.[k, i].A)      
         ) |> ignore
         res
-
 
     let applyFilterColParallelism (filter: float32[][]) (img: Rgba32[,]) =
         let imgH = img.GetLength 0
