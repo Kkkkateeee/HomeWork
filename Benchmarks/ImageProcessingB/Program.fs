@@ -12,7 +12,7 @@ open SixLabors.ImageSharp.PixelFormats
 
 type ipBenchmark() =
 
-    static member Sizes = [|10000..10000..100000|]
+    static member Sizes = [|2; 4|]
     member this.Random = System.Random()
 
     [<ParamsSource("Sizes")>]

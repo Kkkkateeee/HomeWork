@@ -3,30 +3,32 @@ open System.Threading.Tasks
 open System.IO
 open ImageProcessing.ImProcessing
 open Argu
+open SixLabors.ImageSharp.PixelFormats
 
 type Filters =
-    | gaussianBlur = 1
-    | motionDiagonal135deg = 2  
-    | motionDiagonal315deg = 3
-    | motionVertical = 4
-    | motionHorizontal = 5
-    | edgesHorizontal = 6
-    | edgesVertical = 7
-    | edgesDioganal135deg = 8
-    | edgesDioganal315deg = 9
-    | edgesAllDirections = 10
-    | sharpen = 11
-    | sharpenSoft = 12
-    | sharpenWithEdges = 13
-    | emboss = 14
-    | embossHard = 15
+    | GaussianBlur
+    | MotionDiagonal135deg 
+    | MotionDiagonal315deg
+    | MotionVertical 
+    | MotionHorizontal 
+    | EdgesHorizontal 
+    | EdgesVertical 
+    | EdgesDioganal135deg 
+    | EdgesDioganal315deg 
+    | EdgesAllDirections 
+    | Sharpen 
+    | SharpenSoft 
+    | SharpenWithEdges 
+    | Emboss 
+    | EmbossHard 
+
 
 type ParallelismTypes =
-    | noParallelism = 0
-    | pixelParallelism = 1
-    | parallelismInParts = 2
-    | rowParallelism = 3
-    | colParallelism = 4
+    | NoParallelism 
+    | PixelParallelism 
+    | ParallelismInParts 
+    | RowParallelism 
+    | ColParallelism 
 
 
 type Arguments =
@@ -44,11 +46,19 @@ type Arguments =
 
 
 type FileProcessorMessage =
-    | ProcessImage of string * string * float32[][] * AsyncReplyChannel<Result<unit, string>> 
+    | ProcessImage of string * string * list<Filters> * list<ParallelismTypes> * AsyncReplyChannel<Result<unit, string>> 
     | Stop
 
 
 let createFileProcessor () =
+    let getParallelismType (parallelism: list<ParallelismTypes>) (filter: float32[][]) (img: Async<Rgba32[,]>) =
+        match parallelism.[0] with 
+        | NoParallelism -> applyFilterColParallelismA filter img
+        | PixelParallelism  -> applyFilterPixelParallelismA filter img
+        | ParallelismInParts -> applyFilterParallelismInPartsA filter img
+        | RowParallelism -> applyFilterRowParallelismA filter img
+        | ColParallelism -> applyFilterColParallelismA filter img
+
     MailboxProcessor.Start(fun inbox ->
 
         let rec loop () = 
@@ -56,10 +66,30 @@ let createFileProcessor () =
                 let! msg = inbox.Receive()
 
                 match msg with
-                | ProcessImage (sourcePath, destinationPath, filter, replyChannel) ->
+                | ProcessImage (sourcePath, destinationPath, filters, parallelism, replyChannel) ->
                     try
-                        let! imageData = loadAsRgba2DA sourcePath
-                        let! filteredImage = applyFilterNoParallelismA filter (async.Return imageData)
+                        let imageData = loadAsRgba2DA sourcePath
+                        let! filteredImage =
+                            filters |> List.fold (fun img filter ->
+                                match filter with 
+                                | GaussianBlur -> getParallelismType parallelism gaussianBlur img 
+                                | MotionDiagonal135deg -> getParallelismType parallelism motionDiagonal135deg img 
+                                | MotionDiagonal315deg -> getParallelismType parallelism motionDiagonal315deg img 
+                                | MotionVertical -> getParallelismType parallelism motionVertical img 
+                                | MotionHorizontal -> getParallelismType parallelism motionHorizontal img 
+                                | EdgesHorizontal -> getParallelismType parallelism edgesHorizontal img 
+                                | EdgesVertical -> getParallelismType parallelism edgesVertical img 
+                                | EdgesDioganal135deg -> getParallelismType parallelism edgesDioganal135deg img 
+                                | EdgesDioganal315deg -> getParallelismType parallelism edgesDioganal315deg img 
+                                | EdgesAllDirections -> getParallelismType parallelism edgesAllDirections img 
+                                | Sharpen -> getParallelismType parallelism sharpen img 
+                                | SharpenSoft -> getParallelismType parallelism sharpenSoft img 
+                                | SharpenWithEdges -> getParallelismType parallelism sharpenWithEdges img 
+                                | Emboss -> getParallelismType parallelism emboss img 
+                                | EmbossHard -> getParallelismType parallelism embossHard img 
+                                    
+                            ) imageData 
+
                         do! saveRgbaImageA (async.Return filteredImage) destinationPath
                         replyChannel.Reply(Ok ())
                         return! loop ()
@@ -80,9 +110,9 @@ let main argv =
 
     let fileProcessor = createFileProcessor ()
 
-    let processImageAsync (sourcePath: string) (destinationPath: string) (filter: float32[][]) =
+    let processImageAsync (sourcePath: string) (destinationPath: string) (filters: list<Filters>) (parallelism: list<ParallelismTypes>) =
         async {
-            let! reply = fileProcessor.PostAndAsyncReply (fun replyChannel -> ProcessImage(sourcePath, destinationPath, filter, replyChannel))
+            let! reply = fileProcessor.PostAndAsyncReply (fun replyChannel -> ProcessImage(sourcePath, destinationPath, filters, parallelism, replyChannel))
             return reply
         }
 
@@ -93,6 +123,7 @@ let main argv =
     let outFolder = results.GetResult Out_Folder
     let filters = results.GetResult Filters
     let parallelisms = results.GetResult Parallelism
+
 
     if not (Directory.Exists inFolder) then
         printfn $"Error: Input folder '{inFolder}' does not exist."
@@ -115,15 +146,13 @@ let main argv =
         else
             Directory.CreateDirectory outFolder |> ignore
 
-
-
             let processingTasks =
                 imageFiles
                 |> List.map (fun sourcePath ->
                     let filename = Path.GetFileName sourcePath
                     let destinationPath = Path.Combine(outFolder, filename)
-                    processImageAsync sourcePath destinationPath gaussianBlur
-                )
+                    processImageAsync sourcePath destinationPath filters parallelisms
+                )   
 
             Async.AwaitTask (Task.WhenAll(processingTasks |> List.map Async.StartAsTask |> List.toArray)) |> Async.RunSynchronously |> ignore
 
@@ -131,43 +160,4 @@ let main argv =
 
             printfn "Processing complete."
 
-
-
-            // let inImage = loadAsRgba2DA inFolder
-
-            // let applyFilterWithParallelism filter img parallelism =
-            //     match parallelism with
-            //     | ParallelismTypes.noParallelism -> applyFilterNoParallelismA filter img
-            //     | ParallelismTypes.pixelParallelism -> applyFilterPixelParallelismA filter img
-            //     | ParallelismTypes.parallelismInParts -> applyFilterParallelismInPartsA filter img
-            //     | ParallelismTypes.rowParallelism -> applyFilterRowParallelismA filter img
-            //     | ParallelismTypes.colParallelism -> applyFilterColParallelismA filter img
-            //     | _ -> 
-            //         printfn "Unknown parallelism type"
-            //         img
-
-            // let resultImage =
-            //     List.zip filters parallelisms |> List.fold (fun img (filter, parallelism) ->
-            //         match filter with 
-            //         | Filters.gaussianBlur -> applyFilterWithParallelism gaussianBlur img parallelism 
-            //         | Filters.motionDiagonal135deg -> applyFilterWithParallelism motionDiagonal135deg img parallelism 
-            //         | Filters.motionDiagonal315deg -> applyFilterWithParallelism motionDiagonal315deg img parallelism 
-            //         | Filters.motionVertical -> applyFilterWithParallelism motionVertical img parallelism 
-            //         | Filters.motionHorizontal -> applyFilterWithParallelism motionHorizontal img parallelism 
-            //         | Filters.edgesHorizontal -> applyFilterWithParallelism edgesHorizontal img parallelism 
-            //         | Filters.edgesVertical -> applyFilterWithParallelism edgesVertical img parallelism 
-            //         | Filters.edgesDioganal135deg -> applyFilterWithParallelism edgesDioganal135deg img parallelism 
-            //         | Filters.edgesDioganal315deg -> applyFilterWithParallelism edgesDioganal315deg img parallelism 
-            //         | Filters.edgesAllDirections -> applyFilterWithParallelism edgesAllDirections img parallelism 
-            //         | Filters.sharpen -> applyFilterWithParallelism sharpen img parallelism 
-            //         | Filters.sharpenSoft -> applyFilterWithParallelism sharpenSoft img parallelism 
-            //         | Filters.sharpenWithEdges -> applyFilterWithParallelism sharpenWithEdges img parallelism 
-            //         | Filters.emboss -> applyFilterWithParallelism emboss img parallelism 
-            //         | Filters.embossHard -> applyFilterWithParallelism embossHard img parallelism 
-            //         | _ -> 
-            //             printfn "Unknown filter"
-            //             img
-            //     ) inImage
-            
-            // saveRgbaImageA resultImage outFolder |> ignore
             0 
